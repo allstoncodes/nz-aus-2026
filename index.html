@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AKL → MEL → SYD · May 2026</title>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Outfit:wght@300;400;500;600&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <!-- Leaflet.js (interactive map, no API key, CartoDB dark tiles) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    /* === DESIGN.md tokens === */
+    :root {
+      --bg:#020617; --surface:#0F172A; --card:#1E293B; --border:#334155;
+      --text:#F8FAFC; --text-2:#94A3B8; --text-3:#475569;
+      --accent:#F59E0B; --teal:#0D9488; --success:#22C55E; --danger:#EF4444;
+      --purple:#8B5CF6; --blue:#3B82F6; --cyan:#06B6D4; --slate:#64748B;
+      --col-w:136px; --time-w:50px; --total-h:720px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--bg);color:var(--text);font-family:'Outfit',system-ui,sans-serif;font-size:16px;line-height:1.6;}
+
+    /* ── HEADER ── */
+    .site-header{background:var(--surface);border-bottom:1px solid var(--border);border-top:4px solid var(--accent);padding:26px 40px 22px;position:sticky;top:0;z-index:100;}
+    .header-inner{max-width:1340px;margin:0 auto;display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+    .trip-title{font-family:'Syne',sans-serif;font-size:clamp(1.6rem,4vw,2.4rem);font-weight:800;letter-spacing:-.025em;line-height:1.1;background:linear-gradient(125deg,var(--accent) 0%,#FDE68A 45%,var(--teal) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .trip-sub{margin-top:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+    .trip-dates{font-family:'DM Mono',monospace;font-size:.8125rem;color:var(--text-2);}
+    .city-pills{display:flex;gap:6px;}
+    .city-pill{font-size:.5625rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:9999px;white-space:nowrap;}
+    .pill-sfo{background:rgba(100,116,139,.15);color:var(--slate);border:1px solid rgba(100,116,139,.3);}
+    .pill-akl{background:rgba(245,158,11,.15);color:var(--accent);border:1px solid rgba(245,158,11,.3);}
+    .pill-mel{background:rgba(13,148,136,.15);color:var(--teal);border:1px solid rgba(13,148,136,.3);}
+    .pill-syd{background:rgba(139,92,246,.15);color:var(--purple);border:1px solid rgba(139,92,246,.3);}
+    .header-right{text-align:right;flex-shrink:0;}
+    .travelers{font-size:.875rem;color:var(--text-2);}
+    .booked-badge{display:inline-block;margin-top:6px;font-size:.5625rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:4px;background:rgba(34,197,94,.15);color:var(--success);border:1px solid rgba(34,197,94,.3);}
+
+    /* ── STATS ── */
+    .stats-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 40px;}
+    .stats-inner{max-width:1340px;margin:0 auto;display:flex;gap:24px;overflow-x:auto;padding-bottom:2px;}
+    .stat-item{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+    .stat-swatch{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
+    .stat-label{font-size:.5625rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);}
+    .stat-val{font-family:'DM Mono',monospace;font-size:.875rem;color:var(--text);}
+
+    /* ── TIMELINE ── */
+    .timeline-section{padding:28px 0 0;}
+    .tl-pad{padding:0 40px;max-width:1380px;margin:0 auto;}
+    .section-lede{font-size:.5625rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);margin-bottom:12px;}
+    .timeline-scroll{overflow-x:auto;padding:0 40px 8px;}
+    .timeline-scroll::-webkit-scrollbar{height:4px;}
+    .timeline-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+    .timeline-grid{display:flex;align-items:flex-start;min-width:max-content;}
+    .time-rail{width:var(--time-w);flex-shrink:0;position:relative;height:var(--total-h);border-right:1px solid var(--border);margin-top:70px;}
+    .hr-label{position:absolute;right:8px;font-family:'DM Mono',monospace;font-size:.5rem;color:var(--text-3);transform:translateY(-50%);user-select:none;}
+    .hr-tick{position:absolute;right:0;width:4px;height:1px;background:var(--border);}
+    .days-wrap{display:flex;}
+    .day-col{width:var(--col-w);flex-shrink:0;border-right:1px solid var(--border);}
+    .day-col:last-child{border-right:none;}
+    .day-hdr{height:70px;padding:8px 7px 6px;border-bottom:1px solid var(--border);border-top:3px solid transparent;display:flex;flex-direction:column;justify-content:center;cursor:pointer;transition:background .15s;user-select:none;}
+    .day-hdr:hover,.day-hdr.active{background:var(--card);}
+    .day-hdr:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;}
+    .city-sfo .day-hdr{border-top-color:var(--slate);}
+    .city-akl .day-hdr{border-top-color:var(--accent);}
+    .city-mel .day-hdr{border-top-color:var(--teal);}
+    .city-syd .day-hdr{border-top-color:var(--purple);}
+    .city-flight .day-hdr{border-top:3px dashed rgba(51,65,85,.6);}
+    .d-num{font-family:'Syne',sans-serif;font-size:.5rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);}
+    .d-date{font-family:'DM Mono',monospace;font-size:.75rem;color:var(--text-2);margin-top:2px;}
+    .d-lbl{font-size:.5rem;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;}
+    .day-body{position:relative;height:var(--total-h);background:repeating-linear-gradient(to bottom,transparent,transparent 29px,rgba(51,65,85,.2) 29px,rgba(51,65,85,.2) 30px);}
+    .blk{position:absolute;left:2px;right:2px;border-radius:3px;padding:1px 4px;font-size:.5rem;font-weight:600;letter-spacing:.02em;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;transition:opacity .12s,transform .12s;z-index:2;}
+    .blk:hover{opacity:.85;transform:scaleX(1.02);z-index:10;}
+    .blk.cat-sleep{border:1px solid var(--border);color:var(--text-3);background:var(--surface)!important;}
+
+    /* ── DAY NAV ── */
+    .day-nav-strip{padding:10px 40px 16px;max-width:1380px;margin:0 auto;display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
+    .dnav-label{font-size:.5625rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-right:6px;white-space:nowrap;}
+    .dnav-pill{background:var(--card);border:1px solid var(--border);border-radius:9999px;padding:3px 10px;font-size:.625rem;font-weight:600;color:var(--text-2);cursor:pointer;transition:border-color .15s,color .15s;white-space:nowrap;}
+    .dnav-pill:hover{border-color:var(--text-2);color:var(--text);}
+    .dnav-pill.active{background:var(--surface);border-color:var(--accent);color:var(--accent);}
+    .dnav-pill:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+
+    /* ── MAP SECTION ── */
+    .map-section{padding:0 40px 24px;max-width:1380px;margin:0 auto;}
+    .map-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:10px;}
+    .map-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:var(--text);}
+    .map-toggle-btn{font-size:.625rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:var(--card);border:1px solid var(--border);border-radius:6px;padding:5px 12px;color:var(--text-2);cursor:pointer;transition:border-color .15s,color .15s;}
+    .map-toggle-btn:hover,.map-toggle-btn.active{border-color:var(--accent);color:var(--accent);}
+    #trip-map{height:340px;border-radius:10px;border:1px solid var(--border);overflow:hidden;}
+    /* Leaflet dark overrides */
+    .leaflet-popup-content-wrapper{background:var(--card);border:1px solid var(--border);border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.5);}
+    .leaflet-popup-content-wrapper,.leaflet-popup-tip{background:var(--card);color:var(--text);}
+    .leaflet-popup-content{font-family:'Outfit',sans-serif;font-size:.8125rem;color:var(--text);}
+    .leaflet-popup-content b{color:var(--accent);}
+    .leaflet-popup-content small{color:var(--text-2);font-family:'DM Mono',monospace;}
+    .leaflet-popup-close-button{color:var(--text-2)!important;}
+    .leaflet-control-zoom a{background:var(--card)!important;color:var(--text)!important;border-color:var(--border)!important;}
+    .leaflet-control-attribution{background:rgba(2,6,23,.8)!important;color:var(--text-3)!important;font-size:.5rem!important;}
+    .leaflet-control-attribution a{color:var(--text-2)!important;}
+
+    /* ── LEGEND ── */
+    .legend-section{padding:0 40px 20px;max-width:1340px;margin:0 auto;}
+    .legend{display:flex;gap:16px;flex-wrap:wrap;}
+    .leg-item{display:flex;align-items:center;gap:5px;font-size:.5625rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text-2);}
+    .leg-dot{width:7px;height:7px;border-radius:2px;}
+
+    /* ── TOOLTIP ── */
+    .tooltip{position:fixed;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:9px 13px;font-size:.8rem;pointer-events:none;z-index:200;max-width:240px;box-shadow:0 8px 32px rgba(0,0,0,.6);opacity:0;transition:opacity .08s;}
+    .tooltip.vis{opacity:1;}
+    .tt-time{font-family:'DM Mono',monospace;font-size:.5625rem;color:var(--text-2);margin-bottom:3px;display:flex;align-items:center;gap:5px;}
+    .tt-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+    .tt-lbl{font-size:.8125rem;color:var(--text);line-height:1.35;}
+
+    hr.div{border:none;border-top:1px solid var(--border);}
+
+    /* ── DETAIL PANEL ── */
+    .detail-section{padding:24px 40px;max-width:1340px;margin:0 auto;}
+    .detail-hdr{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;}
+    .det-nav-btn{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-size:.75rem;color:var(--text-2);cursor:pointer;transition:border-color .15s,color .15s;font-family:'DM Mono',monospace;}
+    .det-nav-btn:hover{border-color:var(--accent);color:var(--accent);}
+    .det-nav-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+    .det-nav-btn:disabled{opacity:.3;cursor:default;}
+    .detail-title{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700;flex:1;}
+    .detail-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:6px;}
+    .det-item{display:flex;align-items:flex-start;gap:9px;background:var(--card);border-radius:7px;padding:8px 11px;border-left:3px solid transparent;}
+    .det-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+    .det-time{font-family:'DM Mono',monospace;font-size:.5625rem;color:var(--text-2);flex-shrink:0;width:86px;padding-top:2px;}
+    .det-lbl{font-size:.8125rem;color:var(--text);line-height:1.3;}
+
+    /* ── SECTION SHARED ── */
+    .page-section{padding:24px 40px;max-width:1340px;margin:0 auto;}
+    .section-head{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700;display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+
+    /* ── HOTELS ── */
+    .hotel-box{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-bottom:12px;}
+    .hotel-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;border-left:4px solid var(--accent);}
+    .hotel-city{font-size:.5625rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);margin-bottom:4px;}
+    .hotel-name{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:var(--text);}
+    .hotel-meta{font-size:.8125rem;color:var(--text-2);margin-top:4px;}
+    .hotel-dist{font-family:'DM Mono',monospace;font-size:.6875rem;color:var(--teal);margin-top:6px;}
+    .hotel-link{display:inline-block;margin-top:8px;font-size:.5625rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);text-decoration:none;border:1px solid rgba(245,158,11,.3);border-radius:4px;padding:2px 8px;transition:background .15s;}
+    .hotel-link:hover{background:rgba(245,158,11,.1);}
+
+    /* ── RESTAURANT TABLE ── */
+    .contact-table{width:100%;border-collapse:collapse;font-size:.8125rem;margin-bottom:24px;}
+    .contact-table thead tr{background:var(--surface);}
+    .contact-table th{font-size:.5625rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);padding:8px 10px;text-align:left;border-bottom:1px solid var(--border);}
+    .contact-table td{padding:8px 10px;border-bottom:1px solid rgba(51,65,85,.4);color:var(--text);}
+    .contact-table tr:hover td{background:rgba(30,41,59,.6);}
+    .contact-table a{color:var(--accent);text-decoration:none;}
+    .contact-table a:hover{text-decoration:underline;}
+    .city-header{font-family:'Syne',sans-serif;font-size:.875rem;font-weight:700;color:var(--text-2);margin:16px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+
+    /* ── PRACTICAL INFO GRID ── */
+    .info-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;margin-bottom:12px;}
+    .info-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 18px;}
+    .info-card-title{font-family:'Syne',sans-serif;font-size:.9375rem;font-weight:700;color:var(--text);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+    .info-table{width:100%;border-collapse:collapse;font-size:.8125rem;margin-bottom:8px;}
+    .info-table td{padding:4px 0;color:var(--text-2);}
+    .info-table td:first-child{font-family:'DM Mono',monospace;font-size:.6875rem;color:var(--text-3);width:35%;}
+    .info-table td:last-child{color:var(--text);font-weight:500;}
+    .info-card p{font-size:.8125rem;color:var(--text-2);line-height:1.5;margin-bottom:6px;}
+    .info-card ul{list-style:none;padding:0;}
+    .info-card li{font-size:.8125rem;color:var(--text-2);padding:3px 0;border-bottom:1px solid rgba(51,65,85,.3);}
+    .info-card li:last-child{border-bottom:none;}
+    .info-card li strong{color:var(--text);}
+    .info-link{display:inline-block;margin-top:8px;font-size:.5625rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);text-decoration:none;border:1px solid rgba(13,148,136,.3);border-radius:4px;padding:2px 8px;transition:background .15s;}
+    .info-link:hover{background:rgba(13,148,136,.1);}
+    .rate-badge{font-family:'DM Mono',monospace;font-size:1.125rem;font-weight:500;color:var(--accent);}
+
+    /* ── BOOKINGS ── */
+    .booking-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:8px;}
+    .bk-item{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px;cursor:pointer;transition:border-color .18s,box-shadow .18s;}
+    .bk-item:hover{border-color:var(--accent);box-shadow:0 0 14px rgba(245,158,11,.1);}
+    .bk-item:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+    .bk-item.done{opacity:.4;}
+    .bk-item.done .bk-lbl{text-decoration:line-through;}
+    .bk-item.feature-item{border-color:rgba(139,92,246,.35);}
+    .bk-item.feature-item:hover{border-color:var(--purple);box-shadow:0 0 14px rgba(139,92,246,.15);}
+    .bk-check{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:background .15s,border-color .15s;margin-top:2px;}
+    .bk-item.done .bk-check{background:var(--success);border-color:var(--success);}
+    .bk-info{flex:1;min-width:0;}
+    .bk-pri{font-size:.5rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px;}
+    .pri-urgent{color:var(--danger);}
+    .pri-soon{color:var(--accent);}
+    .pri-ok{color:var(--slate);}
+    .pri-feature{color:var(--purple);}
+    .bk-lbl{font-size:.875rem;font-weight:500;color:var(--text);line-height:1.3;}
+    .bk-meta{font-family:'DM Mono',monospace;font-size:.625rem;color:var(--text-2);margin-top:2px;}
+    .bk-link{display:inline-block;margin-top:6px;font-size:.5625rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);text-decoration:none;border:1px solid rgba(245,158,11,.3);border-radius:4px;padding:2px 8px;transition:background .15s;}
+    .bk-link:hover{background:rgba(245,158,11,.1);}
+    .bk-link.feature-link{color:var(--purple);border-color:rgba(139,92,246,.3);}
+    .bk-link.feature-link:hover{background:rgba(139,92,246,.08);}
+
+    /* ── FOOTER ── */
+    .site-footer{text-align:center;padding:18px 40px;font-size:.75rem;color:var(--text-3);border-top:1px solid var(--border);}
+    .site-footer a{color:var(--text-2);text-decoration:none;}
+    .site-footer a:hover{color:var(--accent);}
+
+    ::-webkit-scrollbar{height:4px;width:4px;}
+    ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+    @media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;}}
+    @media (max-width:768px){
+      .site-header,.stats-bar,.timeline-scroll,.day-nav-strip,.map-section,.legend-section,.detail-section,.page-section{padding-left:16px;padding-right:16px;}
+      .tl-pad{padding:0 16px;}
+      .header-inner{flex-direction:column;}
+      .header-right{text-align:left;}
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header" role="banner">
+  <div class="header-inner">
+    <div>
+      <h1 class="trip-title">AKL → MEL → SYD</h1>
+      <div class="trip-sub">
+        <span class="trip-dates">May 14 – 26, 2026 · 13 days · 10 ground days</span>
+        <div class="city-pills">
+          <span class="city-pill pill-sfo">SFO dep</span>
+          <span class="city-pill pill-akl">AKL · 3d</span>
+          <span class="city-pill pill-mel">MEL · 3d</span>
+          <span class="city-pill pill-syd">SYD · 4d</span>
+        </div>
+      </div>
+    </div>
+    <div class="header-right">
+      <p class="travelers">Allston + Donnie</p>
+      <span class="booked-badge">SFO → AKL Booked ✓</span>
+    </div>
+  </div>
+</header>
+
+<div class="stats-bar" aria-label="Time allocation">
+  <div class="stats-inner" id="stats-inner"></div>
+</div>
+
+<section class="timeline-section" aria-label="Trip timeline">
+  <div class="tl-pad"><p class="section-lede">Full schedule May 14–26 · click any column header for day breakdown</p></div>
+  <div class="timeline-scroll" role="region" aria-label="Scrollable timeline">
+    <div class="timeline-grid">
+      <div class="time-rail" id="time-rail" aria-hidden="true"></div>
+      <div class="days-wrap" id="days-wrap"></div>
+    </div>
+  </div>
+</section>
+
+<div class="day-nav-strip" id="day-nav-strip" aria-label="Day selector"></div>
+
+<!-- MAP -->
+<div class="map-section" aria-label="Interactive trip map">
+  <div class="map-header">
+    <span class="map-title">Trip Map — Per-Day View</span>
+    <button class="map-toggle-btn" id="map-overview-btn" aria-pressed="false">Show Full Route Overview</button>
+  </div>
+  <div id="trip-map" role="region" aria-label="Interactive map of trip locations"></div>
+</div>
+
+<div class="legend-section" aria-label="Legend">
+  <div class="legend" id="legend"></div>
+</div>
+
+<hr class="div">
+
+<section class="detail-section" id="detail-section" aria-label="Day schedule">
+  <div class="detail-hdr">
+    <button class="det-nav-btn" id="btn-prev" aria-label="Previous day">← Prev</button>
+    <h2 class="detail-title" id="detail-title">Select a day above</h2>
+    <span class="city-pill" id="detail-pill"></span>
+    <button class="det-nav-btn" id="btn-next" aria-label="Next day">Next →</button>
+  </div>
+  <div class="detail-grid" id="detail-grid">
+    <p style="color:var(--text-3);font-size:.875rem;">Click any day column or use the nav pills to see the full day schedule.</p>
+  </div>
+</section>
+
+<hr class="div">
+
+<!-- HOTELS -->
+<section class="page-section" aria-label="Hotels">
+  <h2 class="section-head">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--teal)"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    Hotels (Pending — Book Urgently)
+  </h2>
+  <div class="hotel-box">
+    <div class="hotel-card" style="border-left-color:var(--accent)">
+      <div class="hotel-city">Auckland · May 16–19 (3 nights)</div>
+      <div class="hotel-name">Hilton Auckland</div>
+      <div class="hotel-meta">Princes Wharf, harbourfront · eforea spa ✓ · ~$245–335 USD/night (shared)</div>
+      <div class="hotel-dist">5 min walk Wynyard Quarter · 15 min Uber Mount Eden · 45 min drive Piha · 25 min Uber AKL airport</div>
+      <a class="hotel-link" href="https://www.hilton.com/en/hotels/aklhitw-hilton-auckland/" target="_blank" rel="noopener">Book at Hilton →</a>
+    </div>
+    <div class="hotel-card" style="border-left-color:var(--teal)">
+      <div class="hotel-city">Melbourne · May 19–22 (3 nights)</div>
+      <div class="hotel-name">Hilton Melbourne South Wharf</div>
+      <div class="hotel-meta">2 Convention Centre Pl · eforea spa ✓ · ~$195–260 USD/night (shared)</div>
+      <div class="hotel-dist">10 min walk Hosier Lane · 35 min tram Brighton Boxes · 1.5h drive Phillip Island · 20 min tram CBD laneways</div>
+      <a class="hotel-link" href="https://www.hilton.com/en/hotels/mlbswhf-hilton-melbourne-south-wharf/" target="_blank" rel="noopener">Book at Hilton →</a>
+    </div>
+    <div class="hotel-card" style="border-left-color:var(--purple)">
+      <div class="hotel-city">Sydney · May 22–26 (4 nights)</div>
+      <div class="hotel-name">Hilton Sydney</div>
+      <div class="hotel-meta">488 George St, CBD · eforea + LivingWell spa ✓ · ~$230–325 USD/night (shared) · Use Surpass cert Sat May 23</div>
+      <div class="hotel-dist">15 min walk Circular Quay · 10 min Uber Mrs Macquarie's · 25 min Uber Bondi · 13 min Opal rail SYD airport</div>
+      <a class="hotel-link" href="https://www.hilton.com/en/hotels/sydchhf-hilton-sydney/" target="_blank" rel="noopener">Book at Hilton →</a>
+    </div>
+  </div>
+  <p style="font-size:.8125rem;color:var(--text-3);">Check Hilton Honors app for points availability + Surpass free weekend night (use for Sydney Sat May 23 — highest nightly rate). All 3 Honors-eligible.</p>
+</section>
+
+<hr class="div">
+
+<!-- RESTAURANTS -->
+<section class="page-section" aria-label="Restaurant contacts">
+  <h2 class="section-head">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--food-color,#F59E0B)"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
+    Restaurant Contacts
+  </h2>
+
+  <div class="city-header" style="color:var(--accent)">Auckland</div>
+  <table class="contact-table" aria-label="Auckland restaurants">
+    <thead><tr><th>Restaurant</th><th>Day</th><th>Phone</th><th>Book</th><th>Coming From</th><th>Travel Time</th></tr></thead>
+    <tbody>
+      <tr><td><strong>MASU by Nic Watt</strong><br><small style="color:var(--text-3)">Japanese robata, Federal St</small></td><td>Day 1 dinner</td><td>+64 9 363 6278</td><td><a href="https://www.sevenrooms.com/reservations/masu" target="_blank">Book online</a> · info@masu.co.nz</td><td>Hilton Auckland (Princes Wharf)</td><td>10–15 min walk</td></tr>
+      <tr><td><strong>Bistro Saine</strong><br><small style="color:var(--text-3)">French-Med, Hotel Indigo</small></td><td>Day 2 dinner</td><td>Call Hotel Indigo AKL</td><td>Book direct via hotel</td><td>Driving back from Piha Beach to CBD</td><td>5–10 min from CBD parking</td></tr>
+    </tbody>
+  </table>
+
+  <div class="city-header" style="color:var(--teal)">Melbourne</div>
+  <table class="contact-table" aria-label="Melbourne restaurants">
+    <thead><tr><th>Restaurant</th><th>Day</th><th>Phone</th><th>Book</th><th>Coming From</th><th>Travel Time</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Flower Drum</strong><br><small style="color:var(--text-3)">Iconic Chinese, Peking duck, Chinatown</small></td><td>Day 4 dinner (Tue)</td><td>+61 3 9662 3655</td><td><a href="https://flowerdrum.melbourne/bookings/" target="_blank">flowerdrum.melbourne</a> · enquiry@flower-drum.com</td><td>Hilton South Wharf (after Hosier Lane)</td><td>15–20 min walk via Yarra</td></tr>
+      <tr><td><strong>Cutler & Co.</strong><br><small style="color:var(--text-3)">Modern Australian fine dining, Fitzroy</small></td><td>Day 5 dinner (Wed) alt</td><td>+61 3 9419 4888</td><td><a href="https://www.cutlerandco.com.au" target="_blank">cutlerandco.com.au</a> · info@cutlerandco.com.au</td><td>Hilton South Wharf (after Penguin Parade return)</td><td>20–25 min Uber to Fitzroy</td></tr>
+      <tr><td><strong>Ishizuka ⭐</strong><br><small style="color:var(--text-3)">16-seat kaiseki, apartment basement, Thu–Mon ONLY</small></td><td>Day 6 dinner (Thu) 5:30pm</td><td>+61 3 8594 0895</td><td><a href="https://www.ishizuka.com.au/reservation/" target="_blank">ishizuka.com.au</a> · reservation@ishizuka.com.au</td><td>Hilton South Wharf (post-spa)</td><td>15–20 min walk, B01/139 Bourke St basement</td></tr>
+    </tbody>
+  </table>
+
+  <div class="city-header" style="color:var(--purple)">Sydney</div>
+  <table class="contact-table" aria-label="Sydney restaurants">
+    <thead><tr><th>Restaurant</th><th>Day</th><th>Phone</th><th>Book</th><th>Coming From</th><th>Travel Time</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Sean's</strong><br><small style="color:var(--text-3)">North Bondi, 270 Campbell Pde — Time Out Best Special Occasion 2025</small></td><td>Day 8 dinner (Sat)</td><td>+61 2 9365 4924</td><td><a href="https://www.sevenrooms.com/reservations/seansbondi" target="_blank">Book online</a> · sean@seansbondi.com</td><td>Coogee (end of coastal walk)</td><td>15 min Uber from Coogee to North Bondi</td></tr>
+      <tr><td><strong>Baba's Place</strong><br><small style="color:var(--danger)">⚠ Sat–Sun closes 4pm · Thu–Fri evenings only</small></td><td>Lunch option Day 9 (Sun)</td><td>+61 423 587 481</td><td><a href="https://www.babasplace.com.au/reservations" target="_blank">babasplace.com.au</a></td><td>Manly (ferry return) — tight window</td><td>30–35 min from Circular Quay to Marrickville</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-size:.75rem;color:var(--text-3);margin-top:4px;">⭐ Ishizuka has only 16 seats — book by email immediately. Sean's is busy Saturdays — book at least 5–7 days ahead.</p>
+</section>
+
+<hr class="div">
+
+<!-- PRACTICAL INFO -->
+<section class="page-section" aria-label="Practical information">
+  <h2 class="section-head">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--cyan)"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    Practical Info
+  </h2>
+  <div class="info-grid">
+
+    <div class="info-card">
+      <div class="info-card-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--accent)"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        Currency Exchange <small style="font-weight:400;color:var(--text-3);font-size:.75rem;">(May 3 2026)</small>
+      </div>
+      <table class="info-table">
+        <tr><td>USD → AUD</td><td><span class="rate-badge">1.39</span></td></tr>
+        <tr><td>$100 USD</td><td style="color:var(--teal)">= $139 AUD</td></tr>
+        <tr><td>USD → NZD</td><td><span class="rate-badge">1.6949</span></td></tr>
+        <tr><td>$100 USD</td><td style="color:var(--accent)">= $169.49 NZD</td></tr>
+      </table>
+      <p><strong style="color:var(--text)">Cash per person:</strong> NZD $100–120 (~$70 USD) for 3 AKL days. AUD $150 (~$108 USD) for 7 AU days. Both countries are very cashless — this covers markets, tips, and cash-only spots.</p>
+      <p style="margin-top:6px;"><strong style="color:var(--text)">ATM tip:</strong> Withdraw NZD at AKL airport on arrival (Day 1). Withdraw AUD at MEL airport on Day 4. Better rates than currency exchange counters.</p>
+    </div>
+
+    <div class="info-card">
+      <div class="info-card-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--success)"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        Credit Cards & Apple Pay
+      </div>
+      <ul>
+        <li><strong>Visa / Mastercard</strong> — universally accepted in both countries</li>
+        <li><strong>Apple Pay</strong> — fully supported at all modern terminals (tap-to-pay everywhere)</li>
+        <li><strong>Amex</strong> — good at hotels + restaurants; less common at small shops</li>
+        <li><strong>Capital One / Chase Sapphire</strong> — no foreign transaction fees ✓ use for everything</li>
+        <li><strong>Amex cards</strong> — hotels + restaurants for bonus points (4x MR on dining)</li>
+        <li><strong>No-FTF cards</strong> — Capital One Venture, Chase Sapphire Preferred</li>
+      </ul>
+    </div>
+
+    <div class="info-card">
+      <div class="info-card-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--cyan)"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        eSIM — Airalo
+      </div>
+      <p><strong style="color:var(--accent)">Best: Oceania Regional Plan</strong> — covers both NZ + AUS in one eSIM, no switching between countries.</p>
+      <p style="margin-top:6px;"><strong style="color:var(--text)">NZ-only backup:</strong> 15-day 10GB for $23.50 USD (Spark network — best NZ coverage).</p>
+      <p style="margin-top:6px;"><strong style="color:var(--text)">Each person needs their own eSIM.</strong> Buy via Airalo iOS app. Activate before May 14.</p>
+      <p style="margin-top:6px;color:var(--text-3);">Both Allston + Donnie purchase independently.</p>
+      <a class="info-link" href="https://www.airalo.com/esim" target="_blank" rel="noopener">Get eSIM on Airalo →</a>
+    </div>
+
+    <div class="info-card">
+      <div class="info-card-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--blue)"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
+        Getting Around
+      </div>
+      <ul>
+        <li><strong>Auckland:</strong> Uber (strong CBD coverage). YourRide optional for price comparison.</li>
+        <li><strong>Melbourne:</strong> Uber + DiDi + Bolt. Free CBD trams (Zone 1, no tap needed). Myki card for outer suburbs.</li>
+        <li><strong>Sydney:</strong> Uber + DiDi + Bolt. Opal card for trains/ferries (airport rail 13 min).</li>
+        <li><strong>Day 3 — Hobbiton:</strong> GreatSights NZ coach, hotel pickup 7:30am, no driving needed.</li>
+        <li><strong>Day 5 — Phillip Island:</strong> Book tour bus with transport, or Uber each way (~$100 AUD ea).</li>
+        <li><strong>Piha Beach (Day 2):</strong> Uber each way ~$50–70 NZD, simpler than renting.</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<hr class="div">
+
+<!-- BOOKINGS -->
+<section class="page-section" aria-label="Booking checklist">
+  <h2 class="section-head">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--accent)"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+    Booking Priority Queue
+  </h2>
+  <div class="booking-grid" id="booking-grid"></div>
+</section>
+
+<footer class="site-footer">
+  Perplexity Trip Planner · NZ + AUS May 2026 · Allston Fojas + Donnie ·
+  <a href="https://github.com/allstoncodes/nz-aus-2026" target="_blank" rel="noopener">GitHub</a> ·
+  <a href="https://github.com/allstoncodes/nz-aus-2026/blob/main/README.md" target="_blank" rel="noopener">Trip Guide (README)</a>
+</footer>
+
+<div class="tooltip" id="tooltip" role="tooltip">
+  <div class="tt-time" id="tt-time"></div>
+  <div class="tt-lbl" id="tt-lbl"></div>
+</div>
+
+<script>
+'use strict';
+
+/* ── TOKENS ── */
+const CAT={
+  transit:{color:'#3B82F6',label:'Transit'},
+  outdoor:{color:'#22C55E',label:'Outdoor'},
+  food:{color:'#F59E0B',label:'Food'},
+  culture:{color:'#8B5CF6',label:'Culture'},
+  downtime:{color:'#475569',label:'Downtime'},
+  wellness:{color:'#06B6D4',label:'Wellness'},
+  logistics:{color:'#64748B',label:'Logistics'},
+  sleep:{color:'#0F172A',label:'Sleep'},
+};
+const PX_PER_MIN=30/60;
+const CITY_COLORS={AKL:'#F59E0B',MEL:'#0D9488',SYD:'#8B5CF6',SFO:'#64748B',FLIGHT:'#3B82F6'};
+
+/* ── TRIP DATA ── */
+const DAYS=[
+  {tag:'DEP',date:'May 14',wd:'THU',city:'SFO',cityFull:'San Francisco',lbl:'Departure Day',blocks:[
+    {s:'08:00',e:'14:00',c:'logistics',t:'Last-minute packing · SF errands · final prep'},
+    {s:'14:00',e:'18:00',c:'downtime',t:'Rest before redeye · charge devices'},
+    {s:'18:00',e:'20:00',c:'transit',t:'Travel to SFO airport (BART or Uber ~45min)'},
+    {s:'20:00',e:'22:45',c:'logistics',t:'SFO check-in · security · United lounge'},
+    {s:'22:45',e:'24:00',c:'transit',t:'UA 917 SFO → AKL · airborne over Pacific'},
+  ]},
+  {tag:'FLT',date:'May 15',wd:'FRI',city:'SFO',cityFull:'Over the Pacific',lbl:'In-Flight',blocks:[
+    {s:'00:00',e:'24:00',c:'transit',t:'UA 917 SFO → AKL · 13h25m nonstop · crosses dateline · arrives May 16 07:10'},
+  ]},
+  {tag:1,date:'May 16',wd:'SAT',city:'AKL',cityFull:'Auckland',lbl:'Arrival',blocks:[
+    {s:'07:10',e:'08:30',c:'transit',t:'Land AKL · customs · bag claim'},
+    {s:'08:30',e:'09:30',c:'transit',t:'Skybus / Uber to CBD (45min, ~$25 NZD)'},
+    {s:'09:30',e:'11:00',c:'food',t:'Brunch · Wynyard Quarter walk'},
+    {s:'11:00',e:'15:00',c:'downtime',t:'Waterfront explore · bag-drop wait (check-in 3pm)'},
+    {s:'15:00',e:'16:00',c:'logistics',t:'Hotel check-in · Hilton Auckland, Princes Wharf'},
+    {s:'16:00',e:'18:00',c:'downtime',t:'Nap · freshen up at Hilton Auckland'},
+    {s:'18:00',e:'19:00',c:'food',t:'Pre-dinner drinks'},
+    {s:'19:00',e:'21:00',c:'food',t:'Dinner · MASU by Nic Watt (Federal St CBD)'},
+    {s:'21:00',e:'22:00',c:'transit',t:'Walk / Uber back to Hilton Auckland (~10min)'},
+    {s:'22:00',e:'24:00',c:'sleep',t:'Sleep · Hilton Auckland'},
+  ]},
+  {tag:2,date:'May 17',wd:'SUN',city:'AKL',cityFull:'Auckland',lbl:'Full Day',blocks:[
+    {s:'06:00',e:'06:15',c:'logistics',t:'Wake at Hilton Auckland'},
+    {s:'06:15',e:'06:50',c:'transit',t:'Uber to Mount Eden (~15min)'},
+    {s:'06:50',e:'08:00',c:'outdoor',t:'Mount Eden sunrise · crater rim 360 view'},
+    {s:'08:00',e:'09:00',c:'transit',t:'Walk down + Uber back to Hilton'},
+    {s:'09:00',e:'10:00',c:'food',t:'Late breakfast CBD'},
+    {s:'10:00',e:'12:00',c:'culture',t:'Auckland War Memorial Museum · Haka 11am'},
+    {s:'12:00',e:'13:00',c:'food',t:'Lunch'},
+    {s:'13:00',e:'15:00',c:'downtime',t:'Peak UV rest · Hilton Auckland · Donnie work block'},
+    {s:'15:00',e:'15:45',c:'transit',t:'Uber to Piha Beach (45min, ~$55 NZD)'},
+    {s:'15:45',e:'17:30',c:'outdoor',t:'Piha Beach · Lion Rock · black-sand golden hour'},
+    {s:'17:30',e:'18:15',c:'transit',t:'Uber back to Auckland CBD (45min)'},
+    {s:'18:15',e:'21:00',c:'food',t:'Dinner · Bistro Saine or Forest'},
+    {s:'21:00',e:'21:30',c:'transit',t:'Walk / Uber back to Hilton Auckland'},
+    {s:'21:30',e:'22:30',c:'downtime',t:'Wind down at hotel'},
+    {s:'22:30',e:'24:00',c:'sleep',t:'Sleep · Hilton Auckland'},
+  ]},
+  {tag:3,date:'May 18',wd:'MON',city:'AKL',cityFull:'Auckland',lbl:'Hobbiton Day',blocks:[
+    {s:'07:00',e:'07:30',c:'logistics',t:'Wake at Hilton Auckland · ready for coach pickup'},
+    {s:'07:30',e:'09:45',c:'transit',t:'GreatSights NZ coach from Hilton Auckland → Hobbiton (2h15m)'},
+    {s:'09:45',e:'12:15',c:'outdoor',t:'Hobbiton Movie Set guided tour · Green Dragon Inn'},
+    {s:'12:15',e:'14:30',c:'transit',t:'Coach return to Auckland (2h15m)'},
+    {s:'14:30',e:'16:00',c:'downtime',t:'Afternoon free · CBD wander or rest'},
+    {s:'16:00',e:'18:00',c:'outdoor',t:'Auckland waterfront · Princes Wharf · evening stroll'},
+    {s:'18:00',e:'19:30',c:'food',t:'Dinner at SuMI or near hotel · rest night before early flight'},
+    {s:'19:30',e:'21:00',c:'logistics',t:'Pack bags · set 3:30am alarm for QF 152 06:10 dep'},
+    {s:'21:00',e:'24:00',c:'sleep',t:'Sleep · Hilton Auckland'},
+  ]},
+  {tag:4,date:'May 19',wd:'TUE',city:'FLIGHT',cityFull:'AKL → MEL',lbl:'Transit + MEL Arrival',blocks:[
+    {s:'03:30',e:'04:30',c:'logistics',t:'Wake · Hilton Auckland checkout (bags packed night before)'},
+    {s:'04:30',e:'05:00',c:'transit',t:'Uber to AKL airport (~25min, ~$35 NZD)'},
+    {s:'05:00',e:'06:10',c:'logistics',t:'AKL airport · check-in · security · gate'},
+    {s:'06:10',e:'08:20',c:'transit',t:'Flight QF 152 AKL → MEL (2h10m nonstop)'},
+    {s:'08:20',e:'09:00',c:'transit',t:'MEL airport → CBD SkyBus (~30min, ~$24 AUD)'},
+    {s:'09:00',e:'10:00',c:'logistics',t:'Bag drop at Hilton Melbourne South Wharf (check-in 3pm)'},
+    {s:'10:00',e:'12:00',c:'food',t:'Brunch · Yarra riverside · South Wharf precinct'},
+    {s:'12:00',e:'13:00',c:'food',t:'Lunch'},
+    {s:'13:00',e:'15:00',c:'downtime',t:'Rest · early-morning recovery · hotel downtime'},
+    {s:'15:00',e:'15:30',c:'logistics',t:'Hotel check-in · Hilton Melbourne South Wharf'},
+    {s:'15:30',e:'17:30',c:'culture',t:'Hosier Lane Street Art · Federation Square (10min walk)'},
+    {s:'17:30',e:'19:00',c:'food',t:'Pre-dinner drinks'},
+    {s:'19:00',e:'21:30',c:'food',t:'Dinner · Flower Drum (Chinatown, 15min walk)'},
+    {s:'21:30',e:'22:15',c:'transit',t:'Walk back to Hilton South Wharf (~20min)'},
+    {s:'22:15',e:'24:00',c:'sleep',t:'Sleep · Hilton Melbourne South Wharf'},
+  ]},
+  {tag:5,date:'May 20',wd:'WED',city:'MEL',cityFull:'Melbourne',lbl:'Brighton + Penguin Parade',blocks:[
+    {s:'06:30',e:'07:00',c:'logistics',t:'Wake at Hilton South Wharf'},
+    {s:'07:00',e:'07:40',c:'transit',t:'Tram / Uber to Brighton Bathing Boxes (~35min)'},
+    {s:'07:40',e:'09:00',c:'outdoor',t:'Brighton Bathing Boxes sunrise (north-facing, golden light)'},
+    {s:'09:00',e:'09:35',c:'transit',t:'Back to CBD / hotel area'},
+    {s:'09:35',e:'10:30',c:'food',t:'Late breakfast'},
+    {s:'10:30',e:'13:00',c:'culture',t:'Federation Square · ACMI · Ian Potter Centre'},
+    {s:'13:00',e:'13:30',c:'food',t:'Lunch'},
+    {s:'13:30',e:'15:30',c:'transit',t:'Drive / tour bus to Phillip Island (1.5h east)'},
+    {s:'15:30',e:'17:00',c:'outdoor',t:'Phillip Island · visitor center · Summerland Beach walk'},
+    {s:'17:00',e:'18:30',c:'outdoor',t:'Penguin Parade · Little Penguins emerge at sunset'},
+    {s:'18:30',e:'20:00',c:'transit',t:'Drive back to Melbourne (1.5h)'},
+    {s:'20:00',e:'21:00',c:'food',t:'Light dinner near Hilton South Wharf'},
+    {s:'21:00',e:'22:00',c:'downtime',t:'Wind down at hotel'},
+    {s:'22:00',e:'24:00',c:'sleep',t:'Sleep · Hilton Melbourne South Wharf'},
+  ]},
+  {tag:6,date:'May 21',wd:'THU',city:'MEL',cityFull:'Melbourne',lbl:'Spa + Ishizuka',blocks:[
+    {s:'09:00',e:'10:00',c:'food',t:'Slow morning coffee · Hilton South Wharf'},
+    {s:'10:00',e:'12:00',c:'wellness',t:'Sakura Lounge / Bamford Spa · 90-min massage'},
+    {s:'12:00',e:'13:30',c:'food',t:'Lunch'},
+    {s:'13:30',e:'15:30',c:'culture',t:'Melbourne CBD laneways · Degraves St · last wander'},
+    {s:'15:30',e:'17:00',c:'downtime',t:'Rest at Hilton South Wharf · pack bags (5am departure)'},
+    {s:'17:00',e:'17:30',c:'transit',t:'Walk to Ishizuka · B01/139 Bourke St basement (~15min)'},
+    {s:'17:30',e:'21:00',c:'food',t:'Ishizuka kaiseki 5:30pm early seating · 16-seat basement restaurant'},
+    {s:'21:00',e:'21:30',c:'transit',t:'Walk back to Hilton South Wharf (~15min)'},
+    {s:'21:30',e:'23:00',c:'logistics',t:'Final packing · set 5am alarm for 06:00 MEL→SYD flight'},
+    {s:'23:00',e:'24:00',c:'sleep',t:'Sleep (limited — 5am wake)'},
+  ]},
+  {tag:7,date:'May 22',wd:'FRI',city:'FLIGHT',cityFull:'MEL → SYD',lbl:'Transit + Vivid Night 1',blocks:[
+    {s:'05:00',e:'05:30',c:'logistics',t:'Wake · Hilton South Wharf checkout'},
+    {s:'05:30',e:'05:50',c:'transit',t:'Uber to MEL airport (~20min)'},
+    {s:'05:50',e:'06:00',c:'logistics',t:'MEL airport security'},
+    {s:'06:00',e:'07:30',c:'transit',t:'Flight JQ 500 MEL → SYD (1h30m) · Vivid Sydney opens today'},
+    {s:'07:30',e:'08:00',c:'transit',t:'SYD airport → CBD · Opal rail (13min, ~$20 AUD)'},
+    {s:'08:00',e:'10:00',c:'logistics',t:'Bag drop Hilton Sydney, 488 George St · breakfast QVB'},
+    {s:'10:00',e:'12:00',c:'outdoor',t:'Royal Botanic Garden walk · harbour foreshore'},
+    {s:'12:00',e:'13:00',c:'food',t:'Lunch'},
+    {s:'13:00',e:'15:00',c:'downtime',t:'Rest (very early start) · Hilton Sydney'},
+    {s:'15:00',e:'15:30',c:'logistics',t:'Hotel check-in · Hilton Sydney'},
+    {s:'15:30',e:'18:30',c:'outdoor',t:'Observatory Hill golden hour · Harbour Bridge + skyline'},
+    {s:'18:30',e:'19:30',c:'food',t:'The Rocks dinner'},
+    {s:'19:30',e:'22:00',c:'culture',t:'Vivid Sydney Night 1 · Circular Quay light projections'},
+    {s:'22:00',e:'22:30',c:'transit',t:'Walk back to Hilton Sydney (~15min)'},
+    {s:'22:30',e:'24:00',c:'sleep',t:'Sleep · Hilton Sydney'},
+  ]},
+  {tag:8,date:'May 23',wd:'SAT',city:'SYD',cityFull:'Sydney',lbl:'Iconic Day + Sean\'s',blocks:[
+    {s:'06:00',e:'06:15',c:'logistics',t:'Wake at Hilton Sydney'},
+    {s:'06:15',e:'06:45',c:'transit',t:'Uber to Mrs Macquarie\'s Chair (~10min)'},
+    {s:'06:45',e:'08:00',c:'outdoor',t:'Sunrise · Opera House + Harbour Bridge in one frame'},
+    {s:'08:00',e:'09:00',c:'transit',t:'Walk / Uber back to CBD + coffee'},
+    {s:'09:00',e:'11:00',c:'culture',t:'Sydney Opera House guided tour (book AUD $45)'},
+    {s:'11:00',e:'12:00',c:'food',t:'Lunch · Circular Quay'},
+    {s:'12:00',e:'14:00',c:'downtime',t:'Peak UV rest · Hilton Sydney'},
+    {s:'14:00',e:'14:25',c:'transit',t:'Uber to Bondi (~25min)'},
+    {s:'14:25',e:'17:00',c:'outdoor',t:'Bondi → Coogee Coastal Walk · Icebergs ocean pool'},
+    {s:'17:00',e:'17:20',c:'transit',t:'Uber from Coogee → Sean\'s North Bondi (~15min)'},
+    {s:'17:20',e:'19:00',c:'food',t:'Dinner · Sean\'s, 270 Campbell Pde North Bondi'},
+    {s:'19:00',e:'19:45',c:'transit',t:'Uber back to Hilton Sydney (~25min)'},
+    {s:'19:45',e:'22:00',c:'culture',t:'Vivid Sydney Night 2 · optional evening walk Circular Quay'},
+    {s:'22:00',e:'24:00',c:'sleep',t:'Sleep · Hilton Sydney'},
+  ]},
+  {tag:9,date:'May 24',wd:'SUN',city:'SYD',cityFull:'Sydney',lbl:'Burrawa + Vivid Drone Kayak',blocks:[
+    {s:'05:30',e:'06:15',c:'transit',t:'Wake at Hilton Sydney · walk to BridgeClimb, Cumberland St'},
+    {s:'06:15',e:'06:30',c:'logistics',t:'Burrawa Climb check-in · suit up'},
+    {s:'06:30',e:'10:00',c:'outdoor',t:'Burrawa Climb · dawn · Eora Nation storyteller · 440ft above harbour'},
+    {s:'10:00',e:'11:00',c:'food',t:'Post-climb brunch'},
+    {s:'11:00',e:'11:30',c:'transit',t:'Walk to Circular Quay · ferry to Manly (30min)'},
+    {s:'11:30',e:'14:00',c:'outdoor',t:'Manly Beach + Manly Scenic Walkway'},
+    {s:'14:00',e:'14:30',c:'transit',t:'Ferry back to Circular Quay'},
+    {s:'14:30',e:'15:00',c:'transit',t:'Walk back to Hilton Sydney'},
+    {s:'15:00',e:'17:00',c:'wellness',t:'Venustus spa · 6-handed massage · or SpaQ at QT'},
+    {s:'17:00',e:'17:30',c:'downtime',t:'Freshen up at hotel'},
+    {s:'17:30',e:'19:30',c:'food',t:'Dinner · The Rocks area (near Maritime Museum)'},
+    {s:'19:30',e:'20:00',c:'transit',t:'Walk to Australian National Maritime Museum, Darling Harbour (~15min)'},
+    {s:'20:00',e:'20:30',c:'logistics',t:'Sydney Harbour Kayaks check-in · DRONE SHOW night · gear up'},
+    {s:'20:30',e:'22:00',c:'culture',t:'Vivid Sydney DRONE SHOW Kayak Tour · $135 AUD/pp · 1.5h harbour'},
+    {s:'22:00',e:'22:30',c:'transit',t:'Walk back to Hilton Sydney'},
+    {s:'22:30',e:'23:30',c:'downtime',t:'Wind down · last big night in Sydney'},
+    {s:'23:30',e:'24:00',c:'sleep',t:'Sleep · Hilton Sydney'},
+  ]},
+  {tag:10,date:'May 25',wd:'MON',city:'SYD',cityFull:'Sydney',lbl:'Memorial Day Buffer',blocks:[
+    {s:'09:00',e:'11:00',c:'food',t:'Slow morning · Hilton Sydney breakfast'},
+    {s:'11:00',e:'13:00',c:'culture',t:'Free time · shopping · explore neighbourhood'},
+    {s:'13:00',e:'15:00',c:'food',t:'Long farewell lunch'},
+    {s:'15:00',e:'17:00',c:'outdoor',t:'Harbour walk or Bondi'},
+    {s:'17:00',e:'19:00',c:'logistics',t:'Pack bags for 7am departure tomorrow'},
+    {s:'19:00',e:'21:00',c:'food',t:'Final Sydney dinner'},
+    {s:'21:00',e:'22:00',c:'downtime',t:'Circular Quay sunset stroll'},
+    {s:'22:00',e:'23:00',c:'logistics',t:'Final prep · set 6:30am alarm'},
+    {s:'23:00',e:'24:00',c:'sleep',t:'Sleep · Hilton Sydney'},
+  ]},
+  {tag:11,date:'May 26',wd:'TUE',city:'SYD',cityFull:'Sydney → SFO',lbl:'Departure',blocks:[
+    {s:'06:30',e:'07:30',c:'logistics',t:'Wake · Hilton Sydney checkout'},
+    {s:'07:30',e:'07:45',c:'transit',t:'Walk to Town Hall station (2min)'},
+    {s:'07:45',e:'08:00',c:'transit',t:'Opal rail SYD airport (13min, ~$20 AUD)'},
+    {s:'08:00',e:'10:20',c:'logistics',t:'SYD airport check-in · security · United lounge'},
+    {s:'10:20',e:'24:00',c:'transit',t:'Flight UA 870 SYD → SFO · 13.5h nonstop · arrives May 26 06:50 SFO'},
+  ]},
+];
+
+const BOOKINGS=[
+  {pri:'urgent',lbl:'Vivid Sydney Kayak — DRONE SHOW',meta:'May 24 · 8:30pm · $135 AUD/pp · Darling Harbour',url:'https://sydneyharbourkayaks.rezdy.com/442358/sydney-vivid-moonlight-sea-kayaking-experience-darling-harbour-sydney',done:false},
+  {pri:'urgent',lbl:'AKL → MEL · Qantas QF 152',meta:'May 19 · 06:10–08:20 · $466/pp w/ bag',url:'https://www.qantas.com',done:false},
+  {pri:'urgent',lbl:'MEL → SYD · Jetstar JQ 500',meta:'May 22 · 06:00–07:30 · $161/pp w/ bag',url:'https://www.jetstar.com',done:false},
+  {pri:'urgent',lbl:'SYD → SFO · UA 870',meta:'May 26 · 10:20–06:50 · $1,162 w/ bag (or Flying Blue → QF 73)',url:'https://www.united.com',done:false},
+  {pri:'urgent',lbl:'Hilton Auckland',meta:'May 16–19 · Princes Wharf · check Honors pts first',url:'https://www.hilton.com/en/hotels/aklhitw-hilton-auckland/',done:false},
+  {pri:'urgent',lbl:'Hilton Melbourne South Wharf',meta:'May 19–22 · check Honors pts / Marriott alt: Westin MEL',url:'https://www.hilton.com/en/hotels/mlbswhf-hilton-melbourne-south-wharf/',done:false},
+  {pri:'urgent',lbl:'Hilton Sydney',meta:'May 22–26 · use Surpass cert Sat May 23 (highest nightly rate)',url:'https://www.hilton.com/en/hotels/sydchhf-hilton-sydney/',done:false},
+  {pri:'soon',lbl:'Ishizuka · 5:30pm early seating',meta:'May 21 (Thu) — email reservation@ishizuka.com.au today',url:'https://www.ishizuka.com.au/reservation/',done:false},
+  {pri:'soon',lbl:'Sean\'s · reserve table',meta:'May 23 (Sat) · +61 2 9365 4924 · 5 days ahead min',url:'https://www.sevenrooms.com/reservations/seansbondi',done:false},
+  {pri:'soon',lbl:'Burrawa Climb · dawn slot May 24',meta:'bridgeclimb.com · select "Burrawa" Indigenous storyteller climb',url:'https://www.bridgeclimb.com',done:false},
+  {pri:'soon',lbl:'Hobbiton coach · GreatSights NZ',meta:'May 18 · hotel pickup 7:30am · ~NZD $150–200pp all-in',url:'https://www.hobbitontours.com/plan-visit/transfers/',done:false},
+  {pri:'ok',lbl:'Penguin Parade · Phillip Island',meta:'May 20 (Wed) · Penguin Plus recommended · penguins.org.au',url:'https://www.penguins.org.au',done:false},
+  {pri:'ok',lbl:'Sydney Opera House tour',meta:'May 23 · AUD $45 · 9am or 10am slot',url:'https://www.sydneyoperahouse.com',done:false},
+  {pri:'ok',lbl:'Airalo eSIM · Oceania Regional',meta:'Both travelers separately · activate before May 14',url:'https://www.airalo.com/esim',done:false},
+  {pri:'ok',lbl:'MASU by Nic Watt · Day 1 dinner',meta:'May 16 · sevenrooms.com/reservations/masu',url:'https://www.sevenrooms.com/reservations/masu',done:false},
+  {pri:'feature',lbl:'Google Calendar Shared Trip Calendar',meta:'Auto-sync bookings + tickets for Allston + Donnie',url:'',done:false},
+];
+
+/* ── MAP DATA (Leaflet per-day pins) ── */
+const MAP_DAYS=[
+  {center:[37.7749,-122.4194],zoom:11,cityCode:'SFO',pins:[
+    {c:[37.7749,-122.4194],l:'Home · San Francisco',t:'08:00–18:00'},
+    {c:[37.6213,-122.3790],l:'SFO Airport · UA 917 dep 22:45',t:'22:45'},
+  ]},
+  {center:[-10,175],zoom:2,cityCode:'FLIGHT',pins:[
+    {c:[37.6213,-122.3790],l:'SFO · departed 22:45',t:'May 14'},
+    {c:[-36.8485,174.7633],l:'AKL · arriving May 16 07:10',t:'May 16'},
+  ]},
+  {center:[-36.8500,174.7600],zoom:12,cityCode:'AKL',pins:[
+    {c:[-37.0082,174.7850],l:'Auckland Airport (AKL)',t:'07:10'},
+    {c:[-36.8424,174.7621],l:'Wynyard Quarter',t:'10:00'},
+    {c:[-36.8427,174.7674],l:'Hilton Auckland, Princes Wharf',t:'15:00'},
+    {c:[-36.8461,174.7640],l:'MASU by Nic Watt, Federal St',t:'19:00'},
+  ]},
+  {center:[-36.9100,174.6100],zoom:11,cityCode:'AKL',pins:[
+    {c:[-36.8763,174.7663],l:'Mount Eden · sunrise crater rim',t:'06:50'},
+    {c:[-36.8601,174.7775],l:'Auckland War Memorial Museum',t:'10:00'},
+    {c:[-36.9548,174.4670],l:'Piha Beach · Lion Rock',t:'15:45'},
+    {c:[-36.8461,174.7640],l:'Bistro Saine / Forest · dinner',t:'18:15'},
+  ]},
+  {center:[-37.3500,174.9000],zoom:9,cityCode:'AKL',pins:[
+    {c:[-36.8427,174.7674],l:'Hilton Auckland · coach pickup 7:30am',t:'07:30'},
+    {c:[-37.8574,175.6824],l:'Hobbiton Movie Set, Matamata',t:'09:45–12:15'},
+  ]},
+  {center:[-37.5000,160.0000],zoom:4,cityCode:'FLIGHT',pins:[
+    {c:[-37.0082,174.7850],l:'Auckland Airport · QF 152 dep 06:10',t:'04:30'},
+    {c:[-37.6690,144.8410],l:'Melbourne Airport · arr 08:20',t:'08:20'},
+    {c:[-37.8230,144.9500],l:'Hilton Melbourne South Wharf',t:'09:00'},
+    {c:[-37.8170,144.9672],l:'Hosier Lane Street Art',t:'15:30'},
+  ]},
+  {center:[-38.0500,144.9800],zoom:9,cityCode:'MEL',pins:[
+    {c:[-37.9020,145.0020],l:'Brighton Bathing Boxes · sunrise',t:'07:40'},
+    {c:[-37.8180,144.9691],l:'Federation Square + ACMI',t:'10:30'},
+    {c:[-38.5140,145.1250],l:'Phillip Island Penguin Parade',t:'17:00'},
+  ]},
+  {center:[-37.8150,144.9600],zoom:14,cityCode:'MEL',pins:[
+    {c:[-37.8230,144.9500],l:'Hilton South Wharf · spa morning',t:'10:00'},
+    {c:[-37.8130,144.9640],l:'Ishizuka · B01/139 Bourke St basement',t:'17:30'},
+  ]},
+  {center:[-35.5000,149.5000],zoom:5,cityCode:'FLIGHT',pins:[
+    {c:[-37.6690,144.8410],l:'Melbourne Airport · JQ 500 dep 06:00',t:'05:30'},
+    {c:[-33.9399,151.1753],l:'Sydney Airport (SYD) · arr 07:30',t:'07:30'},
+    {c:[-33.8733,151.2064],l:'Hilton Sydney, 488 George St',t:'08:00'},
+    {c:[-33.8593,151.2032],l:'Observatory Hill · golden hour',t:'15:30'},
+    {c:[-33.8578,151.2100],l:'Circular Quay · Vivid Sydney Night 1',t:'19:30'},
+  ]},
+  {center:[-33.8800,151.2400],zoom:12,cityCode:'SYD',pins:[
+    {c:[-33.8640,151.2255],l:'Mrs Macquarie\'s Chair · sunrise',t:'06:45'},
+    {c:[-33.8568,151.2153],l:'Sydney Opera House',t:'09:00'},
+    {c:[-33.8908,151.2743],l:'Bondi Beach → Coogee Walk',t:'14:25'},
+    {c:[-33.8904,151.2793],l:'Sean\'s Restaurant, North Bondi',t:'17:20'},
+  ]},
+  {center:[-33.8600,151.2200],zoom:12,cityCode:'SYD',pins:[
+    {c:[-33.8604,151.2046],l:'BridgeClimb · Burrawa dawn slot',t:'06:30'},
+    {c:[-33.7964,151.2879],l:'Manly Beach',t:'11:30'},
+    {c:[-33.8733,151.2064],l:'Hilton Sydney · spa',t:'15:00'},
+    {c:[-33.8691,151.2011],l:'VIVID DRONE KAYAK · Maritime Museum Darling Harbour',t:'20:30'},
+  ]},
+  {center:[-33.8688,151.2093],zoom:13,cityCode:'SYD',pins:[
+    {c:[-33.8733,151.2064],l:'Hilton Sydney · slow morning',t:'09:00'},
+    {c:[-33.8578,151.2100],l:'Sydney CBD · final explore',t:'11:00'},
+  ]},
+  {center:[-33.9000,151.2000],zoom:12,cityCode:'SYD',pins:[
+    {c:[-33.8733,151.2064],l:'Hilton Sydney · checkout',t:'07:30'},
+    {c:[-33.9399,151.1753],l:'Sydney Airport · UA 870 dep 10:20',t:'08:00'},
+  ]},
+];
+
+// Overview route (SFO eastward offset to cross date line correctly in Leaflet)
+const OVERVIEW_ROUTE=[
+  [37.7749,237.5806], // SFO eastward (-122.4194 + 360)
+  [-36.8485,174.7633], // AKL
+  [-37.8136,144.9631], // MEL
+  [-33.8688,151.2093], // SYD
+  [37.7749,237.5806],  // back to SFO
+];
+const OVERVIEW_CITIES=[
+  {c:[37.7749,237.5806],l:'San Francisco (SFO)',code:'SFO'},
+  {c:[-36.8485,174.7633],l:'Auckland (AKL)',code:'AKL'},
+  {c:[-37.8136,144.9631],l:'Melbourne (MEL)',code:'MEL'},
+  {c:[-33.8688,151.2093],l:'Sydney (SYD)',code:'SYD'},
+];
+
+/* ── HELPERS ── */
+function toMins(t){if(!t||t==='24:00')return 1440;const[h,m]=t.split(':').map(Number);return h*60+(m||0);}
+function fmtT(t){return t==='24:00'?'00:00':t;}
+function pad2(n){return String(n).padStart(2,'0');}
+
+function blockGeom(s,e){
+  const sm=toMins(s),em=Math.min(toMins(e),1440);
+  return{top:sm*PX_PER_MIN,height:Math.max((em-sm)*PX_PER_MIN,4)};
+}
+
+/* ── STATS ── */
+function renderStats(){
+  const tot={};Object.keys(CAT).forEach(k=>tot[k]=0);
+  DAYS.forEach(d=>d.blocks.forEach(b=>{const dur=Math.min(toMins(b.e),1440)-toMins(b.s);if(dur>0)tot[b.c]=(tot[b.c]||0)+dur;}));
+  const fmtH=m=>{const h=Math.floor(m/60),r=m%60;return r?`${h}h ${r}m`:`${h}h`;};
+  const order=['transit','outdoor','food','culture','wellness','logistics','downtime','sleep'];
+  document.getElementById('stats-inner').innerHTML=order.map(k=>`
+    <div class="stat-item">
+      <div class="stat-swatch" style="background:${CAT[k].color}" aria-hidden="true"></div>
+      <div><div class="stat-label">${CAT[k].label}</div><div class="stat-val">${fmtH(tot[k]||0)}</div></div>
+    </div>`).join('');
+}
+
+/* ── TIME RAIL ── */
+function renderRail(){
+  document.getElementById('time-rail').innerHTML=[0,4,8,12,16,20,24].map(h=>{
+    const top=h*60*PX_PER_MIN,lbl=h===24?'00':pad2(h);
+    return`<div class="hr-label" style="top:${top}px">${lbl}</div><div class="hr-tick" style="top:${top}px"></div>`;
+  }).join('');
+}
+
+/* ── CITY ── */
+function cityClass(city){return({AKL:'city-akl',MEL:'city-mel',SYD:'city-syd',FLIGHT:'city-flight',SFO:'city-sfo'})[city]||'city-sfo';}
+function pillClass(city){return({AKL:'pill-akl',MEL:'pill-mel',SFO:'pill-sfo'})[city]||'pill-syd';}
+
+/* ── DAYS ── */
+let activeDayIdx=-1;
+
+function renderDays(){
+  const wrap=document.getElementById('days-wrap');
+  wrap.innerHTML=DAYS.map((day,i)=>{
+    const blks=day.blocks.map(b=>{
+      const{top,height}=blockGeom(b.s,b.e);
+      const col=CAT[b.c]?.color||'#475569';
+      const isSleep=b.c==='sleep';
+      return`<div class="blk cat-${b.c}" style="top:${top}px;height:${height}px;${isSleep?'':'background:'+col+'DC;'}"
+        data-s="${b.s}" data-e="${b.e}" data-c="${b.c}"
+        data-t="${b.t.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}"
+        tabindex="0" role="button" aria-label="${b.t}"
+      >${height>=13?b.t:''}</div>`;
+    }).join('');
+    const tagDisp=typeof day.tag==='number'?`Day ${day.tag}`:day.tag;
+    return`<div class="day-col ${cityClass(day.city)}" data-idx="${i}">
+      <div class="day-hdr" data-idx="${i}" tabindex="0" role="button" aria-label="${day.date}: ${day.cityFull}">
+        <div class="d-num">${tagDisp} · ${day.wd}</div>
+        <div class="d-date">${day.date}</div>
+        <div class="d-lbl">${day.lbl}</div>
+      </div>
+      <div class="day-body" aria-hidden="true">${blks}</div>
+    </div>`;
+  }).join('');
+}
+
+/* ── NAV STRIP ── */
+function renderNavStrip(){
+  document.getElementById('day-nav-strip').innerHTML=
+    `<span class="dnav-label">Jump to →</span>`+
+    DAYS.map((day,i)=>{
+      const tagDisp=typeof day.tag==='number'?`Day ${day.tag}`:day.tag;
+      return`<button class="dnav-pill" data-idx="${i}">${tagDisp}</button>`;
+    }).join('');
+}
+function updateNavStrip(idx){
+  document.querySelectorAll('.dnav-pill').forEach((p,i)=>p.classList.toggle('active',i===idx));
+}
+
+/* ── LEGEND ── */
+function renderLegend(){
+  const cats=['transit','outdoor','food','culture','wellness','logistics','downtime'];
+  document.getElementById('legend').innerHTML=cats.map(k=>
+    `<div class="leg-item"><div class="leg-dot" style="background:${CAT[k].color}" aria-hidden="true"></div>${CAT[k].label}</div>`).join('');
+}
+
+/* ── LEAFLET MAP ── */
+let leafMap,markersLayer,routeLayer,isOverview=false;
+
+function initMap(){
+  leafMap=L.map('trip-map',{
+    center:[-20,160],zoom:3,
+    attributionControl:true,
+    zoomControl:true,
+  });
+  // CartoDB Dark Matter (free, no API key, dark theme matches OLED design)
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
+    attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains:'abcd',maxZoom:19
+  }).addTo(leafMap);
+  markersLayer=L.layerGroup().addTo(leafMap);
+  routeLayer=L.layerGroup().addTo(leafMap);
+}
+
+function makeCircleIcon(color,size=9){
+  return L.circleMarker([0,0],{radius:size,fillColor:color,color:'#fff',weight:2,opacity:1,fillOpacity:0.92});
+}
+
+function updateMapForDay(idx){
+  if(!leafMap)return;
+  isOverview=false;
+  document.getElementById('map-overview-btn').classList.remove('active');
+  document.getElementById('map-overview-btn').setAttribute('aria-pressed','false');
+
+  markersLayer.clearLayers();
+  routeLayer.clearLayers();
+
+  const md=MAP_DAYS[idx];
+  if(!md)return;
+  const col=CITY_COLORS[md.cityCode]||'#94A3B8';
+  leafMap.setView(md.center,md.zoom,{animate:true,duration:0.4});
+
+  md.pins.forEach((pin,pi)=>{
+    const m=L.circleMarker(pin.c,{
+      radius:pi===0?7:8,fillColor:col,color:'#fff',weight:2,opacity:1,fillOpacity:0.9
+    }).bindPopup(`<b>${pin.l}</b><br><small>${pin.t}</small>`).addTo(markersLayer);
+  });
+
+  if(md.pins.length>1){
+    L.polyline(md.pins.map(p=>p.c),{
+      color:col,weight:2,opacity:0.65,dashArray:'6 4'
+    }).addTo(routeLayer);
+  }
+}
+
+function showOverview(){
+  if(!leafMap)return;
+  isOverview=true;
+  document.getElementById('map-overview-btn').classList.add('active');
+  document.getElementById('map-overview-btn').setAttribute('aria-pressed','true');
+  markersLayer.clearLayers();
+  routeLayer.clearLayers();
+  leafMap.setView([-10,175],2,{animate:true,duration:0.4});
+
+  OVERVIEW_CITIES.forEach(city=>{
+    const col=CITY_COLORS[city.code]||'#94A3B8';
+    L.circleMarker(city.c,{
+      radius:12,fillColor:col,color:'#fff',weight:2.5,fillOpacity:0.95
+    }).bindPopup(`<b>${city.l}</b>`).addTo(markersLayer);
+  });
+  L.polyline(OVERVIEW_ROUTE,{color:'#94A3B8',weight:1.5,opacity:0.7,dashArray:'8 5'}).addTo(routeLayer);
+}
+
+/* ── DETAIL ── */
+function showDetail(idx){
+  if(idx<0||idx>=DAYS.length)return;
+  activeDayIdx=idx;
+  const day=DAYS[idx];
+  document.querySelectorAll('.day-hdr').forEach((h,i)=>h.classList.toggle('active',i===idx));
+  updateNavStrip(idx);
+  if(!isOverview)updateMapForDay(idx);
+
+  const tagDisp=typeof day.tag==='number'?`Day ${day.tag}`:day.tag;
+  document.getElementById('detail-title').textContent=`${tagDisp} · ${day.date} · ${day.cityFull}`;
+  const pill=document.getElementById('detail-pill');
+  pill.textContent=day.lbl;pill.className=`city-pill ${pillClass(day.city)}`;
+
+  document.getElementById('detail-grid').innerHTML=day.blocks.map(b=>{
+    const col=CAT[b.c]?.color||'#475569';
+    return`<div class="det-item" style="border-left-color:${col}">
+      <div class="det-dot" style="background:${col}" aria-hidden="true"></div>
+      <div class="det-time">${fmtT(b.s)} – ${fmtT(b.e)}</div>
+      <div class="det-lbl">${b.t}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('btn-prev').disabled=(idx<=0);
+  document.getElementById('btn-next').disabled=(idx>=DAYS.length-1);
+  document.getElementById('detail-section').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+/* ── BOOKINGS ── */
+function renderBookings(){
+  const PL={urgent:'Book Today',soon:'Book Soon',ok:'Upcoming',feature:'Coming Soon'};
+  document.getElementById('booking-grid').innerHTML=BOOKINGS.map((b,i)=>{
+    const isFeature=b.pri==='feature';
+    const chkSvg=b.done?`<svg width="11" height="11" viewBox="0 0 11 11" fill="none" aria-hidden="true"><path d="M1.5 5.5l3 3 5-5" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`:'';
+    const linkHtml=b.url
+      ?`<a class="bk-link${isFeature?' feature-link':''}" href="${b.url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Book here →</a>`
+      :`<span class="bk-link feature-link" style="cursor:default;opacity:.7">See SUGGESTIONS.md</span>`;
+    return`<div class="bk-item${b.done?' done':''}${isFeature?' feature-item':''}" data-i="${i}"
+      tabindex="0" role="button" aria-pressed="${b.done}" aria-label="${b.done?'Done':'Pending'}: ${b.lbl}">
+      <div class="bk-check" aria-hidden="true">${chkSvg}</div>
+      <div class="bk-info">
+        <div class="bk-pri pri-${b.pri}">${PL[b.pri]}</div>
+        <div class="bk-lbl">${b.lbl}</div>
+        <div class="bk-meta">${b.meta}</div>
+        ${linkHtml}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ── TOOLTIP ── */
+const tip=document.getElementById('tooltip');
+const ttT=document.getElementById('tt-time');
+const ttL=document.getElementById('tt-lbl');
+function showTip(e,el){
+  const col=CAT[el.dataset.c]?.color||'#fff';
+  ttT.innerHTML=`<div class="tt-dot" style="background:${col}" aria-hidden="true"></div>${fmtT(el.dataset.s)} – ${fmtT(el.dataset.e)}`;
+  ttL.textContent=el.dataset.t;
+  tip.classList.add('vis');moveTip(e);
+}
+function moveTip(e){
+  tip.style.left=Math.min(e.clientX+14,window.innerWidth-250)+'px';
+  tip.style.top=Math.min(e.clientY-6,window.innerHeight-90)+'px';
+}
+function hideTip(){tip.classList.remove('vis');}
+
+/* ── INIT ── */
+function init(){
+  renderStats();renderRail();renderDays();renderNavStrip();renderLegend();renderBookings();
+  initMap();
+
+  const wrap=document.getElementById('days-wrap');
+  wrap.addEventListener('click',e=>{const h=e.target.closest('.day-hdr');if(h)showDetail(+h.dataset.idx);});
+  wrap.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){const h=e.target.closest('.day-hdr');if(h){e.preventDefault();showDetail(+h.dataset.idx);}}});
+  wrap.addEventListener('mouseover',e=>{const b=e.target.closest('.blk');if(b)showTip(e,b);});
+  wrap.addEventListener('mousemove',e=>{if(tip.classList.contains('vis'))moveTip(e);});
+  wrap.addEventListener('mouseout',e=>{if(e.target.closest('.blk'))hideTip();});
+
+  document.getElementById('day-nav-strip').addEventListener('click',e=>{const p=e.target.closest('.dnav-pill');if(p)showDetail(+p.dataset.idx);});
+  document.getElementById('day-nav-strip').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){const p=e.target.closest('.dnav-pill');if(p){e.preventDefault();showDetail(+p.dataset.idx);}}});
+  document.getElementById('btn-prev').addEventListener('click',()=>showDetail(activeDayIdx-1));
+  document.getElementById('btn-next').addEventListener('click',()=>showDetail(activeDayIdx+1));
+  document.getElementById('map-overview-btn').addEventListener('click',()=>{if(isOverview)showDetail(activeDayIdx);else showOverview();});
+
+  const bGrid=document.getElementById('booking-grid');
+  bGrid.addEventListener('click',e=>{if(e.target.closest('a'))return;const item=e.target.closest('.bk-item');if(item){BOOKINGS[+item.dataset.i].done^=true;renderBookings();}});
+  bGrid.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();const item=e.target.closest('.bk-item');if(item){BOOKINGS[+item.dataset.i].done^=true;renderBookings();}}});
+
+  showDetail(0);
+}
+
+document.addEventListener('DOMContentLoaded',init);
+</script>
+</body>
+</html>
