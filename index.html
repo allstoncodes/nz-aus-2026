@@ -893,7 +893,7 @@ function showDetail(idx){
   const day=DAYS[idx];
   document.querySelectorAll('.day-hdr').forEach((h,i)=>h.classList.toggle('active',i===idx));
   updateNavStrip(idx);
-  if(!isOverview)updateMapForDay(idx);
+  updateMapForDay(idx); // always update map when selecting a day (exits overview mode)
 
   const tagDisp=typeof day.tag==='number'?`Day ${day.tag}`:day.tag;
   document.getElementById('detail-title').textContent=`${tagDisp} · ${day.date} · ${day.cityFull}`;

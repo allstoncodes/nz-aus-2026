@@ -6,6 +6,109 @@
 
 ---
 
+## Trip Arc
+
+```mermaid
+%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#1E293B', 'primaryTextColor': '#F8FAFC', 'primaryBorderColor': '#F59E0B', 'lineColor': '#94A3B8', 'background': '#020617', 'taskBkgColor': '#1E293B', 'taskBorderColor': '#334155', 'doneTaskBkgColor': '#134E4A', 'critBorderColor': '#3B82F6', 'critBkgColor': '#1E3A5F', 'todayLineColor': '#F59E0B'}}}%%
+gantt
+  dateFormat  YYYY-MM-DD
+  title       AKL → MEL → SYD · May 2026
+
+  section ✈ Outbound
+  UA 917 SFO → AKL (departs May 14)     :done,    f0, 2026-05-14, 2d
+
+  section Auckland (3 days)
+  Day 1 · Arrival · MASU dinner         :done,    a1, 2026-05-16, 1d
+  Day 2 · Mount Eden · Piha Beach       :done,    a2, 2026-05-17, 1d
+  Day 3 · Hobbiton Movie Set            :active,  a3, 2026-05-18, 1d
+
+  section ✈ AKL → MEL
+  QF 152 · 06:10 → 08:20 · $466/pp     :crit,    f1, 2026-05-19, 1d
+
+  section Melbourne (3 days)
+  Day 5 · Brighton Boxes + Penguin Parade :done,  m1, 2026-05-20, 1d
+  Day 6 · Spa + Ishizuka 5:30pm         :done,    m2, 2026-05-21, 1d
+
+  section ✈ MEL → SYD
+  JQ 500 · 06:00 → 07:30 · $161/pp     :crit,    f2, 2026-05-22, 1d
+
+  section Sydney + Vivid (4 days)
+  Day 7 · Vivid Night 1 · Observatory Hill :done, s0, 2026-05-22, 1d
+  Day 8 · Opera House · Bondi · Sean's  :done,    s1, 2026-05-23, 1d
+  Day 9 · Burrawa Climb + VIVID DRONE KAYAK :done, s2, 2026-05-24, 1d
+  Day 10 · Memorial Day buffer          :done,    s3, 2026-05-25, 1d
+
+  section ✈ Return
+  UA 870 / QF 73 SYD → SFO             :crit,    f3, 2026-05-26, 1d
+```
+
+---
+
+## Route
+
+```mermaid
+flowchart LR
+  SFO["✈ SFO\nSan Francisco\nMay 14 22:45"]
+  AKL["🥝 AKL\nAuckland\nMay 16–19"]
+  HOB["Hobbiton\nCoach tour"]
+  PIH["Piha Beach\nBlack sand"]
+  MEL["🦘 MEL\nMelbourne\nMay 19–22"]
+  PHI["Penguin Parade\nPhillip Island"]
+  ISH["Ishizuka\n16-seat kaiseki"]
+  SYD["🦭 SYD\nSydney\nMay 22–26"]
+  BUR["Burrawa Climb\n440ft · dawn"]
+  VIV["Vivid Drone\nKayak · May 24"]
+
+  SFO -->|"UA 917 · nonstop 13.5h"| AKL
+  AKL --- HOB
+  AKL --- PIH
+  AKL -->|"QF 152 · May 19 · $466/pp"| MEL
+  MEL --- PHI
+  MEL --- ISH
+  MEL -->|"JQ 500 · May 22 · $161/pp"| SYD
+  SYD --- BUR
+  SYD --- VIV
+  SYD -->|"UA 870 / QF 73 · nonstop 13.5h"| SFO
+
+  style SFO  fill:#1E293B,stroke:#64748B,color:#94A3B8
+  style AKL  fill:#1E293B,stroke:#F59E0B,color:#F59E0B
+  style MEL  fill:#1E293B,stroke:#0D9488,color:#0D9488
+  style SYD  fill:#1E293B,stroke:#8B5CF6,color:#8B5CF6
+  style HOB  fill:#14532D,stroke:#22C55E,color:#F8FAFC
+  style PIH  fill:#14532D,stroke:#22C55E,color:#F8FAFC
+  style PHI  fill:#14532D,stroke:#22C55E,color:#F8FAFC
+  style ISH  fill:#1E1B4B,stroke:#8B5CF6,color:#F8FAFC
+  style BUR  fill:#1E1B4B,stroke:#8B5CF6,color:#F8FAFC
+  style VIV  fill:#1E1B4B,stroke:#8B5CF6,color:#F8FAFC
+```
+
+---
+
+## Schedule at a Glance (ASCII)
+
+```
+      00 04 08 12 16 20 24
+      ── ── ── ── ── ── ──
+May14 ....LLLLL.....LLLTTT  SFO · Departure Day (flight dep 22:45)
+May15 TTTTTTTTTTTTTTTTTTTT  In-flight over Pacific (13h25m UA 917)
+May16 ..TTTFFFDDDDDLDDFFDS  AKL · Arrival · MASU dinner
+May17 ..LOOTTFCCDOTTTFFDS.  AKL · Mount Eden · Museum · Piha Beach
+May18 ..LTTTOOTTTTFLDSS....  AKL · Hobbiton coach (departs 7:30am)
+May19 LLTTTLFFFDDLCCCFFDS..  AKL→MEL · Transit · Flower Drum dinner
+May20 .TOOOTTCCCTTTTOOFDSS.  MEL · Brighton Boxes · Penguin Parade
+May21 .FFWWFLLLCCCDDDFLLSS.  MEL · Spa + Ishizuka 5:30pm
+May22 LLTTTTLLOOFDDOOOOTS..  MEL→SYD · Transit · Vivid Night 1
+May23 .TOOOTTCFFFFDDTFTCCTS  SYD · Mrs Macquarie · Opera · Bondi · Sean's
+May24 TLOOTTFOOTTTWWWFTLCDS  SYD · Burrawa Climb + Vivid DRONE Kayak
+May25 .FFFCCCFFFLOFFFDS....  SYD · Memorial Day buffer
+May26 .LTTLTTTTTTTTTTTTTTT  SYD · Departure UA 870 dep 10:20am
+
+KEY: T=transit  O=outdoor  F=food  C=culture  W=wellness
+     L=logistics  D=downtime  S=sleep  .=midnight buffer
+```
+
+---
+
 ## Fast Facts
 
 | | |
