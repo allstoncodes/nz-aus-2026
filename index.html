@@ -198,6 +198,11 @@
     .bk-link.feature-link{color:var(--purple);border-color:rgba(139,92,246,.3);}
     .bk-link.feature-link:hover{background:rgba(139,92,246,.08);}
 
+    /* ── FEEDBACK ── */
+    .feedback-btn{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 18px;color:var(--text-2);text-decoration:none;font-size:.875rem;font-weight:600;transition:border-color .15s,color .15s,background .15s;}
+    .feedback-btn:hover{border-color:var(--purple);color:var(--purple);background:rgba(139,92,246,.05);}
+    .feedback-btn:focus-visible{outline:2px solid var(--purple);outline-offset:2px;}
+
     /* ── FOOTER ── */
     .site-footer{text-align:center;padding:18px 40px;font-size:.75rem;color:var(--text-3);border-top:1px solid var(--border);}
     .site-footer a{color:var(--text-2);text-decoration:none;}
@@ -435,6 +440,27 @@
   <div class="booking-grid" id="booking-grid"></div>
 </section>
 
+<hr class="div">
+
+<!-- FEEDBACK -->
+<section class="page-section" aria-label="Leave feedback">
+  <h2 class="section-head">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--purple)"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    Leave Feedback
+  </h2>
+  <p style="font-size:.875rem;color:var(--text-2);margin-bottom:14px;max-width:760px;">
+    See something to update — wrong time, missing activity, better restaurant, broken link?
+    Click below to open a pre-filled GitHub Issue. Allston reads + implements between sessions; Donnie can comment on the same issue to add more notes. Both Allston + Donnie use the same loop.
+  </p>
+  <a class="feedback-btn" href="https://github.com/allstoncodes/nz-aus-2026/issues/new?title=Feedback%3A+%5Bday+or+section%5D&body=%2A%2ADay+%2F+section%3A%2A%2A+%0A%0A%2A%2AFeedback%3A%2A%2A+%0A%0A%2A%2ASubmitted+by%3A%2A%2A+Allston+%2F+Donnie&labels=feedback" target="_blank" rel="noopener">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+    Open GitHub Issue
+  </a>
+  <p style="font-size:.6875rem;color:var(--text-3);margin-top:14px;max-width:760px;">
+    Loop: you submit → Claude pulls via <code style="font-family:'DM Mono',monospace;color:var(--text-2);background:var(--card);padding:1px 5px;border-radius:3px;">gh issue list</code> → implements → pushes update → GitHub Pages auto-deploys → closes issue. Both Allston and Donnie can comment on the same issue.
+  </p>
+</section>
+
 <footer class="site-footer">
   Perplexity Trip Planner · NZ + AUS May 2026 · Allston Fojas + Donnie ·
   <a href="https://github.com/allstoncodes/nz-aus-2026" target="_blank" rel="noopener">GitHub</a> ·
@@ -651,14 +677,59 @@ const BOOKINGS=[
   {pri:'feature',lbl:'Google Calendar Shared Trip Calendar',meta:'Auto-sync bookings + tickets for Allston + Donnie',url:'',done:false},
 ];
 
+/* ── GREAT CIRCLE ARCS ──
+   gcArc() computes spherical interpolation waypoints for a flight leg.
+   Key trick for Pacific crossings:
+   - SFO→AKL (westward): start from SFO_E (+237°) → AKL natural (+175°), arc decreases
+   - SYD→SFO (eastward): SYD natural (+151°) → SFO_E (+237°), arc increases
+   Both keep all coords in the same hemisphere copy so Leaflet renders one continuous arc. */
+function gcArc(lat1,lon1,lat2,lon2,n=40){
+  const D=Math.PI/180,R=180/Math.PI;
+  const[f1,l1,f2,l2]=[lat1,lon1,lat2,lon2].map(v=>v*D);
+  const d=Math.acos(Math.max(-1,Math.min(1,Math.sin(f1)*Math.sin(f2)+Math.cos(f1)*Math.cos(f2)*Math.cos(l2-l1))));
+  if(d<1e-5)return[[lat1,lon1],[lat2,lon2]];
+  const pts=Array.from({length:n+1},(_,i)=>{
+    const t=i/n,A=Math.sin((1-t)*d)/Math.sin(d),B=Math.sin(t*d)/Math.sin(d);
+    const x=A*Math.cos(f1)*Math.cos(l1)+B*Math.cos(f2)*Math.cos(l2);
+    const y=A*Math.cos(f1)*Math.sin(l1)+B*Math.cos(f2)*Math.sin(l2);
+    const z=A*Math.sin(f1)+B*Math.sin(f2);
+    return[Math.atan2(z,Math.sqrt(x*x+y*y))*R,Math.atan2(y,x)*R];
+  });
+  // Force first point to literal input lon1 (preserves "extended" coordinate range
+  // when caller passes lon > 180 or < -180), then normalize subsequent points to be
+  // continuous from the previous one (no ±360 jumps).
+  pts[0]=[lat1,lon1];
+  for(let i=1;i<pts.length;i++){
+    let dl=pts[i][1]-pts[i-1][1];
+    while(dl>180){pts[i][1]-=360;dl-=360;}
+    while(dl<-180){pts[i][1]+=360;dl+=360;}
+  }
+  return pts;
+}
+// SFO shifted 360° east → renders in visible Pacific bounds (+175 to +240 range).
+const SFO_E=[37.6213,-122.3790+360]; // = [37.6213, 237.6210]
+const ARCS={
+  'SFO-AKL':gcArc(SFO_E[0],SFO_E[1],-36.8485,174.7633),      // westward Pacific ✈ (+237 → +175)
+  'AKL-MEL':gcArc(-36.8485,174.7633,-37.6690,144.8410,20),    // trans-Tasman ✈
+  'MEL-SYD':gcArc(-37.6690,144.8410,-33.9399,151.1753,10),    // short hop ✈
+  'SYD-SFO':gcArc(-33.9399,151.1753,SFO_E[0],SFO_E[1]),      // eastward Pacific ✈ (+151 → +237)
+};
+// Overview: city markers in Pacific-extended coords (SFO at +237 visible alongside AKL/MEL/SYD).
+const OVERVIEW_CITIES=[
+  {c:SFO_E,l:'San Francisco (SFO) · May 14 dep',code:'SFO'},
+  {c:[-36.8485,174.7633],l:'Auckland (AKL) · May 16–19',code:'AKL'},
+  {c:[-37.8136,144.9631],l:'Melbourne (MEL) · May 19–22',code:'MEL'},
+  {c:[-33.8688,151.2093],l:'Sydney (SYD) · May 22–26',code:'SYD'},
+];
+
 /* ── MAP DATA (Leaflet per-day pins) ── */
 const MAP_DAYS=[
   {center:[37.7749,-122.4194],zoom:11,cityCode:'SFO',pins:[
     {c:[37.7749,-122.4194],l:'Home · San Francisco',t:'08:00–18:00'},
     {c:[37.6213,-122.3790],l:'SFO Airport · UA 917 dep 22:45',t:'22:45'},
   ]},
-  {center:[-10,175],zoom:2,cityCode:'FLIGHT',pins:[
-    {c:[37.6213,-122.3790],l:'SFO · departed 22:45',t:'May 14'},
+  {center:[-15,200],zoom:2,cityCode:'FLIGHT',arc:'SFO-AKL',pins:[
+    {c:SFO_E,l:'SFO · UA 917 departed 22:45',t:'May 14'},
     {c:[-36.8485,174.7633],l:'AKL · arriving May 16 07:10',t:'May 16'},
   ]},
   {center:[-36.8500,174.7600],zoom:12,cityCode:'AKL',pins:[
@@ -677,7 +748,7 @@ const MAP_DAYS=[
     {c:[-36.8427,174.7674],l:'Hilton Auckland · coach pickup 7:30am',t:'07:30'},
     {c:[-37.8574,175.6824],l:'Hobbiton Movie Set, Matamata',t:'09:45–12:15'},
   ]},
-  {center:[-37.5000,160.0000],zoom:4,cityCode:'FLIGHT',pins:[
+  {center:[-37.2000,160.0000],zoom:5,cityCode:'FLIGHT',arc:'AKL-MEL',pins:[
     {c:[-37.0082,174.7850],l:'Auckland Airport · QF 152 dep 06:10',t:'04:30'},
     {c:[-37.6690,144.8410],l:'Melbourne Airport · arr 08:20',t:'08:20'},
     {c:[-37.8230,144.9500],l:'Hilton Melbourne South Wharf',t:'09:00'},
@@ -692,7 +763,7 @@ const MAP_DAYS=[
     {c:[-37.8230,144.9500],l:'Hilton South Wharf · spa morning',t:'10:00'},
     {c:[-37.8130,144.9640],l:'Ishizuka · B01/139 Bourke St basement',t:'17:30'},
   ]},
-  {center:[-35.5000,149.5000],zoom:5,cityCode:'FLIGHT',pins:[
+  {center:[-35.8000,148.0000],zoom:6,cityCode:'FLIGHT',arc:'MEL-SYD',pins:[
     {c:[-37.6690,144.8410],l:'Melbourne Airport · JQ 500 dep 06:00',t:'05:30'},
     {c:[-33.9399,151.1753],l:'Sydney Airport (SYD) · arr 07:30',t:'07:30'},
     {c:[-33.8733,151.2064],l:'Hilton Sydney, 488 George St',t:'08:00'},
@@ -715,25 +786,11 @@ const MAP_DAYS=[
     {c:[-33.8733,151.2064],l:'Hilton Sydney · slow morning',t:'09:00'},
     {c:[-33.8578,151.2100],l:'Sydney CBD · final explore',t:'11:00'},
   ]},
-  {center:[-33.9000,151.2000],zoom:12,cityCode:'SYD',pins:[
+  {center:[-15,200],zoom:2,cityCode:'FLIGHT',arc:'SYD-SFO',pins:[
     {c:[-33.8733,151.2064],l:'Hilton Sydney · checkout',t:'07:30'},
-    {c:[-33.9399,151.1753],l:'Sydney Airport · UA 870 dep 10:20',t:'08:00'},
+    {c:[-33.9399,151.1753],l:'Sydney Airport · UA 870 dep 10:20',t:'10:20'},
+    {c:SFO_E,l:'SFO · arrives 06:50 same day (crosses dateline)',t:'06:50'},
   ]},
-];
-
-// Overview route (SFO eastward offset to cross date line correctly in Leaflet)
-const OVERVIEW_ROUTE=[
-  [37.7749,237.5806], // SFO eastward (-122.4194 + 360)
-  [-36.8485,174.7633], // AKL
-  [-37.8136,144.9631], // MEL
-  [-33.8688,151.2093], // SYD
-  [37.7749,237.5806],  // back to SFO
-];
-const OVERVIEW_CITIES=[
-  {c:[37.7749,237.5806],l:'San Francisco (SFO)',code:'SFO'},
-  {c:[-36.8485,174.7633],l:'Auckland (AKL)',code:'AKL'},
-  {c:[-37.8136,144.9631],l:'Melbourne (MEL)',code:'MEL'},
-  {c:[-33.8688,151.2093],l:'Sydney (SYD)',code:'SYD'},
 ];
 
 /* ── HELPERS ── */
@@ -861,7 +918,11 @@ function updateMapForDay(idx){
     }).bindPopup(`<b>${pin.l}</b><br><small>${pin.t}</small>`).addTo(markersLayer);
   });
 
-  if(md.pins.length>1){
+  // Flight days: draw the precomputed great circle arc (solid, more visible).
+  // Non-flight days: dashed line connecting the day's pins in order.
+  if(md.arc && ARCS[md.arc]){
+    L.polyline(ARCS[md.arc],{color:col,weight:2.5,opacity:0.85}).addTo(routeLayer);
+  } else if(md.pins.length>1){
     L.polyline(md.pins.map(p=>p.c),{
       color:col,weight:2,opacity:0.65,dashArray:'6 4'
     }).addTo(routeLayer);
@@ -875,7 +936,7 @@ function showOverview(){
   document.getElementById('map-overview-btn').setAttribute('aria-pressed','true');
   markersLayer.clearLayers();
   routeLayer.clearLayers();
-  leafMap.setView([-10,175],2,{animate:true,duration:0.4});
+  leafMap.setView([-15,200],2,{animate:true,duration:0.4});
 
   OVERVIEW_CITIES.forEach(city=>{
     const col=CITY_COLORS[city.code]||'#94A3B8';
@@ -883,7 +944,11 @@ function showOverview(){
       radius:12,fillColor:col,color:'#fff',weight:2.5,fillOpacity:0.95
     }).bindPopup(`<b>${city.l}</b>`).addTo(markersLayer);
   });
-  L.polyline(OVERVIEW_ROUTE,{color:'#94A3B8',weight:1.5,opacity:0.7,dashArray:'8 5'}).addTo(routeLayer);
+  // Per-leg arcs colored by destination city
+  L.polyline(ARCS['SFO-AKL'],{color:'#F59E0B',weight:2,opacity:0.8}).addTo(routeLayer);
+  L.polyline(ARCS['AKL-MEL'],{color:'#0D9488',weight:2,opacity:0.8}).addTo(routeLayer);
+  L.polyline(ARCS['MEL-SYD'],{color:'#8B5CF6',weight:2,opacity:0.8}).addTo(routeLayer);
+  L.polyline(ARCS['SYD-SFO'],{color:'#94A3B8',weight:2,opacity:0.7,dashArray:'8 5'}).addTo(routeLayer);
 }
 
 /* ── DETAIL ── */
