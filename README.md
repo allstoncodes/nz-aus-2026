@@ -19,24 +19,24 @@ gantt
     UA 917 SFO to AKL                    :done,    f0, 2026-05-14, 2d
 
     section Auckland
-    Day 1 - Arrival - MASU dinner        :done,    a1, 2026-05-16, 1d
-    Day 2 - Mount Eden - Piha Beach      :done,    a2, 2026-05-17, 1d
+    Day 1 - Arrival, MASU dinner         :done,    a1, 2026-05-16, 1d
+    Day 2 - Mount Eden, Piha Beach       :done,    a2, 2026-05-17, 1d
     Day 3 - Hobbiton Movie Set           :active,  a3, 2026-05-18, 1d
 
     section AKL to MEL
-    QF 152 - 06:10 to 08:20 - 466/pp     :crit,    f1, 2026-05-19, 1d
+    QF 152 dep 0610 arr 0820 - $466/pp   :crit,    f1, 2026-05-19, 1d
 
     section Melbourne
-    Day 5 - Brighton + Penguin Parade    :done,    m1, 2026-05-20, 1d
-    Day 6 - Spa + Ishizuka 5:30pm        :done,    m2, 2026-05-21, 1d
+    Day 5 - Brighton, Penguin Parade     :done,    m1, 2026-05-20, 1d
+    Day 6 - Spa, Ishizuka dinner         :done,    m2, 2026-05-21, 1d
 
     section MEL to SYD
-    JQ 500 - 06:00 to 07:30 - 161/pp     :crit,    f2, 2026-05-22, 1d
+    JQ 500 dep 0600 arr 0730 - $161/pp   :crit,    f2, 2026-05-22, 1d
 
     section Sydney + Vivid
     Day 7 - Vivid Night 1                :done,    s0, 2026-05-22, 1d
-    Day 8 - Opera House + Bondi + Seans  :done,    s1, 2026-05-23, 1d
-    Day 9 - Burrawa + Vivid Drone Kayak  :done,    s2, 2026-05-24, 1d
+    Day 8 - Opera House, Bondi, Seans    :done,    s1, 2026-05-23, 1d
+    Day 9 - Burrawa, Vivid Drone Kayak   :done,    s2, 2026-05-24, 1d
     Day 10 - Memorial Day buffer         :done,    s3, 2026-05-25, 1d
 
     section Return
