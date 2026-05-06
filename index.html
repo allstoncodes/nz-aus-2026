@@ -970,7 +970,7 @@ function showOverview(){
 }
 
 /* ── DETAIL ── */
-function showDetail(idx){
+function showDetail(idx,scroll=true){
   if(idx<0||idx>=DAYS.length)return;
   activeDayIdx=idx;
   const day=DAYS[idx];
@@ -994,7 +994,7 @@ function showDetail(idx){
 
   document.getElementById('btn-prev').disabled=(idx<=0);
   document.getElementById('btn-next').disabled=(idx>=DAYS.length-1);
-  document.getElementById('detail-section').scrollIntoView({behavior:'smooth',block:'nearest'});
+  if(scroll)document.getElementById('detail-section').scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
 /* ── BOOKINGS ── */
@@ -1057,7 +1057,7 @@ function init(){
   bGrid.addEventListener('click',e=>{if(e.target.closest('a'))return;const item=e.target.closest('.bk-item');if(item){BOOKINGS[+item.dataset.i].done^=true;renderBookings();}});
   bGrid.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();const item=e.target.closest('.bk-item');if(item){BOOKINGS[+item.dataset.i].done^=true;renderBookings();}}});
 
-  showDetail(0);
+  showDetail(0,false);
 }
 
 document.addEventListener('DOMContentLoaded',init);
