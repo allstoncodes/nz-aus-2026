@@ -1,15 +1,14 @@
----
-title: "NZ + AUS May 2026 — Trip Diagrams"
-type: trip-visual
-trip: Auckland → Melbourne → Sydney
-dates: 2026-05-16 to 2026-05-26
-ai_generated: true
-created: 2026-05-03
+# AKL → Hamilton → MEL → SYD · May 2026
+
+> **[→ Open Interactive Trip Dashboard](https://allstoncodes.github.io/nz-aus-2026)** — day-by-day timeline, per-day Leaflet map, hotel info, booking checklist (Hamilton + Waitomo + Hobbiton now included)
+
+*For Allston + Donnie's eyes. Repo goes private after May 26 return.*
+
+**Last update:** 2026-05-06 — restructured around GCal-aligned itinerary with Hamilton/Waitomo/Hobbiton self-drive leg + QF 73 evening return (booked).
+
 ---
 
-# AKL → MEL → SYD · May 2026 Diagrams
-
-Supplementary Mermaid + ASCII visualizations of the 11-day trip. Primary visual: `2026-05-03-nz-aus-trip-visual.html`.
+Supplementary Mermaid + ASCII visualizations of the 11-day trip. Primary visual: the interactive HTML dashboard at the link above.
 
 ---
 
