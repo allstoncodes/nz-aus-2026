@@ -560,11 +560,19 @@
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--accent-warm,#e8a93b)"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
     Outstanding Decisions
   </h2>
-  <p style="font-size:.875rem;color:var(--text-2);margin-bottom:14px;max-width:760px;">Open questions to confirm <em>before</em> booking. Tier order: events → flights → hotels → restaurants. Allston + Donnie align here, then book the queue below.</p>
+  <p style="font-size:.875rem;color:var(--text-2);margin-bottom:10px;max-width:760px;">Open questions to confirm <em>before</em> booking. Tier order: events → flights → hotels → restaurants. Allston + Donnie align here, then book the queue below.</p>
+
+  <!-- Legend -->
+  <div style="display:flex;flex-wrap:wrap;gap:14px;margin-bottom:18px;padding:10px 14px;background:rgba(255,255,255,0.03);border-radius:8px;font-size:.825rem;">
+    <span style="display:inline-flex;align-items:center;gap:6px;"><span style="display:inline-block;width:14px;height:14px;border-left:4px solid #e8a93b;background:rgba(232,169,59,0.08);"></span><strong>Amber</strong> = blocking (someone else gates this)</span>
+    <span style="display:inline-flex;align-items:center;gap:6px;"><span style="display:inline-block;width:14px;height:14px;border-left:4px solid #3b82f6;background:rgba(59,130,246,0.08);"></span><strong>Blue</strong> = active decision (pick one)</span>
+    <span style="display:inline-flex;align-items:center;gap:6px;"><span style="display:inline-block;width:14px;height:14px;border-left:4px solid #22c55e;background:rgba(34,197,94,0.08);"></span><strong>Green</strong> = verification / pre-trip checklist</span>
+  </div>
+
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:12px;">
 
-    <!-- 1. Donnie driving prep -->
-    <div class="info-card" style="border-left:3px solid var(--accent-warm,#e8a93b);">
+    <!-- 1. Donnie driving prep — AMBER (blocking) -->
+    <div class="info-card" style="border-left:4px solid #e8a93b !important;">
       <div class="info-title">🚗 Donnie — Driving Prep (gates everything)</div>
       <ul style="font-size:.875rem;margin-top:6px;">
         <li>Confirm <strong>International Driver's Permit</strong> acquired before May 14 departure</li>
@@ -573,8 +581,8 @@
       </ul>
     </div>
 
-    <!-- 2. Rental car booking -->
-    <div class="info-card" style="border-left:3px solid var(--accent,#3b82f6);">
+    <!-- 2. Rental car booking — BLUE (active decision) -->
+    <div class="info-card" style="border-left:4px solid #3b82f6 !important;">
       <div class="info-title">🚙 Rental Car — Allston books</div>
       <ul style="font-size:.875rem;margin-top:6px;">
         <li><strong>Hertz President's Circle Compact SUV</strong> (Kia Seltos or similar): $161 USD + 2.53% NZ CC fee ≈ $165</li>
@@ -584,8 +592,8 @@
       </ul>
     </div>
 
-    <!-- 3. AKL hotel decision -->
-    <div class="info-card" style="border-left:3px solid var(--accent,#3b82f6);">
+    <!-- 3. AKL hotel decision — BLUE -->
+    <div class="info-card" style="border-left:4px solid #3b82f6 !important;">
       <div class="info-title">🏨 AKL Hotel — pick one (2 non-contig nights)</div>
       <ul style="font-size:.875rem;margin-top:6px;">
         <li>⭐ <strong>Four Points by Sheraton Auckland</strong> — 189 NZD/night ≈ $113 USD; earns Bonvoy; 0.2mi CBD; rooftop bar</li>
@@ -594,8 +602,8 @@
       </ul>
     </div>
 
-    <!-- 4. Sun 5/17 cruise decision -->
-    <div class="info-card" style="border-left:3px solid var(--accent,#3b82f6);">
+    <!-- 4. Sun 5/17 cruise — BLUE -->
+    <div class="info-card" style="border-left:4px solid #3b82f6 !important;">
       <div class="info-title">⛴️ Sun 5/17 — Cruise pick</div>
       <ul style="font-size:.875rem;margin-top:6px;">
         <li><strong>Fullers Cruise / Waiheke Island Hopping</strong> 10:00–18:15 — wine tours, beaches, optional zipline (drive rental car onto car ferry for flexibility)</li>
@@ -603,8 +611,8 @@
       </ul>
     </div>
 
-    <!-- 5. Sat 5/16 morning fill -->
-    <div class="info-card" style="border-left:3px solid var(--accent,#3b82f6);">
+    <!-- 5. Sat 5/16 morning fill — BLUE -->
+    <div class="info-card" style="border-left:4px solid #3b82f6 !important;">
       <div class="info-title">☀️ Sat 5/16 morning fill (10:30 → 14:30 gap)</div>
       <ul style="font-size:.875rem;margin-top:6px;">
         <li><strong>All Blacks Experience + Hangi Shop lunch</strong> (cleanest combo near Sky Tower)</li>
@@ -614,8 +622,8 @@
       </ul>
     </div>
 
-    <!-- 6. Sat 5/16 evening anchor -->
-    <div class="info-card" style="border-left:3px solid var(--accent,#3b82f6);">
+    <!-- 6. Sat 5/16 evening anchor — BLUE -->
+    <div class="info-card" style="border-left:4px solid #3b82f6 !important;">
       <div class="info-title">🎭 Sat 5/16 evening anchor (16:45–19:30)</div>
       <ul style="font-size:.875rem;margin-top:6px;">
         <li>⭐ <strong>Auckland Writers Festival</strong> session (currently scheduled)</li>
@@ -624,8 +632,8 @@
       </ul>
     </div>
 
-    <!-- 7. MEL hotel decision -->
-    <div class="info-card" style="border-left:3px solid var(--accent,#3b82f6);">
+    <!-- 7. MEL hotel decision — BLUE -->
+    <div class="info-card" style="border-left:4px solid #3b82f6 !important;">
       <div class="info-title">🏨 MEL Hotel — pick one (2 nights, 5/20 + 5/21)</div>
       <ul style="font-size:.875rem;margin-top:6px;">
         <li><strong>Park Hyatt Melbourne</strong> — $206 USD/night, 9.1 reviews; cash via Sapphire Preferred</li>
@@ -634,8 +642,8 @@
       </ul>
     </div>
 
-    <!-- 8. SYD activities -->
-    <div class="info-card" style="border-left:3px solid var(--accent,#3b82f6);">
+    <!-- 8. SYD activities — BLUE -->
+    <div class="info-card" style="border-left:4px solid #3b82f6 !important;">
       <div class="info-title">🇦🇺 Sat–Mon 5/23–5/25 SYD plan (currently TBD)</div>
       <ul style="font-size:.875rem;margin-top:6px;">
         <li>Anchor candidates: Vivid Sydney (starts 5/22) · BridgeClimb Burrawa · Bondi-Coogee walk · Symbio Wildlife (Corey + Jiho recs — quokka encounter) · Opera House tour · whale-watching</li>
@@ -643,8 +651,8 @@
       </ul>
     </div>
 
-    <!-- 9. Allston pre-trip verifications -->
-    <div class="info-card" style="border-left:3px solid var(--success,#22c55e);">
+    <!-- 9. Allston pre-trip verifications — GREEN -->
+    <div class="info-card" style="border-left:4px solid #22c55e !important;">
       <div class="info-title">✅ Allston — pre-trip verifications</div>
       <ul style="font-size:.875rem;margin-top:6px;">
         <li>Verify Capital One Venture X benefits guide says "primary CDW, applies abroad" for NZ + AU (60 sec via Cap One app)</li>
