@@ -175,6 +175,19 @@
     .info-link:hover{background:rgba(13,148,136,.1);}
     .rate-badge{font-family:'DM Mono',monospace;font-size:1.125rem;font-weight:500;color:var(--accent);}
 
+    /* ── WEATHER WIDGET ── */
+    .weather-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:10px;}
+    .weather-tile{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;}
+    .weather-city{font-weight:600;font-size:.875rem;color:var(--text);margin-bottom:4px;}
+    .weather-dates{font-size:.75rem;color:var(--text-3);margin-bottom:8px;}
+    .weather-temp{font-size:1.25rem;color:var(--accent);font-weight:600;}
+    .weather-rain{font-size:.8125rem;color:var(--text-2);margin-top:2px;}
+    .weather-detail{font-size:.75rem;color:var(--text-3);margin-top:6px;line-height:1.4;}
+    .weather-loading,.weather-error{font-size:.8125rem;color:var(--text-3);}
+    /* ── PERSISTENCE STATUS ── */
+    .persist-bar{display:flex;justify-content:space-between;align-items:center;font-size:.75rem;color:var(--text-3);margin:6px 0 4px;}
+    .persist-reset{background:transparent;border:1px solid var(--border);color:var(--text-3);padding:3px 10px;border-radius:6px;cursor:pointer;font-size:.7rem;}
+    .persist-reset:hover{color:var(--text);border-color:var(--text-3);}
     /* ── BOOKINGS ── */
     .booking-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:8px;}
     .bk-item{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px;cursor:pointer;transition:border-color .18s,box-shadow .18s;}
@@ -292,6 +305,18 @@
 
 <hr class="div">
 
+<!-- WEATHER WIDGET -->
+<section class="page-section" aria-label="Real-time weather forecast">
+  <h2 class="section-head">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--accent)"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    Weather Forecast (real-time · Open-Meteo)
+  </h2>
+  <div class="weather-grid" id="weather-widget"><div class="weather-loading">Loading forecast…</div></div>
+  <p style="font-size:.75rem;color:var(--text-3);margin-top:8px;">Forecasts auto-load on page open. Open-Meteo's 16-day window covers all trip dates 5/14–5/26 once we're within range. Fahrenheit shown.</p>
+</section>
+
+<hr class="div">
+
 <!-- HOTELS -->
 <section class="page-section" aria-label="Hotels">
   <h2 class="section-head">
@@ -300,35 +325,35 @@
   </h2>
   <div class="hotel-box">
     <div class="hotel-card" style="border-left-color:var(--accent)">
-      <div class="hotel-city">Auckland · May 16 + May 19 (2 nights, split by Hamilton)</div>
-      <div class="hotel-name">Hilton Auckland</div>
-      <div class="hotel-meta">Princes Wharf, harbourfront · eforea spa ✓ · ~$245–335 USD/night (shared)</div>
-      <div class="hotel-dist">5 min walk Wynyard Quarter · 25 min Uber AKL airport · ~1.5h drive to Hamilton (Sun afternoon checkout)</div>
-      <a class="hotel-link" href="https://www.hilton.com/en/hotels/aklhitw-hilton-auckland/" target="_blank" rel="noopener">Book at Hilton →</a>
+      <div class="hotel-city">Auckland · May 16 + 18 + 19 (3 non-contig nights · reshuffle 5/8)</div>
+      <div class="hotel-name">RE-SEARCH PENDING — refundable + &lt;$100/night soft target</div>
+      <div class="hotel-meta">Donnie 5/8 criteria changed all city picks. Re-search via Trivago + Skiplagged + Airbnb running.</div>
+      <div class="hotel-dist">Reshuffle: Hamilton drops to 1 night → AKL gains a night for the AKL free day Tue 5/19</div>
+      <a class="hotel-link" href="#" onclick="return false">(pending)</a>
     </div>
     <div class="hotel-card" style="border-left-color:var(--success)">
-      <div class="hotel-city">Hamilton · May 17–18 (1 night) · cash-only</div>
-      <div class="hotel-name">Novotel Tainui Hamilton ⭐</div>
-      <div class="hotel-meta">4.5★ Accor · CBD riverside · restaurant + sauna · ~$157 USD/night · No Hilton/Marriott in Hamilton</div>
-      <div class="hotel-dist">~75 min drive Waitomo Black Abyss · ~45 min drive Hobbiton (Matamata) · CBD walkable for dinner</div>
-      <a class="hotel-link" href="https://all.accor.com/hotel/2159/index.en.shtml" target="_blank" rel="noopener">Book at Accor →</a>
+      <div class="hotel-city">Hamilton · May 17 (1 night only · was 2)</div>
+      <div class="hotel-name">RE-SEARCH PENDING — refundable + &lt;$100/night soft target</div>
+      <div class="hotel-meta">Old rec: Novotel Tainui ~$170. New: Quest on Ward $91 / BKs Premier $107 / Airbnb $58–113 — likely target.</div>
+      <div class="hotel-dist">Hamilton hosts only Sun 5/17 night; Mon 5/18 → drive Waitomo (Black Labyrinth) → Hobbiton → AKL same day</div>
+      <a class="hotel-link" href="#" onclick="return false">(pending)</a>
     </div>
     <div class="hotel-card" style="border-left-color:var(--teal)">
-      <div class="hotel-city">Melbourne · May 20–22 (2 nights)</div>
-      <div class="hotel-name">Hilton Melbourne South Wharf</div>
-      <div class="hotel-meta">2 Convention Centre Pl · eforea spa ✓ · ~$195–260 USD/night (shared)</div>
-      <div class="hotel-dist">10 min walk Hosier Lane · 1.5h drive Phillip Island · 3h drive Kennett River koalas</div>
-      <a class="hotel-link" href="https://www.hilton.com/en/hotels/mlbswhf-hilton-melbourne-south-wharf/" target="_blank" rel="noopener">Book at Hilton →</a>
+      <div class="hotel-city">Melbourne · May 20–22 (3 nights · was 2)</div>
+      <div class="hotel-name">RE-SEARCH PENDING — refundable + &lt;$100/night soft target</div>
+      <div class="hotel-meta">Old rec: Park Hyatt $206. New: Citadines on Bourke ~$104 best 4★ &lt;$110, or Airbnb 1BR CBD $100–130 floor.</div>
+      <div class="hotel-dist">+1 MEL night (5/22) added when JQ 516 booked for 5/23 instead of old JQ 500 5/22</div>
+      <a class="hotel-link" href="#" onclick="return false">(pending)</a>
     </div>
     <div class="hotel-card" style="border-left-color:var(--purple)">
-      <div class="hotel-city">Sydney · May 22/23–26 (3–4 nights · arrival depends on MEL→SYD timing)</div>
-      <div class="hotel-name">Hilton Sydney</div>
-      <div class="hotel-meta">488 George St, CBD · eforea + LivingWell spa ✓ · ~$230–325 USD/night (shared) · Use Surpass cert Sat May 23</div>
-      <div class="hotel-dist">15 min walk Circular Quay · 10 min Uber Mrs Macquarie's · 25 min Uber Bondi · 13 min Opal rail SYD airport</div>
-      <a class="hotel-link" href="https://www.hilton.com/en/hotels/sydchhf-hilton-sydney/" target="_blank" rel="noopener">Book at Hilton →</a>
+      <div class="hotel-city">Sydney · May 23–25 (3 nights · was 4) · Surpass cert decision</div>
+      <div class="hotel-name">Hilton Sydney for Sat 5/23 (Surpass cert) + RE-SEARCH for Sun+Mon</div>
+      <div class="hotel-meta">488 George St · Surpass cert covers Sat free (highest-rate night); Sun + Mon &lt;$100/night via Airbnb or budget hotel.</div>
+      <div class="hotel-dist">15 min walk Circular Quay · Vivid Sydney precinct walkable · 25 min Uber Bondi · 13 min Opal rail SYD airport</div>
+      <a class="hotel-link" href="https://www.hilton.com/en/hotels/sydchhf-hilton-sydney/" target="_blank" rel="noopener">Hilton Sydney →</a>
     </div>
   </div>
-  <p style="font-size:.8125rem;color:var(--text-3);">Check Hilton Honors app for points availability + Surpass free weekend night (use for Sydney Sat May 23 — highest nightly rate). Hamilton is cash-only — no Hilton/Marriott CBD presence; Novotel Tainui is the best branded mid-tier option (Accor 4.5★).</p>
+  <p style="font-size:.8125rem;color:var(--text-3);">Donnie 5/8 criteria: refundable + &lt;$100 USD/night soft target (flex up if better fit on chain pref / location / proximity). Surpass cert for Hilton Sydney Sat 5/23 still on the table — applies free, doesn't count against $100 target.</p>
 </section>
 
 <hr class="div">
@@ -573,81 +598,82 @@
 
     <!-- 1. Donnie driving prep — AMBER (blocking) -->
     <div class="info-card" style="border-left:4px solid #e8a93b !important;">
-      <div class="info-title">🚗 Donnie — Driving Prep (gates everything)</div>
+      <div class="info-title">🚗 Donnie — Driving Prep</div>
       <ul style="font-size:.875rem;margin-top:6px;">
-        <li>Confirm <strong>International Driver's Permit</strong> acquired before May 14 departure</li>
-        <li>Confirm comfortable with <strong>left-side driving</strong> (right-hand-drive car) — see Practical Info card above</li>
-        <li>Confirm <strong>Black Abyss (5h) vs Black Labyrinth (3h)</strong> intensity preference for Mon 5/18</li>
+        <li>⏳ <strong>International Driver's Permit</strong> not yet received (5/8) — AAA in person if not delivered by 5/13</li>
+        <li>✅ Comfortable with <strong>left-side driving</strong> (RHD car) — confirmed 5/8</li>
+        <li>✅ <strong>Black Labyrinth (3h)</strong> chosen over Black Abyss (5h) — confirmed 5/8</li>
       </ul>
     </div>
 
-    <!-- 2. Rental car booking — BLUE (active decision) -->
-    <div class="info-card" style="border-left:4px solid #3b82f6 !important;">
-      <div class="info-title">🚙 Rental Car — Allston books</div>
+    <!-- 2. Rental car booking — GREEN (DONNIE BOOKING) -->
+    <div class="info-card" style="border-left:4px solid #22c55e !important;">
+      <div class="info-title">🚙 Rental Car — Donnie books (changed 5/8)</div>
       <ul style="font-size:.875rem;margin-top:6px;">
         <li><strong>Hertz President's Circle Compact SUV</strong> (Kia Seltos or similar): $161 USD + 2.53% NZ CC fee ≈ $165</li>
         <li>AKL Sat 5/16 10:00 → AKL Wed 5/20 11:00 (4 days)</li>
-        <li>Pay with <strong>Capital One Venture X</strong> · decline counter CDW · accept LIS (~$15-20 NZD/day for liability)</li>
-        <li><a href="https://hertz.co.nz" target="_blank" rel="noopener">hertz.co.nz</a> — sign in to President's Circle</li>
+        <li>Donnie has Capital One Venture X too → same President's Circle deal applies for him · decline counter CDW · accept LIS (~$15-20 NZD/day)</li>
+        <li><a href="https://hertz.co.nz" target="_blank" rel="noopener">hertz.co.nz</a></li>
       </ul>
     </div>
 
-    <!-- 3. AKL hotel decision — BLUE -->
+    <!-- 3. AKL hotel decision — BLUE (RE-OPEN per Donnie 5/8 criteria) -->
     <div class="info-card" style="border-left:4px solid #3b82f6 !important;">
-      <div class="info-title">🏨 AKL Hotel — pick one (2 non-contig nights)</div>
+      <div class="info-title">🏨 AKL Hotel — re-search 5/8 (3 non-contig nights)</div>
       <ul style="font-size:.875rem;margin-top:6px;">
-        <li>⭐ <strong>Four Points by Sheraton Auckland</strong> — 189 NZD/night ≈ $113 USD; earns Bonvoy; 0.2mi CBD; rooftop bar</li>
-        <li>OR <strong>Hilton Auckland Princes Wharf</strong> — $172 USD/night; 3-min walk to Fullers ferry; earns Hilton Honors</li>
-        <li>Sat 5/16 + Tue 5/19 nights</li>
+        <li><strong>Criteria changed:</strong> refundable + &lt;$100 USD/night soft target (was Four Points $113)</li>
+        <li>Sat 5/16 + <strong>Mon 5/18</strong> + Tue 5/19 (was 2 nights; +1 from Hamilton reshuffle)</li>
+        <li>Re-search via Trivago + Skiplagged + Airbnb pending</li>
       </ul>
     </div>
 
-    <!-- 4. Sun 5/17 cruise — BLUE -->
-    <div class="info-card" style="border-left:4px solid #3b82f6 !important;">
-      <div class="info-title">⛴️ Sun 5/17 — Cruise pick</div>
+    <!-- 4. Sun 5/17 cruise — GREEN (LOCKED) -->
+    <div class="info-card" style="border-left:4px solid #22c55e !important;">
+      <div class="info-title">⛴️ Sun 5/17 — Fullers Waiheke (LOCKED 5/8)</div>
       <ul style="font-size:.875rem;margin-top:6px;">
-        <li><strong>Fullers Cruise / Waiheke Island Hopping</strong> 10:00–18:15 — wine tours, beaches, optional zipline (drive rental car onto car ferry for flexibility)</li>
-        <li>OR <strong>Whale and Dolphin Safari</strong> 4.5h Hauraki Gulf — May = humpback migration starting; common dolphins, bottlenose, Bryde's whales</li>
+        <li>✅ <strong>Fullers Waiheke Island Hopping</strong> 10:00–18:15 — drive rental car onto car ferry · wine + zipline + flexibility</li>
+        <li>+~$80 NZD car-ferry surcharge for drive-on vs walk-on</li>
       </ul>
     </div>
 
-    <!-- 5. Sat 5/16 morning fill — BLUE -->
-    <div class="info-card" style="border-left:4px solid #3b82f6 !important;">
-      <div class="info-title">☀️ Sat 5/16 morning fill (10:30 → 14:30 gap)</div>
+    <!-- 5. Sat 5/16 morning fill — GREEN (LOCKED per Donnie's Google Doc pick) -->
+    <div class="info-card" style="border-left:4px solid #22c55e !important;">
+      <div class="info-title">☀️ Sat 5/16 morning — Forever Tomorrow + War Museum (LOCKED 5/8)</div>
       <ul style="font-size:.875rem;margin-top:6px;">
-        <li><strong>All Blacks Experience + Hangi Shop lunch</strong> (cleanest combo near Sky Tower)</li>
-        <li>OR Devonport ferry round-trip (~3h) + lunch back in CBD</li>
-        <li>OR Mount Eden sunrise ~6:50am (commits to early wake despite redeye)</li>
-        <li>OR Forever Tomorrow Chinese Art exhibition (chill indoor, pairs w/ War Museum afternoon)</li>
+        <li>✅ <strong>Forever Tomorrow: Chinese Art Now</strong> (Auckland Art Gallery) 10:30–12:30 — chill museum, pairs with War Museum afternoon</li>
+        <li>✅ <strong>Auckland War Memorial Museum</strong> 14:00–16:30 — best place to see <strong>Haka</strong> performed live</li>
+        <li>All Blacks Experience moves to Tue 5/19 (new free AKL day from reshuffle)</li>
       </ul>
     </div>
 
-    <!-- 6. Sat 5/16 evening anchor — BLUE -->
-    <div class="info-card" style="border-left:4px solid #3b82f6 !important;">
-      <div class="info-title">🎭 Sat 5/16 evening anchor (16:45–19:30)</div>
+    <!-- 6. Sat 5/16 evening anchor — GREEN (LOCKED) -->
+    <div class="info-card" style="border-left:4px solid #22c55e !important;">
+      <div class="info-title">🎭 Sat 5/16 evening — Auckland Writers Festival (LOCKED 5/8)</div>
       <ul style="font-size:.875rem;margin-top:6px;">
-        <li>⭐ <strong>Auckland Writers Festival</strong> session (currently scheduled)</li>
-        <li>OR NZ Music Month gig · NZ International Comedy Festival show · Blues v Hurricanes Super Rugby · Africa Day Auckland</li>
-        <li>Browse <a href="https://www.aucklandlive.co.nz/search/events?genre=-&date=2026-05-15%2C2026-05-19&price=-&page=3" target="_blank" rel="noopener">aucklandlive.co.nz events calendar</a></li>
+        <li>✅ <strong>Auckland Writers Festival</strong> session 16:45–19:30 — book session</li>
+        <li>Backup if sold out: NZ International Comedy Festival show (same window)</li>
       </ul>
     </div>
 
-    <!-- 7. MEL hotel decision — BLUE -->
+    <!-- 7. MEL hotel decision — BLUE (RE-OPEN per Donnie 5/8 criteria) -->
     <div class="info-card" style="border-left:4px solid #3b82f6 !important;">
-      <div class="info-title">🏨 MEL Hotel — pick one (2 nights, 5/20 + 5/21)</div>
+      <div class="info-title">🏨 MEL Hotel — re-search 5/8 (3 nights, 5/20–5/22)</div>
       <ul style="font-size:.875rem;margin-top:6px;">
-        <li><strong>Park Hyatt Melbourne</strong> — $206 USD/night, 9.1 reviews; cash via Sapphire Preferred</li>
-        <li>OR <strong>Sheraton Melbourne</strong> — $205/night; Bonvoy via Amex MR transfer 1:1; potential FHR stack</li>
-        <li>OR re-check Hilton Melbourne South Wharf direct rates at hilton.com</li>
+        <li><strong>Criteria changed:</strong> refundable + &lt;$100 USD/night soft target (was Park Hyatt $206)</li>
+        <li>3 nights: Wed 5/20 + Thu 5/21 + Fri 5/22 (was 2 nights — JQ 516 5/23 shifted MEL→SYD)</li>
+        <li>Realistic at &lt;$100: Airbnb 1BR CBD ($100–130 floor); Citadines on Bourke ~$104</li>
       </ul>
     </div>
 
     <!-- 8. SYD activities — BLUE -->
     <div class="info-card" style="border-left:4px solid #3b82f6 !important;">
-      <div class="info-title">🇦🇺 Sat–Mon 5/23–5/25 SYD plan (currently TBD)</div>
+      <div class="info-title">🇦🇺 SYD plan Sat–Mon 5/23–5/25 (refined 5/8)</div>
       <ul style="font-size:.875rem;margin-top:6px;">
-        <li>Anchor candidates: Vivid Sydney (starts 5/22) · BridgeClimb Burrawa · Bondi-Coogee walk · Symbio Wildlife (Corey + Jiho recs — quokka encounter) · Opera House tour · whale-watching</li>
-        <li>Plan after NZ leg locks; book ahead for BridgeClimb + Symbio</li>
+        <li>⭐ <strong>Vivid Kayak Tour</strong> Sat 5/23 evening — Donnie's pick over crowded boardwalks; paddle harbor center in glowing kayak (advance booking)</li>
+        <li>⭐ <strong>BridgeClimb Burrawa</strong> Sun 5/24 morning — Indigenous storyteller (Eora Nation), 440 ft above water (advance booking)</li>
+        <li><strong>Bondi → Coogee coastal walk</strong> Sun 5/24 afternoon — free, ~6km</li>
+        <li><strong>Symbio Wildlife Park</strong> Mon 5/25 — quokka/koala paid experience, only 1 slot/day (advance booking) · alt: <strong>Featherdale</strong></li>
+        <li>Whale-watching cruise option: May = 40K humpbacks Antarctica → AU coast</li>
       </ul>
     </div>
 
@@ -655,9 +681,10 @@
     <div class="info-card" style="border-left:4px solid #22c55e !important;">
       <div class="info-title">✅ Allston — pre-trip verifications</div>
       <ul style="font-size:.875rem;margin-top:6px;">
-        <li>Verify Capital One Venture X benefits guide says "primary CDW, applies abroad" for NZ + AU (60 sec via Cap One app)</li>
-        <li>Apply Hilton Surpass weekend night cert to Sat 5/23 SYD (highest-rate night)</li>
-        <li>Decide Amex MR transfer to Bonvoy for SYD nights 2-3 (vs cash) — depends on locked SYD pick</li>
+        <li>✅ Capital One Venture X primary CDW abroad — verified prior session; Donnie aware via Google Doc</li>
+        <li>⏳ Apply Hilton Surpass weekend night cert to Sat 5/23 SYD (pending Hilton Sydney booking decision)</li>
+        <li>⏳ Convert GCal events from PST → NZST (NZ events) / AEST (AU events) — confirmed PST 5/8</li>
+        <li>⏳ Sync donnie-reference.md back to Google Doc once hotels finalize</li>
       </ul>
     </div>
 
@@ -672,6 +699,10 @@
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--accent)"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
     Booking Priority Queue
   </h2>
+  <div class="persist-bar">
+    <span>✓ Your checkboxes persist on this device (localStorage).</span>
+    <button class="persist-reset" id="reset-state-btn" type="button">Clear my checkboxes</button>
+  </div>
   <div class="booking-grid" id="booking-grid"></div>
 </section>
 
@@ -761,42 +792,50 @@ const DAYS=[
     {s:'22:00',e:'22:30',c:'downtime',t:'Wind down · prep for Black Abyss tomorrow'},
     {s:'22:30',e:'24:00',c:'sleep',t:'Sleep · Novotel Tainui Hamilton'},
   ]},
-  {tag:3,date:'May 18',wd:'MON',city:'AKL',cityFull:'Hamilton + Waitomo',lbl:'Black Abyss · 5hr underground',blocks:[
-    {s:'08:00',e:'09:00',c:'food',t:'Breakfast Novotel · pre-Abyss fuel'},
-    {s:'09:00',e:'11:00',c:'downtime',t:'Hamilton CBD wander or hotel rest · check Black Abyss arrival window'},
-    {s:'11:00',e:'12:15',c:'transit',t:'Drive Hamilton to Waitomo (~75min)'},
-    {s:'12:15',e:'12:30',c:'logistics',t:'Black Water Rafting Co. check-in · wetsuit + helmet + harness'},
-    {s:'12:30',e:'17:30',c:'outdoor',t:'Black Abyss · 35m abseil · zipline blackout · climb waterfalls · glowworm tubing'},
-    {s:'17:30',e:'18:15',c:'food',t:'Hot shower + soup + bagel at Black Water Rafting Co. base'},
-    {s:'18:15',e:'19:30',c:'transit',t:'Drive back to Hamilton (~75min)'},
-    {s:'19:30',e:'21:00',c:'food',t:'Hamilton dinner CBD'},
-    {s:'21:00',e:'22:00',c:'downtime',t:'Recover at Novotel'},
-    {s:'22:00',e:'24:00',c:'sleep',t:'Sleep · Novotel Tainui Hamilton'},
+  {tag:3,date:'May 18',wd:'MON',city:'AKL',cityFull:'Hamilton → Hobbiton → Waitomo → AKL',lbl:'Hobbiton FIRST + Black Labyrinth LAST (BIG day · order set 5/8)',blocks:[
+    {s:'07:00',e:'07:45',c:'food',t:'Hamilton breakfast (early) · pre-Hobbiton fuel'},
+    {s:'07:45',e:'08:00',c:'logistics',t:'Wake/finish · checkout Hamilton (only Hamilton night)'},
+    {s:'08:00',e:'09:00',c:'transit',t:'Drive Hamilton to Hobbiton / Matamata (~1hr · Donnie driving rental, IDP)'},
+    {s:'09:00',e:'11:30',c:'outdoor',t:'Hobbiton Movie Set guided tour · Green Dragon Inn · Bag End (morning slot · 2.5h with on-set time + Green Dragon stop)'},
+    {s:'11:30',e:'12:30',c:'food',t:'Shire\'s Rest lunch (Hobbiton entrance cafe) · last dry meal before wet activity'},
+    {s:'12:30',e:'14:30',c:'transit',t:'Drive Hobbiton to Waitomo (~2hr · longer than direct from Hamilton because Hobbiton + Waitomo are not on same axis)'},
+    {s:'14:30',e:'15:00',c:'logistics',t:'Black Water Rafting Co. check-in · wetsuit + helmet + harness'},
+    {s:'15:00',e:'18:00',c:'outdoor',t:'Black Labyrinth · 3hr · gentler version (Donnie 5/8 pick) · float through glowworm caves · ENDS day on wet/cold note as designed'},
+    {s:'18:00',e:'18:30',c:'food',t:'Hot shower + soup at Black Water Rafting Co. base · last reset before drive'},
+    {s:'18:30',e:'21:00',c:'transit',t:'Drive Waitomo to Auckland (~2.5hr · damp but only have to drive home, no more activities)'},
+    {s:'21:00',e:'21:30',c:'logistics',t:'Check in AKL hotel · drop bags'},
+    {s:'21:30',e:'22:30',c:'food',t:'Late dinner Auckland · Federal St / Britomart late-night option'},
+    {s:'22:30',e:'24:00',c:'sleep',t:'Sleep · AKL N2'},
   ]},
-  {tag:4,date:'May 19',wd:'TUE',city:'AKL',cityFull:'Hamilton to AKL via Hobbiton',lbl:'Hobbiton Movie Set',blocks:[
-    {s:'08:00',e:'09:00',c:'food',t:'Breakfast Novotel · checkout Hamilton'},
-    {s:'09:00',e:'10:00',c:'transit',t:'Drive Hamilton to Hobbiton / Matamata (~1hr)'},
-    {s:'10:00',e:'14:00',c:'outdoor',t:'Hobbiton Movie Set guided tour · Green Dragon Inn · Bag End'},
-    {s:'14:00',e:'15:00',c:'food',t:'Lunch Matamata or pickup en route to AKL'},
-    {s:'15:00',e:'17:00',c:'transit',t:'Drive Hobbiton to Auckland (~2hr) · drop rental car'},
-    {s:'17:00',e:'18:00',c:'logistics',t:'Check in Hilton Auckland Princes Wharf'},
-    {s:'18:00',e:'20:00',c:'downtime',t:'AKL evening downtime · CBD wander'},
-    {s:'20:00',e:'21:30',c:'food',t:'Dinner Auckland · Bistro Saine or SuMI'},
-    {s:'21:30',e:'22:30',c:'logistics',t:'Pack bags · MEL morning flight tomorrow'},
-    {s:'22:30',e:'24:00',c:'sleep',t:'Sleep · Hilton Auckland'},
+  {tag:4,date:'May 19',wd:'TUE',city:'AKL',cityFull:'Auckland (free day · reshuffle gain)',lbl:'AKL flex menu · Mt Eden + All Blacks + Devonport',blocks:[
+    {s:'06:00',e:'06:30',c:'logistics',t:'Wake AKL · early start for sunrise'},
+    {s:'06:30',e:'08:00',c:'culture',t:'Mt Eden sunrise · volcanic cone · 360° city views · top photography spot'},
+    {s:'08:00',e:'09:30',c:'food',t:'AKL breakfast · CBD cafe (Britomart precinct)'},
+    {s:'09:30',e:'10:30',c:'downtime',t:'CBD wander · prep for activity day'},
+    {s:'10:30',e:'12:00',c:'culture',t:'All Blacks Experience · rugby museum + interactive · FREE SkyCity parking May 2026'},
+    {s:'12:00',e:'13:00',c:'food',t:'Federal St lunch · Hangi Shop or Depot Eatery'},
+    {s:'13:00',e:'16:00',c:'outdoor',t:'Devonport ferry round-trip · 12-min ferry from CBD waterfront · seaside village + Mt Victoria walk'},
+    {s:'16:00',e:'17:00',c:'downtime',t:'Hotel return / repack for MEL tomorrow'},
+    {s:'17:00',e:'18:00',c:'culture',t:'Sky Tower observation deck · 328m · sunset light'},
+    {s:'18:00',e:'19:00',c:'transit',t:'Walk Sky Tower → Viaduct Harbour'},
+    {s:'19:00',e:'21:00',c:'food',t:'Viaduct Harbour dinner · waterfront restaurant + yacht views'},
+    {s:'21:00',e:'22:30',c:'logistics',t:'Pack bags · MEL morning tomorrow'},
+    {s:'22:30',e:'24:00',c:'sleep',t:'Sleep · AKL N3'},
   ]},
-  {tag:5,date:'May 20',wd:'WED',city:'FLIGHT',cityFull:'AKL to MEL',lbl:'Transit + MEL Hosier Lane evening',blocks:[
-    {s:'07:30',e:'08:30',c:'logistics',t:'Wake · Hilton Auckland checkout · Uber to AKL airport'},
-    {s:'08:30',e:'09:45',c:'logistics',t:'AKL airport · check-in · security · gate (carrier TBD - re-search)'},
-    {s:'09:45',e:'13:00',c:'transit',t:'Flight AKL to MEL · ~3h15m gate-to-gate'},
-    {s:'13:00',e:'14:00',c:'transit',t:'MEL airport SkyBus to CBD (~30min)'},
-    {s:'14:00',e:'15:00',c:'logistics',t:'Bag drop Hilton Melbourne South Wharf · check-in 3pm'},
-    {s:'15:00',e:'17:00',c:'downtime',t:'Hotel check-in · post-arrival reset · MEL CBD orient'},
+  {tag:5,date:'May 20',wd:'WED',city:'FLIGHT',cityFull:'AKL to MEL',lbl:'QF 154 BOOKED 13:40 + MEL evening',blocks:[
+    {s:'08:00',e:'09:00',c:'food',t:'Slow AKL morning · hotel breakfast'},
+    {s:'09:00',e:'10:00',c:'logistics',t:'Pack + checkout AKL hotel'},
+    {s:'10:00',e:'10:30',c:'transit',t:'Drive AKL hotel → AKL airport (~30min)'},
+    {s:'10:30',e:'11:00',c:'logistics',t:'Return Hertz rental car · counter walk-out'},
+    {s:'11:00',e:'13:40',c:'logistics',t:'AKL airport check-in · security · gate · Qantas Club lounge'},
+    {s:'13:40',e:'15:50',c:'transit',t:'QF 154 AKL → MEL · 4h10m nonstop · Economy Sale (BOOKED 5/7) · note 2hr time-zone gain (NZST UTC+12 → AEST UTC+10)'},
+    {s:'15:50',e:'16:30',c:'transit',t:'MEL airport → MEL hotel (SkyBus or Uber ~40min)'},
+    {s:'16:30',e:'17:00',c:'logistics',t:'Bag drop MEL hotel (re-search pending) · check-in'},
     {s:'17:00',e:'18:30',c:'culture',t:'Hosier Lane Street Art · Federation Square evening light'},
-    {s:'18:30',e:'20:00',c:'food',t:'Dinner CBD · Flower Drum or pre-Selena rec scout'},
-    {s:'20:00',e:'21:00',c:'downtime',t:'Walk back to Hilton South Wharf'},
+    {s:'18:30',e:'20:00',c:'food',t:'Dinner CBD · Flower Drum or Selena MEL list'},
+    {s:'20:00',e:'21:00',c:'downtime',t:'Walk back to MEL hotel'},
     {s:'21:00',e:'22:30',c:'downtime',t:'Wind down · plan Penguin + Kennett day'},
-    {s:'22:30',e:'24:00',c:'sleep',t:'Sleep · Hilton Melbourne South Wharf'},
+    {s:'22:30',e:'24:00',c:'sleep',t:'Sleep · MEL N1'},
   ]},
   {tag:6,date:'May 21',wd:'THU',city:'MEL',cityFull:'Melbourne',lbl:'Penguin Parade + Kennett River koalas',blocks:[
     {s:'06:30',e:'07:00',c:'logistics',t:'Wake at Hilton South Wharf · breakfast to-go'},
@@ -808,24 +847,46 @@ const DAYS=[
     {s:'22:00',e:'22:30',c:'food',t:'Late snack near Hilton South Wharf'},
     {s:'22:30',e:'24:00',c:'sleep',t:'Sleep · Hilton Melbourne South Wharf'},
   ]},
-  {tag:7,date:'May 22',wd:'FRI',city:'FLIGHT',cityFull:'MEL to SYD',lbl:'Aussie friends meetup + fly evening',blocks:[
+  {tag:7,date:'May 22',wd:'FRI',city:'MEL',cityFull:'Melbourne (full day)',lbl:'MEL N3 · Aussie friends meetup (no flight)',blocks:[
     {s:'09:00',e:'11:00',c:'food',t:'Slow morning · Selena rec breakfast (Top Paddock or LUNE)'},
-    {s:'11:00',e:'13:00',c:'downtime',t:'CBD laneway wander · matcha at Little Rogue · LaTao cheesecake sundae'},
+    {s:'11:00',e:'13:00',c:'downtime',t:'CBD laneway wander · matcha at Little Rogue · LaTao cheesecake sundae · remote-work-friendly buffer'},
     {s:'13:00',e:'14:30',c:'food',t:'Lunch · Wongs Crispy Pancake or Chancery Lane'},
-    {s:'14:30',e:'16:30',c:'logistics',t:'Pack + checkout Hilton South Wharf · luggage to airport storage or friends'},
+    {s:'14:30',e:'16:30',c:'downtime',t:'South Melbourne / Queen Victoria markets · or NGV (National Gallery)'},
     {s:'16:30',e:'21:15',c:'food',t:'Aussie friends meetup · dinner + drinks (per Selena/Corey recs)'},
-    {s:'21:15',e:'22:00',c:'transit',t:'Uber to MEL airport'},
-    {s:'22:00',e:'23:30',c:'transit',t:'Flight MEL to SYD evening (carrier TBD - re-search)'},
-    {s:'23:30',e:'24:00',c:'transit',t:'SYD airport Opal rail to CBD · check in Hilton Sydney late'},
+    {s:'21:15',e:'22:30',c:'downtime',t:'Walk back to MEL hotel'},
+    {s:'22:30',e:'24:00',c:'sleep',t:'Sleep · MEL N3 (added 5/8 after JQ 516 booked for 5/23 vs old JQ 500 5/22)'},
   ]},
-  {tag:8,date:'May 23',wd:'SAT',city:'SYD',cityFull:'Sydney',lbl:'TBD — finalize after NZ',blocks:[
-    {s:'09:00',e:'24:00',c:'downtime',t:'TBD · Sydney itinerary intentionally blank — Allston + Donnie will plan AU portion after finalizing NZ. Candidate activities live in the recs table below (not yet committed).'},
+  {tag:8,date:'May 23',wd:'SAT',city:'FLIGHT',cityFull:'MEL → SYD via JQ 516',lbl:'JQ 516 BOOKED 13:55 + Vivid Sydney evening',blocks:[
+    {s:'09:00',e:'09:30',c:'logistics',t:'Wake MEL · final morning'},
+    {s:'09:30',e:'11:00',c:'food',t:'MEL chill brunch · last Selena pick'},
+    {s:'11:00',e:'11:30',c:'logistics',t:'Pack + checkout MEL hotel'},
+    {s:'11:30',e:'12:15',c:'transit',t:'Uber MEL hotel → MEL airport'},
+    {s:'12:15',e:'13:55',c:'logistics',t:'MEL airport check-in · security · gate'},
+    {s:'13:55',e:'15:20',c:'transit',t:'JQ 516 MEL → SYD · 1h25m nonstop · Starter Plus (BOOKED 5/8) · same time zone (AEST UTC+10)'},
+    {s:'15:20',e:'16:00',c:'transit',t:'SYD airport → SYD hotel (~30-40min Uber or Opal rail)'},
+    {s:'16:00',e:'17:00',c:'logistics',t:'Check in SYD hotel (Hilton Sydney for Surpass cert night Sat 5/23 + Sun/Mon TBD per re-search)'},
+    {s:'17:00',e:'18:00',c:'downtime',t:'SYD CBD orient · George St walk'},
+    {s:'18:00',e:'21:00',c:'culture',t:'Vivid Sydney evening light walk · Circular Quay → Opera House → Royal Botanic Garden (free, runs 5/22 onwards)'},
+    {s:'21:00',e:'22:30',c:'food',t:'SYD dinner N1 · Circular Quay restaurant'},
+    {s:'22:30',e:'24:00',c:'sleep',t:'Sleep · SYD N1 (Surpass cert covers this Hilton Sydney night)'},
   ]},
-  {tag:9,date:'May 24',wd:'SUN',city:'SYD',cityFull:'Sydney',lbl:'TBD — finalize after NZ',blocks:[
-    {s:'09:00',e:'24:00',c:'downtime',t:'TBD · Sydney itinerary intentionally blank — Allston + Donnie will plan AU portion after finalizing NZ.'},
+  {tag:9,date:'May 24',wd:'SUN',city:'SYD',cityFull:'Sydney',lbl:'BridgeClimb Burrawa + Bondi-Coogee',blocks:[
+    {s:'08:00',e:'09:00',c:'food',t:'SYD breakfast · hotel or Circular Quay cafe'},
+    {s:'09:00',e:'13:00',c:'outdoor',t:'BridgeClimb Burrawa · Indigenous storyteller (Eora Nation perspective) · 440 ft above water · ~3.5h round trip'},
+    {s:'13:00',e:'14:30',c:'food',t:'Lunch Circular Quay or Rocks district'},
+    {s:'14:30',e:'18:30',c:'outdoor',t:'Bondi → Coogee coastal walk · ~6km · ocean cliffs + sandstone formations + small beaches'},
+    {s:'18:30',e:'20:00',c:'transit',t:'Bus/train Coogee → SYD CBD'},
+    {s:'20:00',e:'22:00',c:'food',t:'SYD dinner · Surry Hills or CBD'},
+    {s:'22:00',e:'24:00',c:'sleep',t:'Sleep · SYD N2'},
   ]},
-  {tag:10,date:'May 25',wd:'MON',city:'SYD',cityFull:'Sydney · Memorial Day',lbl:'TBD — Memorial Day off-work',blocks:[
-    {s:'09:00',e:'24:00',c:'downtime',t:'TBD · Memorial Day (Allston off work) · Sydney itinerary intentionally blank — Allston + Donnie will plan AU portion after finalizing NZ.'},
+  {tag:10,date:'May 25',wd:'MON',city:'SYD',cityFull:'Sydney · Memorial Day',lbl:'Symbio Wildlife (quokkas) + final SYD chill',blocks:[
+    {s:'09:00',e:'10:00',c:'food',t:'Slow morning (Allston off work) · breakfast'},
+    {s:'10:00',e:'15:00',c:'outdoor',t:'Symbio Wildlife Park (Corey + Jiho rec) · paid quokka/koala experience · ~1hr drive south · book ahead, only 1 slot/day · alt: Featherdale Sydney Wildlife Park (closer to CBD)'},
+    {s:'15:00',e:'18:00',c:'downtime',t:'SYD chill final · Bondi swim or Royal Botanic Garden walk'},
+    {s:'18:00',e:'20:00',c:'food',t:'Pre-dinner drinks · Opera Bar harbour view'},
+    {s:'20:00',e:'22:00',c:'food',t:'Final dinner · Bennelong (Opera House) or Quay'},
+    {s:'22:00',e:'22:30',c:'logistics',t:'Final repack · prep for tomorrow eve flight'},
+    {s:'22:30',e:'24:00',c:'sleep',t:'Sleep · SYD N3'},
   ]},
   {tag:11,date:'May 26',wd:'TUE',city:'SYD',cityFull:'Sydney to SFO',lbl:'QF 73 evening departure 21:25',blocks:[
     {s:'09:00',e:'11:00',c:'food',t:'Slow morning · Hilton Sydney breakfast'},
@@ -834,20 +895,18 @@ const DAYS=[
     {s:'15:00',e:'17:30',c:'downtime',t:'Hotel rest · final repack · checkout flexible (eve flight)'},
     {s:'17:30',e:'18:30',c:'logistics',t:'Hotel checkout · Opal rail to SYD airport (~13min)'},
     {s:'18:30',e:'21:25',c:'logistics',t:'SYD airport check-in · security · Qantas / KLM lounge'},
-    {s:'21:25',e:'24:00',c:'transit',t:'QF 73 SYD to SFO · 13.5hr nonstop · seat 54K · arrives May 26 17:45 SFO same day (gain a day eastbound)'},
+    {s:'21:25',e:'24:00',c:'transit',t:'QF 73 SYD to SFO · 13.5hr nonstop · BOOKED 5/8 · code YBKAZV · ticket 0742138056542 · arrives May 26 17:45 SFO same day (gain a day eastbound)'},
   ]},
 ];
 
 const BOOKINGS=[
-  {pri:'urgent',lbl:'Black Abyss Waitomo · 12:30 May 18',meta:'~NZD $299 pp · 5hr underground (or swap to 3hr Black Labyrinth ~NZD $193)',url:'https://www.waitomo.com/black-water-rafting/legendary-black-water-rafting-co-black-abyss',done:false},
-  {pri:'urgent',lbl:'Hobbiton Movie Set · 10:00 May 19',meta:'self-drive from Hamilton ~45min · book ASAP for May tour slot',url:'https://www.hobbittontours.com',done:false},
-  {pri:'urgent',lbl:'Novotel Tainui Hamilton · 1 night May 17',meta:'cash · ~$157 USD/night · CBD riverside · 1 or 2 rooms TBD',url:'https://all.accor.com/hotel/2159/index.en.shtml',done:false},
-  {pri:'urgent',lbl:'AKL → MEL flight · May 20 morning',meta:'Re-search ~09:45 dep (was QF 152 May 19; date moved per GCal)',url:'https://www.google.com/flights',done:false},
-  {pri:'urgent',lbl:'MEL → SYD flight · May 22 evening',meta:'Re-search post-Aussie-friends meetup 21:15 (was JQ 500 06:00)',url:'https://www.google.com/flights',done:false},
-  {pri:'ok',lbl:'SYD → SFO · QF 73 BOOKED ✓',meta:'May 26 · 21:25–17:45 · seat 54K · AUD $60 · receipt 4417392950',url:'',done:true},
-  {pri:'urgent',lbl:'Hilton Auckland · 2 nights May 16 + May 19',meta:'Princes Wharf · check Honors pts · split by Hamilton stay',url:'https://www.hilton.com/en/hotels/aklhitw-hilton-auckland/',done:false},
-  {pri:'urgent',lbl:'Hilton Melbourne South Wharf · 2 nights May 20-21',meta:'check Honors pts / Marriott alt: Westin MEL',url:'https://www.hilton.com/en/hotels/mlbswhf-hilton-melbourne-south-wharf/',done:false},
-  {pri:'urgent',lbl:'Hilton Sydney · 3-4 nights May 22/23-26',meta:'use Surpass cert Sat May 23 (highest nightly rate) · arrival depends on MEL→SYD timing',url:'https://www.hilton.com/en/hotels/sydchhf-hilton-sydney/',done:false},
+  {pri:'urgent',lbl:'Black Labyrinth Waitomo · 10:00 May 18',meta:'~NZD $193 pp · 3hr · gentler version (Donnie 5/8 pick over 5hr Black Abyss)',url:'https://www.waitomo.com/black-water-rafting/legendary-black-water-rafting-co-black-labyrinth',done:false},
+  {pri:'urgent',lbl:'Hobbiton Movie Set · 16:00 May 18',meta:'COMBINED-day with Black Labyrinth · drive Waitomo → Hobbiton ~2hr · book afternoon slot',url:'https://www.hobbittontours.com',done:false},
+  {pri:'urgent',lbl:'Hotel re-search ALL CITIES · refundable + <$100/night soft target',meta:'Donnie 5/8 criteria: refundable required, <$100 USD soft. Re-run Trivago + Skiplagged + Airbnb across AKL (3 non-contig) + Hamilton (1 night) + MEL (3) + SYD (3 + Surpass cert decision)',url:'',done:false},
+  {pri:'ok',lbl:'AKL → MEL · QF 154 BOOKED ✓',meta:'May 20 · 13:40 NZST → 15:50 AEST · 4h10m · Cap One Travel',url:'',done:true},
+  {pri:'ok',lbl:'MEL → SYD · JQ 516 BOOKED ✓',meta:'May 23 · 13:55 → 15:20 AEST · 1h25m · Starter Plus · Cap One Travel (replaces JQ 500 5/22)',url:'',done:true},
+  {pri:'ok',lbl:'SYD → SFO · QF 73 BOOKED ✓',meta:'May 26 · 21:25 → 17:45 SFO same day · code YBKAZV · ticket 0742138056542 · FF# 005353439360 · seat picked',url:'',done:true},
+  {pri:'urgent',lbl:'Hilton Sydney Sat 5/23 (Surpass cert)',meta:'Apply Hilton Surpass weekend cert here (free, highest-rate night) · Sun+Mon TBD per re-search',url:'https://www.hilton.com/en/hotels/sydchhf-hilton-sydney/',done:false},
   {pri:'soon',lbl:'Auckland Writers Festival · May 16 16:45',meta:'verify event ticket needed · festival 2026 dates TBD',url:'https://www.writersfestival.co.nz',done:false},
   {pri:'soon',lbl:'Fullers Cruise / Island Hopping · May 17 10:00',meta:'AKL ferry terminal Pier 3 · Waiheke + Rangitoto possible',url:'https://www.fullers.co.nz',done:false},
   {pri:'soon',lbl:'Penguin Parade · Phillip Island May 21',meta:'Penguin Plus recommended · penguins.org.au',url:'https://www.penguins.org.au',done:false},
@@ -1212,9 +1271,68 @@ function moveTip(e){
 }
 function hideTip(){tip.classList.remove('vis');}
 
+/* ── PERSISTENCE (Option A · localStorage) ── */
+const PERSIST_KEY_PREFIX='nzaus2026_bk_';
+function persistKey(lbl){return PERSIST_KEY_PREFIX+lbl.replace(/[^a-z0-9]/gi,'_').toLowerCase().slice(0,80);}
+function hydrateBookings(){
+  BOOKINGS.forEach(b=>{
+    const stored=localStorage.getItem(persistKey(b.lbl));
+    if(stored==='1')b.done=true;
+    else if(stored==='0')b.done=false;
+    // if no stored value, keep default from BOOKINGS array
+  });
+}
+function persistBooking(b){
+  try{localStorage.setItem(persistKey(b.lbl),b.done?'1':'0');}catch(e){/* quota or disabled */}
+}
+function resetBookings(){
+  if(!confirm('Clear all your saved checkboxes on this device? This only affects you.'))return;
+  Object.keys(localStorage).forEach(k=>{if(k.startsWith(PERSIST_KEY_PREFIX))localStorage.removeItem(k);});
+  location.reload();
+}
+
+/* ── WEATHER WIDGET (Open-Meteo · free, no auth) ── */
+async function loadWeather(){
+  const cities=[
+    {name:'Auckland',lat:-36.8485,lon:174.7633,dates:'5/16 · 5/18 · 5/19'},
+    {name:'Hamilton',lat:-37.7826,lon:175.2528,dates:'5/17'},
+    {name:'Melbourne',lat:-37.8136,lon:144.9631,dates:'5/20–5/22'},
+    {name:'Sydney',lat:-33.8688,lon:151.2093,dates:'5/23–5/26'},
+  ];
+  const c=document.getElementById('weather-widget');
+  if(!c)return;
+  try{
+    const results=await Promise.all(cities.map(async city=>{
+      const url=`https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lon}&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weather_code&temperature_unit=fahrenheit&timezone=auto&forecast_days=16`;
+      try{const r=await fetch(url);if(!r.ok)throw 0;return{city,data:await r.json()};}
+      catch(e){return{city,error:true};}
+    }));
+    const wcDesc={0:'Clear',1:'Mostly clear',2:'Partly cloudy',3:'Overcast',45:'Fog',48:'Fog',51:'Light drizzle',53:'Drizzle',55:'Heavy drizzle',61:'Light rain',63:'Rain',65:'Heavy rain',71:'Light snow',73:'Snow',75:'Heavy snow',80:'Showers',81:'Heavy showers',82:'Violent showers',95:'Thunder',96:'Thunder+hail',99:'Severe thunder'};
+    c.innerHTML=results.map(({city,data,error})=>{
+      if(error||!data?.daily)return`<div class="weather-tile"><div class="weather-city">${city.name}</div><div class="weather-error">Forecast unavailable</div></div>`;
+      const d=data.daily;
+      // Avg over forecast days available
+      const days=d.time.length;
+      const tmaxAvg=Math.round(d.temperature_2m_max.reduce((a,b)=>a+b,0)/days);
+      const tminAvg=Math.round(d.temperature_2m_min.reduce((a,b)=>a+b,0)/days);
+      const rainMax=Math.max(...d.precipitation_probability_max);
+      const todayDesc=wcDesc[d.weather_code[0]]||'—';
+      return`<div class="weather-tile">
+        <div class="weather-city">${city.name}</div>
+        <div class="weather-dates">${city.dates}</div>
+        <div class="weather-temp">${tmaxAvg}° / ${tminAvg}°F</div>
+        <div class="weather-rain">Max rain: ${rainMax}%</div>
+        <div class="weather-detail">${days}-day avg · today: ${todayDesc} ${Math.round(d.temperature_2m_max[0])}°/${Math.round(d.temperature_2m_min[0])}°</div>
+      </div>`;
+    }).join('');
+  }catch(e){c.innerHTML='<div class="weather-error">Weather load failed.</div>';}
+}
+
 /* ── INIT ── */
 function init(){
+  hydrateBookings();
   renderStats();renderRail();renderDays();renderNavStrip();renderLegend();renderBookings();
+  loadWeather();
   initMap();
 
   const wrap=document.getElementById('days-wrap');
@@ -1231,8 +1349,11 @@ function init(){
   document.getElementById('map-overview-btn').addEventListener('click',()=>{if(isOverview)showDetail(activeDayIdx);else showOverview();});
 
   const bGrid=document.getElementById('booking-grid');
-  bGrid.addEventListener('click',e=>{if(e.target.closest('a'))return;const item=e.target.closest('.bk-item');if(item){BOOKINGS[+item.dataset.i].done^=true;renderBookings();}});
-  bGrid.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();const item=e.target.closest('.bk-item');if(item){BOOKINGS[+item.dataset.i].done^=true;renderBookings();}}});
+  bGrid.addEventListener('click',e=>{if(e.target.closest('a'))return;const item=e.target.closest('.bk-item');if(item){const b=BOOKINGS[+item.dataset.i];b.done^=true;persistBooking(b);renderBookings();}});
+  bGrid.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();const item=e.target.closest('.bk-item');if(item){const b=BOOKINGS[+item.dataset.i];b.done^=true;persistBooking(b);renderBookings();}}});
+
+  const resetBtn=document.getElementById('reset-state-btn');
+  if(resetBtn)resetBtn.addEventListener('click',resetBookings);
 
   showDetail(0,false);
 }
