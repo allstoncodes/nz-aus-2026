@@ -175,6 +175,29 @@
     .info-link:hover{background:rgba(13,148,136,.1);}
     .rate-badge{font-family:'DM Mono',monospace;font-size:1.125rem;font-weight:500;color:var(--accent);}
 
+    /* ── BOOKING QUICK LINKS (top of page) ── */
+    .booking-quicklinks{background:var(--surface);border-top:2px solid var(--accent);border-bottom:1px solid var(--border);}
+    .ql-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;margin-top:10px;}
+    .ql-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;border-left:4px solid var(--text-3);display:flex;flex-direction:column;}
+    .ql-card.urgent{border-left-color:#ef4444;}
+    .ql-card.action{border-left-color:#f59e0b;}
+    .ql-card.ok{border-left-color:#22c55e;}
+    .ql-card.pick{border-left-color:#3b82f6;}
+    .ql-num{font-family:'DM Mono',monospace;font-size:.75rem;font-weight:700;color:var(--text-3);letter-spacing:.06em;}
+    .ql-name{font-family:'Syne',sans-serif;font-size:.9375rem;font-weight:700;color:var(--text);margin:4px 0 6px;}
+    .ql-slot{font-size:.8125rem;color:var(--text-2);margin-bottom:4px;}
+    .ql-slot strong{color:var(--accent);}
+    .ql-status{font-size:.75rem;color:var(--text-3);margin-bottom:10px;line-height:1.4;flex:1;}
+    .ql-status.urgent{color:#ef4444;font-weight:500;}
+    .ql-status.action{color:#f59e0b;}
+    .ql-status.ok{color:#22c55e;}
+    .ql-link{display:inline-block;font-size:.6875rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--accent);text-decoration:none;border-radius:6px;padding:7px 12px;text-align:center;transition:opacity .15s;}
+    .ql-link:hover{opacity:.85;}
+    .ql-link.secondary{background:transparent;color:var(--text-2);border:1px solid var(--border);}
+    .ql-cost{font-family:'DM Mono',monospace;font-size:.6875rem;color:var(--text-3);margin-top:4px;display:block;}
+    .ql-intro{font-size:.8125rem;color:var(--text-2);margin:8px 0 4px;}
+    .ql-intro strong{color:var(--text);}
+
     /* ── WEATHER WIDGET ── */
     .weather-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:10px;}
     .weather-tile{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;}
@@ -259,6 +282,79 @@
     </div>
   </div>
 </header>
+
+<!-- BOOKING QUICK LINKS — top of page · click-through reference for NZ leg bookings -->
+<section class="page-section booking-quicklinks" aria-label="Booking quick links">
+  <h2 class="section-head">
+    <span class="section-emoji">🎫</span>
+    Booking Quick Links
+    <span class="section-sub" style="font-size:.75rem;color:var(--text-3);font-weight:400;margin-left:8px;">T-3 days · 6 time-sensitive items · availability verified 2026-05-12</span>
+  </h2>
+  <p class="ql-intro">Click any <strong>BOOK NOW</strong> button to land directly on the verified date+party-size pre-filled booking page. Status colors: <span style="color:#ef4444;font-weight:600;">red = urgent/scarcity</span> · <span style="color:#f59e0b;font-weight:600;">amber = manual step needed</span> · <span style="color:#3b82f6;font-weight:600;">blue = session pick required</span> · <span style="color:#22c55e;font-weight:600;">green = open availability</span>.</p>
+  <div class="ql-grid">
+
+    <!-- 1. Hobbiton -->
+    <div class="ql-card urgent">
+      <span class="ql-num">01 · URGENT</span>
+      <div class="ql-name">🎬 Hobbiton Movie Set Tour</div>
+      <div class="ql-slot"><strong>Tue 5/19 · 09:20am</strong> · party of 2</div>
+      <div class="ql-status urgent">⚠️ 9:30 FULLY BOOKED · 9:10/9:20/9:40 = Limited seats · book today</div>
+      <a class="ql-link" href="https://bookings.hobbitontours.com/BookingCat/Availability/?Date=19/05/2026&Category=EXTSRBR&GroupSize=2" target="_blank" rel="noopener">Book Now ↗</a>
+      <span class="ql-cost">$260 NZD ($130 × 2)</span>
+    </div>
+
+    <!-- 2. Black Labyrinth -->
+    <div class="ql-card action">
+      <span class="ql-num">02 · ACTION NEEDED</span>
+      <div class="ql-name">🕳️ Black Labyrinth · Waitomo</div>
+      <div class="ql-slot"><strong>Tue 5/19 · 3:30pm</strong> · party of 2 · 3h cave-tube float</div>
+      <div class="ql-status action">✅ Slot open · click date 19 → expand "Afternoon Start" → 3:30pm Session</div>
+      <a class="ql-link" href="https://wtomo.bookingboss.com/booknow.cfm?e=WTOMO4551" target="_blank" rel="noopener">Book Now ↗</a>
+      <span class="ql-cost">$386 NZD ($193 × 2)</span>
+    </div>
+
+    <!-- 3. Mudbrick -->
+    <div class="ql-card ok">
+      <span class="ql-num">03 · OPEN</span>
+      <div class="ql-name">🍽️ Mudbrick Vineyard · Waiheke</div>
+      <div class="ql-slot"><strong>Sun 5/17 · 11:30am</strong> lunch · 2 covers · 3-course recommended</div>
+      <div class="ql-status ok">✅ All slots 11:30am–2:30pm open · email allergies to info@mudbrick.co.nz first</div>
+      <a class="ql-link" href="https://nz6.eveve.com/web/form?Est=Mudbrick&date=2026-05-17&covers=2" target="_blank" rel="noopener">Book Now ↗</a>
+      <span class="ql-cost">~$250 NZD ($125 × 2 for 3-course)</span>
+    </div>
+
+    <!-- 4. SeaLink -->
+    <div class="ql-card action">
+      <span class="ql-num">04 · MANUAL STEP</span>
+      <div class="ql-name">⛴️ SeaLink Car Ferry · Hamer St → Kennedy Point</div>
+      <div class="ql-slot"><strong>Sun 5/17 · ~09:30</strong> · drive-on with rental car · party of 2 + 1 car</div>
+      <div class="ql-status action">⚠️ Widget hostile to automation · book via site OR phone +64-9-300-5900 · NOT Mātiatia (Fullers passenger-only)</div>
+      <a class="ql-link" href="https://www.sealink.co.nz/make-a-booking" target="_blank" rel="noopener">Book Now ↗</a>
+      <span class="ql-cost">~$80 NZD vehicle surcharge + 2 pax fares</span>
+    </div>
+
+    <!-- 5. All Blacks Experience -->
+    <div class="ql-card ok">
+      <span class="ql-num">05 · OPEN</span>
+      <div class="ql-name">🏉 All Blacks Experience · AKL</div>
+      <div class="ql-slot"><strong>Mon 5/18 · 2:00pm</strong> English Tour · party of 2</div>
+      <div class="ql-status ok">✅ 5+ seats available · book whenever convenient</div>
+      <a class="ql-link" href="https://book.experienceallblacks.com/activity/selection?workingDate=2026-05-18&filter=ProdGroup-ABXALL" target="_blank" rel="noopener">Book Now ↗</a>
+      <span class="ql-cost">~$70–90 NZD (TBD on site)</span>
+    </div>
+
+    <!-- 6. Writers Festival -->
+    <div class="ql-card pick">
+      <span class="ql-num">06 · SESSION PICK</span>
+      <div class="ql-name">📚 Auckland Writers Festival</div>
+      <div class="ql-slot"><strong>Sat 5/16 · evening session</strong> · 2 tickets · 1h each</div>
+      <div class="ql-status" style="color:#3b82f6;">⚠️ No 16:45 session exists · pick 4:00pm block (Amitav Ghosh / SA Cosby / NZ Gothic / Hope in the Machine / Migration & Motherhood) OR 5:30pm block (⭐ Tayari Jones featured / Bora Chung / Who Gets to Tell / Art in the Time of War)</div>
+      <a class="ql-link" href="https://www.ticketmaster.co.nz/auckland-writers-festival-tickets/artist/1970043" target="_blank" rel="noopener">Buy Tickets ↗</a>
+      <span class="ql-cost">~$25–45 NZD per person per session</span>
+    </div>
+
+  </div>
+</section>
 
 <div class="stats-bar" aria-label="Time allocation">
   <div class="stats-inner" id="stats-inner"></div>
