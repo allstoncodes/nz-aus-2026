@@ -294,13 +294,13 @@
   <div class="ql-grid">
 
     <!-- 1. Hobbiton -->
-    <div class="ql-card urgent">
-      <span class="ql-num">01 · URGENT</span>
+    <div class="ql-card ok">
+      <span class="ql-num">01 · BOOKED ✓</span>
       <div class="ql-name">🎬 Hobbiton Movie Set Tour</div>
-      <div class="ql-slot"><strong>Tue 5/19 · 09:20am</strong> · party of 2</div>
-      <div class="ql-status urgent">⚠️ 9:30 FULLY BOOKED · 9:10/9:20/9:40 = Limited seats · book today</div>
-      <a class="ql-link" href="https://bookings.hobbitontours.com/BookingCat/Availability/?Date=19/05/2026&Category=EXTSRBR&GroupSize=2" target="_blank" rel="noopener">Book Now ↗</a>
-      <span class="ql-cost">$260 NZD ($130 × 2)</span>
+      <div class="ql-slot"><strong>Tue 5/19 · 9:50am</strong> · party of 2</div>
+      <div class="ql-status ok">✅ BOOKED 2026-05-12 · Ref #3242461 · Pivoted from 9:20 → 9:50 mid-checkout when 9:40 dropped to 1 seat (scarcity validated)</div>
+      <a class="ql-link secondary" href="https://www.hobbitontours.com/experiences/hobbiton-movie-set-tour/" target="_blank" rel="noopener">Tour Info ↗</a>
+      <span class="ql-cost">$260 NZD ($130 × 2) · PAID</span>
     </div>
 
     <!-- 2. Black Labyrinth -->
@@ -937,11 +937,11 @@ const DAYS=[
     {s:'07:00',e:'07:45',c:'food',t:'Hamilton early breakfast · pre-Hobbiton fuel'},
     {s:'07:45',e:'08:00',c:'logistics',t:'Wake/finish · pack day bag (swimsuit + change of clothes for post-Black-Labyrinth)'},
     {s:'08:00',e:'09:00',c:'transit',t:'Drive Hamilton → Hobbiton / Matamata (~1hr · Donnie driving rental, IDP)'},
-    {s:'08:50',e:'09:20',c:'logistics',t:'Arrive Shire\'s Rest Visitor Centre · park · check in at tour desk · restroom + last-min coffee · wait at shuttle pickup zone (Hobbiton requires arrival 15+ min before tour start · shuttle takes you from the gate to the actual movie set ~1.5km in)'},
-    {s:'09:20',e:'11:50',c:'outdoor',t:'Hobbiton Movie Set guided tour · ⭐ DON\'T MISS the Green Dragon Inn complimentary drink (ale/cider/ginger beer · included with tour · this is the real food/drink moment of the day) · Bag End + 44 hobbit holes · 2.5h with on-set shuttle time · 2026-05-12: 9:30 was FULLY BOOKED; picked 9:20 (Limited seats)'},
-    {s:'11:50',e:'12:05',c:'food',t:'Shire\'s Rest grab-and-go (sandwiches + pies to-go · casual tourist cafe, not destination-worthy · eat in car to save time)'},
-    {s:'12:05',e:'14:05',c:'transit',t:'Drive Hobbiton → Waitomo (~2hr · eat in-car lunch en route)'},
-    {s:'14:05',e:'15:00',c:'logistics',t:'Waitomo Caves village arrival buffer · park at Black Water Rafting Co. (1 Waitomo Village Rd) · restroom · short walk village + photos · prep for kit-up (longer buffer after 2026-05-12 schedule shift)'},
+    {s:'09:25',e:'09:50',c:'logistics',t:'Arrive Shire\'s Rest Visitor Centre · park · check in at tour desk · restroom + last-min coffee · wait at shuttle pickup zone (Hobbiton requires arrival 15+ min before tour start · shuttle takes you from the gate to the actual movie set ~1.5km in)'},
+    {s:'09:50',e:'12:20',c:'outdoor',t:'Hobbiton Movie Set guided tour · ⭐ DON\'T MISS the Green Dragon Inn complimentary drink (ale/cider/ginger beer · included with tour · this is the real food/drink moment of the day) · Bag End + 44 hobbit holes · 2.5h with on-set shuttle time · ✅ BOOKED 2026-05-12 Ref #3242461 (pivoted from 9:20 to 9:50 mid-checkout when 9:40 dropped to 1 seat — scarcity validated)'},
+    {s:'12:20',e:'12:25',c:'food',t:'Shire\'s Rest grab-and-go (5-min compressed · sandwiches + pies to-go · casual tourist cafe, not destination-worthy · eat in car to save time)'},
+    {s:'12:25',e:'14:25',c:'transit',t:'Drive Hobbiton → Waitomo (~2hr · eat in-car lunch en route)'},
+    {s:'14:25',e:'15:00',c:'logistics',t:'Waitomo Caves village arrival buffer · park at Black Water Rafting Co. (1 Waitomo Village Rd) · restroom · short walk village + photos · prep for kit-up (35min buffer after 2026-05-12 schedule shift to 9:50 Hobbiton + 5-min Shire\'s Rest compress)'},
     {s:'15:00',e:'15:30',c:'logistics',t:'Black Water Rafting Co. check-in · wetsuit + helmet + harness · pre-tour briefing'},
     {s:'15:30',e:'18:30',c:'outdoor',t:'Black Labyrinth · 3hr · gentler version (5/8 pick) · float through glowworm caves · ENDS day on wet/cold note as designed · 2026-05-12: no 15:00 slot exists — Tue afternoons run 12:30/13:00/15:30 only; picked 15:30'},
     {s:'18:30',e:'19:00',c:'food',t:'Hot shower + soup at Black Water Rafting Co. base · last reset before drive'},
@@ -1030,7 +1030,7 @@ const DAYS=[
 
 const BOOKINGS=[
   {pri:'urgent',lbl:'Black Labyrinth Waitomo · 15:30 Tue May 19',meta:'~NZD $193 pp ($386 for 2) · 3hr · gentler version (5/8 pick over 5hr Black Abyss) · ENDS day wet/cold as designed · combined-day with Hobbiton · drive Waitomo→Hamilton ~1h after (no AKL backtrack) · 2026-05-12 VERIFIED: no 15:00 slot exists — Tue afternoons run 12:30pm/1:00pm/3:30pm only; picked 15:30 (all currently available)',url:'https://wtomo.bookingboss.com/booknow.cfm?e=WTOMO4551',done:false},
-  {pri:'urgent',lbl:'Hobbiton Movie Set · 09:20 Tue May 19',meta:'⭐ MUST: Green Dragon Inn complimentary drink (ale/cider/ginger beer) on-set is included with tour — the real food/drink moment of the day. Shire\'s Rest at gate is just a nice-to-have grab-and-go cafe. Order: Hamilton start 06:50 → Hobbiton 09:20–11:50 → Shire\'s Rest grab-and-go 11:50–12:05 → drive Waitomo (eat in car) → Black Labyrinth 15:30. Hobbiton tickets book direct. $130 NZD adult ($260 for 2). 2026-05-12 VERIFIED: 9:30 was FULLY BOOKED; 9:10/9:20/9:40 = Limited seats; picked 9:20 · BOOK URGENTLY',url:'https://www.hobbitontours.com/experiences/hobbiton-movie-set-tour/',done:false},
+  {pri:'ok',lbl:'Hobbiton Movie Set · 9:50am Tue May 19 ✓',meta:'✅ BOOKED 2026-05-12 · Ref #3242461 · $260 NZD ($130 × 2) paid via Venture X · conf PDF saved to vault. ⭐ MUST: Green Dragon Inn complimentary drink (ale/cider/ginger beer) on-set is included with tour — the real food/drink moment of the day. Order: Hamilton start 07:15 → Hobbiton 09:50–12:20 → Shire\'s Rest grab-and-go 12:20–12:25 (5-min compressed) → drive Waitomo (eat in car) → Black Labyrinth 15:30. Mid-checkout pivot from 9:20 → 9:50 when 9:40 dropped to 1 seat (real-time scarcity validation).',url:'https://www.hobbitontours.com/experiences/hobbiton-movie-set-tour/',done:true},
   {pri:'soon',lbl:'All Blacks Experience AKL · 14:00 Mon May 18',meta:'Mon afternoon AKL flex slot (corrected 5/11 — Mon = transition day, NOT activity day) · rugby museum + interactive · near Sky Tower · book online if pre-purchase needed · 2026-05-12 VERIFIED: 2:00pm AVAILABLE (5+ seats) · book at book.experienceallblacks.com',url:'https://book.experienceallblacks.com/activity/selection?filter=ProdGroup-ABXALL',done:false},
   {pri:'ok',lbl:'AKL Hotel · Rydges Auckland BOOKED ✓',meta:'2 nights Sat 5/16 + Sun 5/17 · $239.52 USD refundable until May 15 · Booking Ref 1001374794 · Federal & Kingston St CBD · Visa 2499',url:'',done:true},
   {pri:'ok',lbl:'Hamilton Hotel · Camelot on Ulster BOOKED ✓',meta:'2 nights Mon 5/18 + Tue 5/19 · $208.23 USD refundable until May 16 · Booking ID 1002183066 · 231 Ulster St Whitiora · Superior Studio queen+single · Visa 2499',url:'',done:true},
