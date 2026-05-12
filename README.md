@@ -1,14 +1,14 @@
 # AKL → Hamilton → MEL → SYD · May 2026
 
-> **[→ Open Interactive Trip Dashboard](https://allstoncodes.github.io/nz-aus-2026)** — day-by-day timeline, per-day Leaflet map, hotel info, booking checklist (Hamilton + Waitomo + Hobbiton now included)
+> **[→ Open Interactive Trip Dashboard](https://allstoncodes.github.io/nz-aus-2026)** — day-by-day timeline, per-day Leaflet map, hotel info, booking checklist, real-time weather widget, persistent localStorage checkboxes
 
 *For Allston + Donnie's eyes. Repo goes private after May 26 return.*
 
-**Last update:** 2026-05-06 — restructured around GCal-aligned itinerary with Hamilton/Waitomo/Hobbiton self-drive leg + QF 73 evening return (booked).
+**Last update:** 2026-05-11 — Hamilton hotel BOOKED (Camelot on Ulster) · schedule corrected (Mon 5/18 = AKL flex day, Tue 5/19 = combined Hobbiton + Black Labyrinth) · All Blacks Experience now slotted Mon 5/18 14:00 AKL.
 
 ---
 
-Supplementary Mermaid + ASCII visualizations of the 11-day trip. Primary visual: the interactive HTML dashboard at the link above.
+Supplementary Mermaid + ASCII visualizations of the 11-day trip. Primary visual is the interactive HTML dashboard at the link above.
 
 ---
 
@@ -18,38 +18,34 @@ Supplementary Mermaid + ASCII visualizations of the 11-day trip. Primary visual:
 %%{init: {'theme':'dark'}}%%
 gantt
     dateFormat  YYYY-MM-DD
-    title       AKL to MEL to SYD - May 2026
+    title       AKL to Hamilton to MEL to SYD - May 2026
     axisFormat  %b %d
 
     section Outbound
-    UA 917 SFO to AKL                    :done,    f0, 2026-05-14, 2d
+    UA 917 SFO to AKL                     :done,    f0, 2026-05-14, 2d
 
-    section Auckland
-    Day 1 - Arrival, War Museum, Writers :done,    a1, 2026-05-16, 1d
+    section Auckland (Rydges N1+N2)
+    Day 1 - Arrival, War Museum, Writers  :done,    a1, 2026-05-16, 1d
+    Day 2 - Fullers Cruise full day       :done,    a2, 2026-05-17, 1d
 
-    section AKL to Hamilton drive
-    Day 2 - Fullers Cruise drive Hamilton :active, a2, 2026-05-17, 1d
+    section Hamilton (Camelot N1+N2)
+    Day 3 - AKL flex, All Blacks, drive   :done,    h1, 2026-05-18, 1d
+    Day 4 - Hobbiton + Black Labyrinth    :done,    h2, 2026-05-19, 1d
 
-    section Hamilton + Waitomo
-    Day 3 - Black Abyss Waitomo          :active,  h1, 2026-05-18, 1d
+    section Hamilton to AKL airport to MEL
+    Day 5 - Drive AKL airport, QF 154     :done,    f1, 2026-05-20, 1d
 
-    section Hamilton to AKL drive
-    Day 4 - Hobbiton drive back AKL      :active,  h2, 2026-05-19, 1d
+    section Melbourne (MEL N1-N3 placeholder)
+    Day 6 - Penguin Parade Kennett koalas :crit,    m1, 2026-05-21, 1d
+    Day 7 - Aussie friends meetup MEL N3  :crit,    m2, 2026-05-22, 1d
 
-    section AKL to MEL
-    Day 5 - AKL to MEL flight TBD        :crit,    f1, 2026-05-20, 1d
-
-    section Melbourne
-    Day 6 - Penguin Parade Kennett koalas :done,   m1, 2026-05-21, 1d
-    Day 7 - Aussie friends fly SYD        :done,   m2, 2026-05-22, 1d
-
-    section Sydney + Vivid
-    Day 8 - Vivid Sydney start            :done,   s1, 2026-05-23, 1d
-    Day 9 - Opera House Bondi BridgeClimb :done,   s2, 2026-05-24, 1d
-    Day 10 - Memorial Day final spa       :done,   s3, 2026-05-25, 1d
+    section MEL to SYD then Sydney + Vivid
+    Day 8 - JQ 516, Vivid Sydney start    :crit,    s1, 2026-05-23, 1d
+    Day 9 - BridgeClimb Burrawa, Bondi    :crit,    s2, 2026-05-24, 1d
+    Day 10 - Memorial Day Symbio          :crit,    s3, 2026-05-25, 1d
 
     section Return
-    QF 73 SYD to SFO 2125 to 1745        :done,    f3, 2026-05-26, 1d
+    QF 73 SYD to SFO 21:25 to 17:45       :done,    f3, 2026-05-26, 1d
 ```
 
 ---
@@ -59,12 +55,12 @@ gantt
 ```mermaid
 %%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#1E293B', 'primaryTextColor': '#F8FAFC', 'primaryBorderColor': '#334155'}}}%%
 pie title Time Allocation (11 days · excludes sleep)
-  "Transit"   : 42.67
-  "Food"      : 40.25
-  "Outdoor"   : 33.92
-  "Culture"   : 18
+  "Transit"   : 38
+  "Food"      : 40
+  "Outdoor"   : 36
+  "Culture"   : 20
   "Logistics" : 18
-  "Downtime"  : 26.5
+  "Downtime"  : 26
   "Wellness"  : 4
 ```
 
@@ -76,27 +72,30 @@ pie title Time Allocation (11 days · excludes sleep)
 %%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#1E293B', 'primaryTextColor': '#F8FAFC', 'primaryBorderColor': '#F59E0B', 'lineColor': '#94A3B8'}}}%%
 flowchart LR
   SFO["SFO\nSan Francisco"]
-  AKL["AKL\nAuckland"]
-  HOB["Hobbiton\n+ Waitomo"]
-  MEL["MEL\nMelbourne"]
+  AKL["AKL\nAuckland\n(Rydges N1+N2)"]
+  HAM["Hamilton\n(Camelot N1+N2)"]
+  HOB["Hobbiton\n+ Waitomo Black Labyrinth\n(Tue 5/19 day-trip)"]
+  MEL["MEL\nMelbourne\n(N1-N3 TBD)"]
   PHI["Penguin Parade\nPhillip Island"]
-  SYD["SYD\nSydney"]
+  SYD["SYD\nSydney\n(N1-N3 TBD)"]
   VIV["Vivid Sydney\nKayak Tour"]
-  BUR["Burrawa\nClimb"]
+  BUR["BridgeClimb\nBurrawa"]
 
-  SFO -->|"UA 917 · May 14\nnonstop 13.5h"| AKL
-  AKL --> HAM["Hamilton + Waitomo\nrental car drive"]
-  HAM --> HOB
-  HOB --> AKL
-  AKL -->|"AKL to MEL · May 20\nflight TBD"| MEL
+  SFO -->|"UA 917 · May 14\nnonstop 13.5h · BOOKED"| AKL
+  AKL -->|"Mon 5/18 evening drive\n~1.5h"| HAM
+  HAM -->|"Tue 5/19 day-trip\nHamilton-based"| HOB
+  HOB --> HAM
+  HAM -->|"Wed 5/20 morning drive\n~1.5h"| AKL
+  AKL -->|"QF 154 · May 20 13:40\nBOOKED"| MEL
   MEL --> PHI
-  MEL -->|"JQ 500 · May 22\n$161/pp"| SYD
+  MEL -->|"JQ 516 · May 23 13:55\nBOOKED"| SYD
   SYD --> VIV
   SYD --> BUR
-  SYD -->|"QF 73 · May 26 21:25\nnonstop 13.5h · seat 54K"| SFO
+  SYD -->|"QF 73 · May 26 21:25\nnonstop · seat picked · BOOKED"| SFO
 
   style SFO fill:#1E293B,stroke:#475569,color:#94A3B8
   style AKL fill:#1E293B,stroke:#F59E0B,color:#F59E0B
+  style HAM fill:#1E293B,stroke:#22C55E,color:#22C55E
   style MEL fill:#1E293B,stroke:#0D9488,color:#0D9488
   style SYD fill:#1E293B,stroke:#8B5CF6,color:#8B5CF6
   style HOB fill:#14532D,stroke:#22C55E,color:#F8FAFC
@@ -114,19 +113,19 @@ Each row = 1 day, 20 characters spanning 24 hours (~1.2h per char). Category key
 ```
        0  4  8  12 16 20 24
        -  -  -  -  -  -  -
-May14  ....LLLLL.....LLLTTT  SFO  - Departure Day (flight dep 22:45)
+May14  ....LLLLL.....LLLTTT  SFO  - Departure Day (UA 917 dep 22:45)
 May15  TTTTTTTTTTTTTTTTTTTT  Pac  - In-flight over Pacific (13h25m UA 917)
-May16  ..LLTFFCCCCFFFFCCFFDS  AKL  - Arrival - War Museum - Writers Festival
-May17  ..FOOOOOOOOOOOOTTLLDS  AKL  - Fullers Cruise - drive to Hamilton
-May18  ..FFFLOOOOOOLLFFFLLDS  HAM  - Black Abyss Waitomo (5hr)
-May19  ..FOOOOFFTTTFLLLDDDDS  HAM  - Hobbiton - drive back to AKL
-May20  ..LTTTLLLLLDDFFCCFFDS  AKL>MEL transit - check in MEL
-May21  ..FOOOOOFFFOOOOOOFLDS  MEL  - Penguin Parade - Kennett River koalas
-May22  ..FFFCCCDDFFCCFFFFTTL  MEL>SYD - Aussie friends meetup - fly SYD evening
-May23  ..FOOTTCCFFCCFCFCFLLD  SYD  - Vivid Sydney + Opera House
+May16  ..LLTFFCCCCFFFFCCFFDS  AKL  - Arrival - War Museum - Writers Festival - sleep Rydges N1
+May17  ..FOOOOOOOOOOOOFFFFDS  AKL  - Fullers Cruise full day walk-on - sleep Rydges N2
+May18  ..LLLDDFCCCCCCTTLLDDS  HAM  - AKL flex (All Blacks Experience + Mt Eden) - drive Hamilton evening - sleep Camelot N1
+May19  ..FTTOOOOFTTOOOOTTTDS  HAM  - Hobbiton AM - Black Labyrinth PM - drive Hamilton - sleep Camelot N2
+May20  ..FLTTLLLLLDDFFCCFFDS  AKL>MEL transit - QF 154 13:40 - check in MEL
+May21  ..FOOOOOFFFOOOOOOFLDS  MEL  - Penguin Parade - Kennett River koalas (Thu 5/21 placeholders)
+May22  ..FFFCCCDDFFCCFFFFTTL  MEL  - Aussie friends meetup - sleep MEL N3
+May23  ..FFFLTTLLDFCCFCFCFLD  MEL>SYD transit - JQ 516 13:55 - Vivid Sydney evening
 May24  ..FOOTTLLFFCWWWFTLCDS  SYD  - BridgeClimb Burrawa or Bondi-Coogee
-May25  ..FFFCCCFFFLOFFFDDDDS  SYD  - Memorial Day final spa
-May26  ..FFFCCCFFFLLLTTTTTT  SYD>SFO departure QF 73 dep 21:25 (evening red-eye, lands SFO 17:45 same day)
+May25  ..FFFCCCFFFLOFFFDDDDS  SYD  - Memorial Day Symbio Wildlife
+May26  ..FFFCCCFFFLLLTTTTTT  SYD>SFO QF 73 dep 21:25 (evening - lands SFO 17:45 same day)
 
 KEY:  T=transit  O=outdoor  F=food  C=culture  W=wellness
       L=logistics  D=downtime  S=sleep  .=midnight buffer
@@ -134,24 +133,48 @@ KEY:  T=transit  O=outdoor  F=food  C=culture  W=wellness
 
 ---
 
-## 5. Flight Legs Summary
+## 5. Flight Legs Summary — All BOOKED ✓
 
-| Leg | Flight | Date | Dep → Arr | Per Person | Status |
-|---|---|---|---|---|---|
-| SFO → AKL | UA 917 | May 14 | 22:45 → 07:10+2 | $971 | **BOOKED ✓** |
-| AKL → MEL | TBD | May 20 | ~09:45 → ~13:00 | TBD | **Re-search needed** (date moved from 5/19 → 5/20) |
-| MEL → SYD | TBD | May 22 | evening per GCal | TBD | **Re-search needed** (was JQ 500 06:00; new GCal slots Aussie friends meetup until 21:15) |
-| SYD → SFO | QF 73 | May 26 | 21:25 → 17:45 (same day, gain a day) · seat 54K | AUD $60 paid | **BOOKED ✓** (KLM partner) |
-
-*Prices include 1 checked bag. Sourced via Fli MCP on 2026-05-03; QF 73 booked 2026-05-04.*
+| Leg | Flight | Date | Dep → Arr | Status |
+|---|---|---|---|---|
+| SFO → AKL | UA 917 | May 14 | 22:45 → 07:10+2 | **BOOKED ✓** $971 Basic Economy |
+| AKL → MEL | QF 154 | May 20 | 13:40 → 15:50 (4h10m nonstop) | **BOOKED ✓** Economy Sale, Cap One Travel |
+| MEL → SYD | JQ 516 | May 23 | 13:55 → 15:20 (1h25m nonstop) | **BOOKED ✓** Starter Plus, Cap One Travel |
+| SYD → SFO | QF 73 | May 26 | 21:25 → 17:45 (same day, gain a day) | **BOOKED ✓** code YBKAZV, ticket 0742138056542, seat picked |
 
 ---
 
-## 6. City Split — Time Budget
+## 6. Hotel Bookings — NZ leg complete ✓
+
+| City | Hotel | Nights | Total | Status |
+|---|---|---|---|---|
+| Auckland | **Rydges Auckland** (Federal & Kingston St CBD) | Sat 5/16 + Sun 5/17 | $239.52 USD refundable | **BOOKED ✓** ID 1001374794 · cancel May 15 |
+| Hamilton | **Camelot on Ulster** (231 Ulster St, Whitiora) | Mon 5/18 + Tue 5/19 | $208.23 USD refundable | **BOOKED ✓** ID 1002183066 · cancel May 16 |
+| Melbourne | TBD | Wed 5/20 + Thu 5/21 + Fri 5/22 | placeholder | re-plan after NZ |
+| Sydney | TBD (Hilton Sydney for Sat 5/23 Surpass cert is the lead) | Sat 5/23 + Sun 5/24 + Mon 5/25 | placeholder | re-plan after NZ |
+
+---
+
+## 7. City Split — Time Budget
 
 | City | Days | Nights | Key Activities |
 |---|---|---|---|
-| Auckland + Hamilton | Sat–Tue (5/16–5/19) | 3 (2 AKL + 1 Hamilton) | War Museum · Writers Festival · Fullers Cruise · Black Abyss Waitomo · Hobbiton |
-| Melbourne (MEL) | Wed–Fri (5/20–5/22) | 2 | Penguin Parade · Kennett River koalas · Aussie friends · Selena's eats |
-| Sydney (SYD) | Fri–Tue (5/22–5/26) | 4 | Vivid Sydney · Opera House · BridgeClimb Burrawa · Bondi-Coogee · Symbio Wildlife (Corey rec) |
-| **Total** | **11 ground days** | **9** | Driving NZ leg adds rental car logistics (Donnie + IDP) |
+| Auckland | Sat–Sun 5/16–5/17 | 2 (Rydges) | War Museum · Writers Festival · Fullers Cruise full day walk-on |
+| Auckland (Mon 5/18 morning + flex) | Mon 5/18 AM-PM | 0 (transition day) | All Blacks Experience · Mt Eden sunset · drive Hamilton evening |
+| Hamilton | Mon–Tue 5/18–5/19 | 2 (Camelot) | Tue 5/19 = Hobbiton AM + Black Labyrinth PM (Hamilton-based day-trip) |
+| Melbourne | Wed–Fri 5/20–5/22 | 3 (TBD) | Penguin Parade · Kennett River koalas · Aussie friends · Selena's eats |
+| Sydney | Sat–Tue 5/23–5/26 | 3 (TBD) | Vivid Sydney · Opera House · BridgeClimb Burrawa · Bondi-Coogee · Symbio Wildlife (Corey + Jiho rec) |
+| **Total** | **11 ground days** | **7 booked + 6 TBD** | NZ leg = self-drive AKL→Hamilton→Hobbiton→Waitomo loop (Donnie + IDP) |
+
+---
+
+## 8. NZ Leg Drive Math
+
+| Day | Drive | Total |
+|---|---|---|
+| Mon 5/18 | AKL → Hamilton (evening, 18:00) | ~1.5h |
+| Tue 5/19 | Hamilton → Hobbiton (1h) → Waitomo (2h) → Hamilton (1h) | ~4h round-trip |
+| Wed 5/20 | Hamilton → AKL airport (09:00) | ~1.5h |
+| **NZ leg total** | | **~7h** |
+
+Engineered with "end-with-wet" order: Hobbiton chill morning → Black Labyrinth wet/cold finale → 1h drive home → Camelot hot shower + sleep. Black Labyrinth = 3h gentler version (5/8 pick over Black Abyss 5h for energy preservation).
