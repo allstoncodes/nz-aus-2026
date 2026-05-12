@@ -1,10 +1,31 @@
 # AKL → Hamilton → MEL → SYD · May 2026
 
-> **[→ Open Interactive Trip Dashboard](https://allstoncodes.github.io/nz-aus-2026)** — day-by-day timeline, per-day Leaflet map, hotel info, booking checklist, real-time weather widget, persistent localStorage checkboxes
+> **[→ Open Interactive Trip Dashboard](https://allstoncodes.github.io/nz-aus-2026)** — day-by-day timeline, per-day Leaflet map, hotel info, booking checklist with click-through URLs, real-time weather widget, persistent localStorage checkboxes, Pre-Trip Alert banner
 
 *For Allston + Donnie's eyes. Repo goes private after May 26 return.*
 
-**Last update:** 2026-05-11 — Hamilton hotel BOOKED (Camelot on Ulster) · schedule corrected (Mon 5/18 = AKL flex day, Tue 5/19 = combined Hobbiton + Black Labyrinth) · All Blacks Experience now slotted Mon 5/18 14:00 AKL.
+**Last update:** 2026-05-12 — **Tue 5/19 BIG-day items both BOOKED** (Hobbiton 9:50am Ref #3242461 + Black Labyrinth 3:30pm Order Ref WTOMO-4130846 · $653.72 NZD total on Venture X). Site verification pass caught 4 brief errors (Hobbiton 9:30 fully booked → 9:20→9:50 pivot · Black Lab no 15:00 slot → 15:30 · Mudbrick no 11:00 → 11:30 · SeaLink terminal Mātiatia → Kennedy Point). NEW Booking Quick Links panel at top of dashboard (6 BOOK NOW buttons with status flags). NEW Pre-Trip Alert banner for BWR Risk Disclosure form (Wed 5/13 deadline).
+
+## Booking status snapshot (2026-05-12)
+
+| Item | Status | Ref / Action |
+|---|---|---|
+| ✈️ UA 917 SFO→AKL (outbound) | ✅ BOOKED | both travelers same flight LW459T |
+| ✈️ QF 154 AKL→MEL | ✅ BOOKED | Cap One Travel |
+| ✈️ JQ 516 MEL→SYD | ✅ BOOKED | Starter Plus |
+| ✈️ QF 73 SYD→SFO (return) | ✅ BOOKED | YBKAZV |
+| 🏨 Rydges Auckland N1+N2 | ✅ BOOKED | Ref 1001374794 · $239.52 USD refundable |
+| 🏨 Camelot on Ulster Hamilton N1+N2 | ✅ BOOKED | Booking ID 1002183066 · $208.23 USD refundable |
+| 🎬 Hobbiton Tue 5/19 9:50am | ✅ BOOKED 2026-05-12 | **Ref #3242461 · $260 NZD** |
+| 🕳️ Black Labyrinth Tue 5/19 3:30pm | ✅ BOOKED 2026-05-12 | **Order Ref WTOMO-4130846 · $393.72 NZD** |
+| 🍽️ Mudbrick Sun 5/17 11:30am lunch | ⏳ Pending | book at nz6.eveve.com Eveve widget |
+| ⛴️ SeaLink Sun 5/17 ~09:30 Kennedy Point | ⏳ Pending (phone) | +64-9-300-5900 or sealink.co.nz |
+| 🏉 All Blacks Mon 5/18 2:00pm | ⏳ Pending | book.experienceallblacks.com (5+ seats) |
+| 📚 Auckland Writers Festival Sat 5/16 | ⏳ Session pick required | 4:00pm or 5:30pm block (no 16:45) |
+
+## ⚠️ Pre-trip action (Wed 5/13 deadline)
+
+**BWR Risk Disclosure form** — both Allston + Donnie must complete separately before Tue 5/19 tour. Discover Waitomo sent the form link with the Black Lab booking confirmation email. ~5 min each. Saves 10-15 min at BWR base check-in.
 
 ---
 
