@@ -175,6 +175,17 @@
     .info-link:hover{background:rgba(13,148,136,.1);}
     .rate-badge{font-family:'DM Mono',monospace;font-size:1.125rem;font-weight:500;color:var(--accent);}
 
+    /* ── PRE-TRIP ALERT BANNER (top of page) ── */
+    .alert-banner{background:linear-gradient(135deg,rgba(239,68,68,.08),rgba(245,158,11,.08));border-top:3px solid #ef4444;border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+    .alert-banner .alert-icon{font-size:1.5rem;line-height:1;}
+    .alert-banner .alert-body{flex:1;min-width:240px;}
+    .alert-banner .alert-title{font-family:'Syne',sans-serif;font-size:.9375rem;font-weight:700;color:#ef4444;margin-bottom:4px;}
+    .alert-banner .alert-text{font-size:.8125rem;color:var(--text);line-height:1.5;}
+    .alert-banner .alert-text strong{color:var(--accent);}
+    .alert-banner .alert-deadline{font-family:'DM Mono',monospace;font-size:.75rem;color:var(--text-3);margin-top:4px;}
+    .alert-banner .alert-cta{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:#ef4444;color:#fff;text-decoration:none;border-radius:6px;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;transition:opacity .15s;}
+    .alert-banner .alert-cta:hover{opacity:.85;}
+
     /* ── BOOKING QUICK LINKS (top of page) ── */
     .booking-quicklinks{background:var(--surface);border-top:2px solid var(--accent);border-bottom:1px solid var(--border);}
     .ql-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;margin-top:10px;}
@@ -282,6 +293,17 @@
     </div>
   </div>
 </header>
+
+<!-- PRE-TRIP ALERT BANNER — high-priority action items before departure -->
+<section class="alert-banner" aria-label="Pre-trip action alerts">
+  <div class="alert-icon">⚠️</div>
+  <div class="alert-body">
+    <div class="alert-title">Pre-Trip Action Required — Black Water Rafting Risk Disclosure</div>
+    <div class="alert-text">Both travelers (Allston + Donnie) must complete the BWR Risk Disclosure form before the <strong>Tue 5/19 3:30pm Black Labyrinth tour</strong>. Discover Waitomo sent the form link with the booking confirmation email (Order Ref WTOMO-4130846). Each form ~5 min · saves 10–15 min at BWR base check-in. Do this <strong>before Thu 5/14 SFO departure</strong> while on US internet.</div>
+    <div class="alert-deadline">📅 Recommended completion: Wed 2026-05-13 · T-1 day before departure</div>
+  </div>
+  <a class="alert-cta" href="mailto:waitomo.cavesinfo@waitomo.com?subject=Risk%20Disclosure%20Form%20-%20Order%20WTOMO-4130846" target="_blank" rel="noopener">Email BWR ↗</a>
+</section>
 
 <!-- BOOKING QUICK LINKS — top of page · click-through reference for NZ leg bookings -->
 <section class="page-section booking-quicklinks" aria-label="Booking quick links">
