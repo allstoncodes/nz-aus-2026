@@ -450,7 +450,7 @@
     Weather Forecast (real-time · Open-Meteo)
   </h2>
   <div class="weather-grid" id="weather-widget"><div class="weather-loading">Loading forecast…</div></div>
-  <p style="font-size:.75rem;color:var(--text-3);margin-top:8px;">Forecasts auto-load on page open. Open-Meteo's 16-day window covers all trip dates 5/14–5/26 once we're within range. Fahrenheit shown.</p>
+  <p id="weather-updated" style="font-size:.75rem;color:var(--text-3);margin-top:8px;">Forecasts auto-load on page open. Open-Meteo's 16-day window covers all trip dates 5/14–5/26 once we're within range. Fahrenheit shown.</p>
 </section>
 
 <hr class="div">
@@ -949,17 +949,17 @@ const DAYS=[
   {tag:'FLT',date:'May 15',wd:'FRI',city:'SFO',cityFull:'Over the Pacific',lbl:'In-Flight',blocks:[
     {s:'00:00',e:'24:00',c:'transit',t:'UA 917 SFO → AKL · 13h25m nonstop · crosses dateline · arrives May 16 07:10'},
   ]},
-  {tag:1,date:'May 16',wd:'SAT',city:'AKL',cityFull:'Auckland (AKL N1 Rydges)',lbl:'Arrival + Forever Tomorrow + Haka + War Museum + Writers Festival (LOCKED 2026-05-13)',blocks:[
+  {tag:1,date:'May 16',wd:'SAT',city:'AKL',cityFull:'Auckland (AKL N1 Rydges)',lbl:'Arrival + chill day · Writers Festival 4pm FREE locked · Forever Tomorrow + Haka + War Museum walk-up optional (decide morning based on energy)',blocks:[
     {s:'07:00',e:'07:30',c:'logistics',t:'Land AKL 07:10 together on UA 917 (Donnie confirmed same flight 5/11 — no separate meet-up needed)'},
     {s:'07:30',e:'09:00',c:'transit',t:'Customs + immigration + bag claim (~1h for non-NZ residents) · short coffee buffer before Hertz desk'},
     {s:'09:00',e:'09:30',c:'logistics',t:'Hertz rental car pickup AKL airport · 1st-time LHD acclimation'},
     {s:'09:30',e:'10:30',c:'transit',t:'Drive AKL airport → CBD (~1hr) · low-traffic suburban window before downtown'},
-    {s:'10:30',e:'12:30',c:'culture',t:'Forever Tomorrow Exhibition · Auckland Art Gallery · Chinese Art Now · walk-up timed entry · $54 NZD'},
+    {s:'10:30',e:'12:30',c:'culture',t:'🟡 OPTIONAL walk-up · Forever Tomorrow Exhibition · Auckland Art Gallery · Chinese Art Now · timed entry · $54 NZD (skip if low energy post-redeye · UA 917 lands 07:10)'},
     {s:'12:30',e:'13:15',c:'food',t:'Quick lunch · Art Gallery café OR Federal St (Hangi Shop / Depot)'},
     {s:'13:15',e:'13:25',c:'transit',t:'Walk Art Gallery → War Museum (~12 min through Albert Park)'},
     {s:'13:25',e:'13:30',c:'logistics',t:'Arrive AWMM Auditorium Level 2 (10 min early per Haka meeting point instruction)'},
-    {s:'13:30',e:'14:30',c:'culture',t:'Māori Cultural Experience "Living Taonga" (Haka relocated to Auditorium L2 — Marae Ātea + Pacific Galleries CLOSED · $70 NZD · powerful + intimate performance space)'},
-    {s:'14:30',e:'15:45',c:'culture',t:'War Museum self-guided galleries · focus open galleries (Volcanic Field · NZ at War · Origins) · skip closed wings · $54 NZD admission'},
+    {s:'13:30',e:'14:30',c:'culture',t:'🟡 OPTIONAL walk-up · Haka "Living Taonga" Auditorium L2 (daily 11am + 1:30pm · not scarce · Marae Ātea + Pacific Galleries CLOSED) · $35pp Performance + $27pp GA = $124 NZD if going · decide morning'},
+    {s:'14:30',e:'15:45',c:'culture',t:'🟡 OPTIONAL walk-up · War Museum self-guided · focus open galleries (Volcanic Field · NZ at War · Origins) · skip closed wings · $54 NZD admission (covered by Haka combo if doing both)'},
     {s:'15:45',e:'16:00',c:'transit',t:'Walk Museum → Aotea Centre Herald Theatre (~10 min)'},
     {s:'16:00',e:'17:00',c:'culture',t:'Writers Festival Event 81 "Migration & Motherhood" · Thammika Songkaeo + Leilani Tamu · Herald Theatre · FREE walk-in · arrive 15 min early for seating'},
     {s:'17:00',e:'19:00',c:'downtime',t:'CBD wander · drinks pre-dinner · Britomart or Wynyard'},
@@ -967,14 +967,15 @@ const DAYS=[
     {s:'21:00',e:'21:30',c:'transit',t:'Walk back to Rydges Auckland · Federal St'},
     {s:'21:30',e:'24:00',c:'sleep',t:'Sleep · Rydges Auckland N1'},
   ]},
-  {tag:2,date:'May 17',wd:'SUN',city:'AKL',cityFull:'Auckland (AKL N2 Rydges) + Waiheke Option A',lbl:'Mudbrick Centerpiece + Onetangi + Oneroa (Option A LOCKED 2026-05-13)',blocks:[
+  {tag:2,date:'May 17',wd:'SUN',city:'AKL',cityFull:'Auckland (AKL N2 Rydges) + Waiheke Option A',lbl:'Mudbrick à la carte 12:30 + Onetangi + Oneroa (Option A LOCKED · à la carte switch 2026-05-14)',blocks:[
     {s:'08:30',e:'09:30',c:'food',t:'Breakfast Rydges Auckland'},
     {s:'09:30',e:'10:00',c:'downtime',t:'Pack day bag · Mudbrick reservation conf · prep for ferry'},
     {s:'10:00',e:'10:15',c:'transit',t:'Drive Rydges → Auckland City SeaLink terminal (~10min · Wynyard Wharf)'},
     {s:'10:15',e:'10:45',c:'logistics',t:'Load rental car onto SeaLink car ferry (drive-on lane · 30 min check-in window before sailing)'},
     {s:'10:45',e:'11:45',c:'transit',t:'SeaLink Seaway Auckland City → Kennedy Point (1h crossing · $192 NZD outbound · 9:00am cancelled, 10:45am closest viable)'},
     {s:'11:45',e:'11:57',c:'transit',t:'Drive Kennedy Point → Mudbrick Vineyard (12 min via Donald Bruce Rd + Ocean View Rd · 6.8km · drive time corrected 5/13 from prior 20min estimate)'},
-    {s:'12:00',e:'14:00',c:'food',t:'Mudbrick Vineyard Complete Experience · 7-course tasting menu in flagship restaurant · request 12:30pm seating when booking for ferry slack · $370 NZD · $50pp deposit refundable to 72h · email allergies to info@mudbrick.co.nz first'},
+    {s:'11:57',e:'12:30',c:'logistics',t:'Buffer at Mudbrick · park on-site · settle for 12:30 seating (33-min real buffer · ferry-slack engineered after Complete Experience strict 12pm → à la carte switch)'},
+    {s:'12:30',e:'14:00',c:'food',t:'✅ Mudbrick Restaurant à la carte · 2-course $105pp / 3-course $125pp · Reservation CCLUS4B9G6Y (SevenRooms) · pay-on-site · NO deposit charged · dietary email skipped (no restrictions confirmed) · drink/wine flexible'},
     {s:'14:00',e:'14:30',c:'transit',t:'Drive Mudbrick → Onetangi Beach (~15min)'},
     {s:'14:30',e:'16:00',c:'outdoor',t:'Onetangi Beach (main 1.8km swim beach) · walk + photos'},
     {s:'16:00',e:'17:00',c:'outdoor',t:'Oneroa Beach + village walk · closest to ferry · cafés + art galleries'},
@@ -987,21 +988,24 @@ const DAYS=[
     {s:'21:30',e:'22:30',c:'downtime',t:'Pack overnight bag for Mon Hamilton transition'},
     {s:'22:30',e:'24:00',c:'sleep',t:'Sleep · Rydges Auckland N2'},
   ]},
-  {tag:3,date:'May 18',wd:'MON',city:'AKL',cityFull:'AKL flex day → drive Hamilton evening',lbl:'Triple Combo (Wētā + Sky Tower + All Blacks) + Mt Eden sunset + drive Hamilton (LOCKED 2026-05-13)',blocks:[
+  {tag:3,date:'May 18',wd:'MON',city:'AKL',cityFull:'AKL flex day → drive Hamilton evening',lbl:'Wētā + All Blacks BOOKED (individual purchases · Triple Combo abandoned for time-slot certainty) + Sky Tower walk-up + Mt Eden sunset + drive Hamilton',blocks:[
     {s:'09:00',e:'10:00',c:'food',t:'Slow morning at Rydges · late breakfast'},
-    {s:'10:00',e:'10:30',c:'logistics',t:'Pack + late checkout Rydges (max 11:00 checkout · CBD bags stored at front desk if needed)'},
-    {s:'10:30',e:'11:00',c:'transit',t:'Walk Rydges → Wētā Workshop Auckland (CBD · ~10 min)'},
-    {s:'11:00',e:'12:30',c:'culture',t:'Wētā Workshop Unleashed · 90 min · LOTR/Hobbit props + costumes + FX · pairs thematically with Hobbiton Tue 5/19 (same Weta team) · part of $334 NZD Triple Combo'},
-    {s:'12:30',e:'13:15',c:'food',t:'Federal St lunch · Hangi Shop or Depot Eatery'},
-    {s:'13:15',e:'13:55',c:'culture',t:'Sky Tower Observation Deck · ~40 min · iconic AKL view · 328m tallest · part of Triple Combo'},
-    {s:'14:00',e:'15:30',c:'culture',t:'All Blacks Experience · rugby museum + interactive · near Sky Tower · part of Triple Combo (Mon 14:00 5+ seats verified 5/12)'},
-    {s:'15:30',e:'16:00',c:'transit',t:'Drive Sky Tower area → Mt Eden (~15min)'},
-    {s:'16:00',e:'17:00',c:'outdoor',t:'Mt Eden sunset · volcanic cone · 360° city views · FREE · top photography spot'},
-    {s:'17:00',e:'17:15',c:'logistics',t:'Pickup bags from Rydges + load car for Hamilton drive'},
-    {s:'17:15',e:'18:45',c:'transit',t:'Drive AKL → Hamilton (~1.5hr · Donnie at wheel, IDP)'},
-    {s:'18:45',e:'19:15',c:'logistics',t:'Check in Camelot on Ulster · Whitiora 1.6km NW of Hamilton CBD · ground floor + kitchenette + 35 m²'},
-    {s:'19:30',e:'21:00',c:'food',t:'Hamilton dinner · CBD pick (5min drive from Camelot)'},
-    {s:'21:00',e:'22:00',c:'downtime',t:'Wind down · prep early wake for Tue BIG day (07:00)'},
+    {s:'10:00',e:'10:30',c:'logistics',t:'Pack + late checkout Rydges (max 11:00 checkout · CBD bags stored at front desk for daytime activities)'},
+    {s:'10:30',e:'10:55',c:'transit',t:'Walk Rydges → Wētā Workshop · 88 Federal St Level 5 (~10 min · arrive 10:55 per 15-min pre-tour rule)'},
+    {s:'10:55',e:'11:10',c:'logistics',t:'Wētā Workshop check-in · Level 5 · pre-tour briefing'},
+    {s:'11:10',e:'12:40',c:'culture',t:'✅ Wētā Workshop Unleashed · 90 min · LOTR/Hobbit props + costumes + FX · pairs thematically with Hobbiton Tue 5/19 (same Wētā team) · Party Ref 1483637 · Booking Ref #967070 · $134 NZD PAID Venture X · ask front desk re SkyCity parking discount validation'},
+    {s:'12:40',e:'13:30',c:'food',t:'Federal St lunch · Hangi Shop or Depot Eatery (50 min · grouped near SkyCity)'},
+    {s:'13:30',e:'14:10',c:'culture',t:'🟡 Sky Tower walk-up OPTIONAL day-of decision · counter $47/adult ($94 NZD if both) · same as online price · Space Needle equivalent — skip-friendly if low energy'},
+    {s:'14:10',e:'14:50',c:'transit',t:'Walk Sky Tower → SkyCity Convention Centre Level 4 (~5 min) · transition buffer'},
+    {s:'14:50',e:'15:00',c:'logistics',t:'All Blacks check-in · Level 4 SkyCity Convention Centre (Victoria + Federal corner) · 50% off SkyCity parking validation at front desk · flat-soled shoes · NO photos guided portion · NO food/drink'},
+    {s:'15:00',e:'16:30',c:'culture',t:'✅ All Blacks Experience English Tour · 90 min guided + Step Up interactive zone · Order 715560 / Booking ID 477348 · $138 NZD PAID Venture X'},
+    {s:'16:30',e:'17:00',c:'transit',t:'Drive SkyCity → Mt Eden (~15min · pickup bags from Rydges en route)'},
+    {s:'17:00',e:'18:00',c:'outdoor',t:'Mt Eden sunset · volcanic cone · 360° city views · FREE · top photography spot · sunset 17:24 May 18 · pack beanie + thin gloves (cone gets cold fast)'},
+    {s:'18:00',e:'18:15',c:'logistics',t:'Load car for Hamilton drive'},
+    {s:'18:15',e:'19:45',c:'transit',t:'Drive AKL → Hamilton (~1.5hr · Donnie at wheel, IDP)'},
+    {s:'19:45',e:'20:15',c:'logistics',t:'Check in Camelot on Ulster · Whitiora 1.6km NW of Hamilton CBD · ground floor + kitchenette + 35 m²'},
+    {s:'20:15',e:'21:30',c:'food',t:'Hamilton dinner · CBD pick (5min drive from Camelot)'},
+    {s:'21:30',e:'22:00',c:'downtime',t:'Wind down · prep early wake for Tue BIG day (07:00)'},
     {s:'22:00',e:'24:00',c:'sleep',t:'Sleep · Camelot N1'},
   ]},
   {tag:4,date:'May 19',wd:'TUE',city:'HAM',cityFull:'Hamilton → Hobbiton → Waitomo → Hamilton',lbl:'Hobbiton + Black Labyrinth combined BIG day (engineered end-with-wet)',blocks:[
@@ -1119,9 +1123,8 @@ const BOOKINGS=[
   {pri:'ok',lbl:'Forever Tomorrow Exhibition · Sat May 16 10:30am (walk-up OK)',meta:'✅ Walk-up day-of OK · Auckland Art Gallery · "Chinese Art Now" exhibition · timed entry 10:00am–4:15pm Sat in 15-min increments · plenty avail · $27pp × 2 = $54 NZD · pre-book optional at tix.aucklandartgallery.com if preferred',url:'https://tix.aucklandartgallery.com/events/08934c67-bb0a-6953-b48a-283324002dbe',done:false},
   {pri:'soon',lbl:'Penguin Parade · Phillip Island May 21',meta:'Penguin Plus recommended · penguins.org.au',url:'https://www.penguins.org.au',done:false},
   {pri:'soon',lbl:'Kennett River + Lake Elizabeth · May 21 dusk',meta:'self-drive · platypus dawn/dusk window · koalas Kennett',url:'https://visitgreatoceanroad.org.au',done:false},
-  {pri:'ok',lbl:'AU activities — TBD post-NZ planning',meta:'Sydney 5/23-25 + Melbourne candidates live in recs tables below · plan after NZ finalized',url:'',done:false},
-  {pri:'ok',lbl:'Auckland War Memorial Museum · May 16 14:30',meta:'walk-up OK · pre-book if Maori cultural performance desired',url:'https://www.aucklandmuseum.com',done:false},
-  {pri:'ok',lbl:'Rental car AKL · Donnie + IDP · Sat 5/16 09:00 → Wed 5/20 11:00',meta:'Hertz Compact SUV · pickup AKL airport 09:00 Sat · return AKL airport 11:00 Wed (after Hamilton→AKL airport drive 09:00–10:30)',url:'',done:false},
+  {pri:'soon',lbl:'AU activities — final picks pending (hotels + flights BOOKED)',meta:'MEL + SYD hotels BOOKED · in-trip picks: Phillip Island Penguin Parade · Kennett River koalas · Aussie friends meetup MEL · Vivid Sydney · BridgeClimb Burrawa · Bondi-Coogee · Symbio Wildlife',url:'',done:false},
+  {pri:'ok',lbl:'Rental car AKL · Hertz Compact SUV · Sat 5/16 09:00 → Wed 5/20 11:00 ✓ BOOKED',meta:'✅ BOOKED 2026-05-07 · Hertz Compact SUV $161 · Cap One CDW verified primary (no separate insurance needed) · pickup AKL airport 09:00 Sat · return AKL airport 11:00 Wed (after Hamilton→AKL airport drive 09:00–10:30) · Donnie drives w/ IDP',url:'',done:true},
   {pri:'ok',lbl:'Airalo eSIM · Oceania Regional',meta:'Both travelers separately · activate before May 14',url:'https://www.airalo.com/esim',done:false},
   {pri:'feature',lbl:'Google Calendar Shared Trip Calendar',meta:'Auto-sync bookings + tickets for Allston + Donnie',url:'',done:false},
 ];
@@ -1181,70 +1184,87 @@ const MAP_DAYS=[
     {c:SFO_E,l:'SFO · UA 917 departed 22:45',t:'May 14'},
     {c:[-36.8485,174.7633],l:'AKL · arriving May 16 07:10',t:'May 16'},
   ]},
-  // Day 1 May 16 SAT - AKL Arrival + War Museum + Writers Festival
+  // Day 1 May 16 SAT - AKL Arrival + chill day (Writers Festival 4pm FREE locked; rest walk-up optional)
   {center:[-36.8500,174.7600],zoom:12,cityCode:'AKL',pins:[
     {c:[-37.0082,174.7850],l:'Auckland Airport (AKL) · UA 917 lands 07:10 (Allston + Donnie same flight)',t:'07:10'},
-    {c:[-36.8427,174.7674],l:'Hilton Auckland, Princes Wharf',t:'11:00'},
-    {c:[-36.8601,174.7775],l:'Auckland War Memorial Museum',t:'14:30'},
-    {c:[-36.8553,174.7639],l:'Auckland Writers Festival · Aotea Square (4pm OR 5:30pm session — pick at booking)',t:'TBD'},
+    {c:[-36.8484,174.7625],l:'Rydges Auckland · Federal & Kingston St CBD · drop bags',t:'11:00'},
+    {c:[-36.8553,174.7639],l:'🟡 Forever Tomorrow · Auckland Art Gallery (walk-up optional)',t:'10:30'},
+    {c:[-36.8601,174.7775],l:'🟡 Auckland War Museum + Haka "Living Taonga" Auditorium L2 (walk-up optional · daily 11am+1:30pm)',t:'13:30'},
+    {c:[-36.8553,174.7639],l:'✅ Writers Festival Event 81 "Migration & Motherhood" · Herald Theatre Aotea Centre · FREE walk-in',t:'16:00'},
+    {c:[-36.8484,174.7625],l:'Rydges Auckland · sleep N1',t:'21:30'},
   ]},
-  // Day 2 May 17 SUN - AKL to Hamilton via Fullers Cruise
-  {center:[-37.4000,175.1500],zoom:8,cityCode:'AKL',pins:[
-    {c:[-36.8447,174.7686],l:'Pier 3 · Fullers Cruise terminal',t:'10:00'},
-    {c:[-36.8003,175.1080],l:'Waiheke Island (Fullers route)',t:'12:00'},
-    {c:[-36.8427,174.7674],l:'Hilton Auckland · final checkout',t:'18:30'},
-    {c:[-37.7870,175.2793],l:'Novotel Tainui Hamilton',t:'20:00'},
+  // Day 2 May 17 SUN - SeaLink Waiheke (drive-on) + Mudbrick à la carte 12:30 + Onetangi + Oneroa
+  {center:[-36.8200,174.8600],zoom:10,cityCode:'AKL',pins:[
+    {c:[-36.8484,174.7625],l:'Rydges Auckland · breakfast + pack day bag',t:'08:30'},
+    {c:[-36.8410,174.7660],l:'Hamer St SeaLink Terminal · drive-on lane · arrive 10:15 (30 min pre-sail)',t:'10:15'},
+    {c:[-36.8323,174.9013],l:'Kennedy Point Waiheke · SeaLink lands 11:45',t:'11:45'},
+    {c:[-36.7913,175.0001],l:'✅ Mudbrick Restaurant à la carte · 12:30 seating · Reservation CCLUS4B9G6Y · pay-on-site',t:'12:30'},
+    {c:[-36.7782,175.0233],l:'Onetangi Beach · main 1.8km swim beach · walk + photos',t:'14:30'},
+    {c:[-36.7864,174.9886],l:'Oneroa Beach + village · cafés + art galleries',t:'16:00'},
+    {c:[-36.8323,174.9013],l:'Kennedy Point Terminal · SeaLink return 18:00',t:'18:00'},
+    {c:[-36.8484,174.7625],l:'Rydges Auckland · sleep N2',t:'22:30'},
   ]},
-  // Day 3 May 18 MON - Hamilton + Waitomo Black Abyss
-  {center:[-38.0000,175.2000],zoom:9,cityCode:'AKL',pins:[
-    {c:[-37.7870,175.2793],l:'Novotel Tainui Hamilton · base',t:'09:00'},
-    {c:[-38.2611,175.1039],l:'Black Abyss Waitomo · 5hr cave abseil + zipline',t:'12:30'},
-    {c:[-37.7870,175.2793],l:'Back to Novotel Hamilton',t:'19:30'},
+  // Day 3 May 18 MON - AKL flex day: Wētā + Sky Tower walk-up + All Blacks + Mt Eden → drive Camelot Hamilton
+  {center:[-37.2000,175.0000],zoom:8,cityCode:'AKL',pins:[
+    {c:[-36.8484,174.7625],l:'Rydges Auckland · late checkout (max 11:00) · bags stored at front desk',t:'10:00'},
+    {c:[-36.8462,174.7625],l:'✅ Wētā Workshop Unleashed · 88 Federal St Level 5 · Ref 1483637 · $134 NZD PAID',t:'11:10'},
+    {c:[-36.8485,174.7625],l:'🟡 Sky Tower walk-up OPTIONAL · counter $47/adult · day-of decision',t:'13:30'},
+    {c:[-36.8470,174.7625],l:'✅ All Blacks Experience · SkyCity Convention Centre Level 4 · Order 715560 · $138 NZD PAID · check-in 14:50',t:'15:00'},
+    {c:[-36.8770,174.7644],l:'Mt Eden volcanic cone · sunset 17:24 · pack beanie + gloves · FREE',t:'17:00'},
+    {c:[-37.7700,175.2700],l:'Camelot on Ulster · 231 Ulster St Whitiora Hamilton · check in',t:'19:45'},
   ]},
-  // Day 4 May 19 TUE - Hamilton to AKL via Hobbiton
-  {center:[-37.5000,175.3000],zoom:8,cityCode:'AKL',pins:[
-    {c:[-37.7870,175.2793],l:'Novotel Tainui Hamilton · checkout',t:'09:00'},
-    {c:[-37.8574,175.6824],l:'Hobbiton Movie Set, Matamata',t:'10:00–14:00'},
-    {c:[-36.8427,174.7674],l:'Hilton Auckland · check in',t:'17:00'},
+  // Day 4 May 19 TUE - Hamilton → Hobbiton 9:20 → Waitomo Black Labyrinth 3:30 → Camelot Hamilton
+  {center:[-37.9000,175.4000],zoom:8,cityCode:'AKL',pins:[
+    {c:[-37.7700,175.2700],l:'Camelot on Ulster · early breakfast 07:00 · pack day bag (swimsuit + dry change of clothes in car)',t:'07:00'},
+    {c:[-37.8574,175.6824],l:'✅ Hobbiton Movie Set · Donnie booking Ref #3241276 · tour 09:20–11:50 · Green Dragon Inn drink incl.',t:'09:20'},
+    {c:[-38.2611,175.1039],l:'✅ Black Labyrinth Waitomo · BWR base 585 Waitomo Caves Rd · Donnie booking WTOMO-4130062 · tour 15:30–18:30 (3hr cave-tube float)',t:'15:30'},
+    {c:[-37.7700,175.2700],l:'Camelot on Ulster · sleep N2 (1hr drive back from Waitomo)',t:'20:00'},
   ]},
-  // Day 5 May 20 WED - AKL to MEL flight + Hosier Lane evening
-  {center:[-37.2000,160.0000],zoom:5,cityCode:'FLIGHT',arc:'AKL-MEL',pins:[
-    {c:[-37.0082,174.7850],l:'Auckland Airport · flight TBD ~09:45 dep',t:'09:45'},
-    {c:[-37.6690,144.8410],l:'Melbourne Airport · arr ~13:00',t:'13:00'},
-    {c:[-37.8230,144.9500],l:'Hilton Melbourne South Wharf',t:'15:00'},
-    {c:[-37.8170,144.9672],l:'Hosier Lane Street Art',t:'17:00'},
+  // Day 5 May 20 WED - Hamilton → AKL airport → QF 154 13:40 → MEL Flagstaff Gardens
+  {center:[-38.0000,160.0000],zoom:5,cityCode:'FLIGHT',arc:'AKL-MEL',pins:[
+    {c:[-37.7700,175.2700],l:'Camelot on Ulster · checkout 09:00',t:'09:00'},
+    {c:[-37.0082,174.7850],l:'Auckland Airport · return Hertz · QF 154 dep 13:40',t:'13:40'},
+    {c:[-37.6690,144.8410],l:'Melbourne Airport · QF 154 arr 15:50 AEST',t:'15:50'},
+    {c:[-37.8095,144.9580],l:'✅ Flagstaff Gardens Hotel · 380 William St CBD · 3 nights · Booking ID 1002950354 · breakfast incl.',t:'17:00'},
   ]},
-  // Day 6 May 21 THU - MEL Penguin Parade + Kennett River
+  // Day 6 May 21 THU - MEL Phillip Island Penguin Parade + Kennett River koalas
   {center:[-38.5500,145.0000],zoom:8,cityCode:'MEL',pins:[
-    {c:[-37.8230,144.9500],l:'Hilton South Wharf · early start',t:'07:00'},
+    {c:[-37.8095,144.9580],l:'Flagstaff Gardens Hotel · early start',t:'07:00'},
     {c:[-38.5140,145.1250],l:'Phillip Island · Penguin Parade + koalas',t:'08:15'},
     {c:[-38.6577,143.8567],l:'Kennett River · koalas + Lake Elizabeth platypus',t:'15:15'},
-    {c:[-37.8230,144.9500],l:'Back to Hilton South Wharf late',t:'22:00'},
+    {c:[-37.8095,144.9580],l:'Flagstaff Gardens Hotel · return late',t:'22:00'},
   ]},
-  // Day 7 May 22 FRI - MEL Aussie friends meetup + fly SYD evening
-  {center:[-35.8000,148.0000],zoom:6,cityCode:'FLIGHT',arc:'MEL-SYD',pins:[
-    {c:[-37.8170,144.9691],l:'Melbourne CBD · Selena rec breakfast',t:'09:00'},
+  // Day 7 May 22 FRI - MEL CBD chill + Aussie friends meetup (sleep MEL N3)
+  {center:[-37.8136,144.9631],zoom:12,cityCode:'MEL',pins:[
+    {c:[-37.8170,144.9691],l:'MEL CBD · Selena rec breakfast (Top Paddock or LUNE)',t:'09:00'},
     {c:[-37.8136,144.9631],l:'Aussie friends meetup MEL · 16:30–21:15',t:'16:30'},
-    {c:[-37.6690,144.8410],l:'Melbourne Airport · evening flight TBD',t:'22:00'},
-    {c:[-33.9399,151.1753],l:'Sydney Airport · arr late',t:'23:30'},
-    {c:[-33.8733,151.2064],l:'Hilton Sydney · check in late',t:'00:30'},
+    {c:[-37.8095,144.9580],l:'Flagstaff Gardens Hotel · sleep N3',t:'22:00'},
   ]},
-  // Day 8 May 23 SAT - TBD
+  // Day 8 May 23 SAT - MEL → JQ 516 13:55 → SYD View Sydney + Vivid evening
+  {center:[-35.8000,148.0000],zoom:6,cityCode:'FLIGHT',arc:'MEL-SYD',pins:[
+    {c:[-37.8095,144.9580],l:'Flagstaff Gardens · checkout 11:30',t:'11:30'},
+    {c:[-37.6690,144.8410],l:'Melbourne Airport · JQ 516 dep 13:55',t:'13:55'},
+    {c:[-33.9399,151.1753],l:'Sydney Airport · JQ 516 arr 15:20 AEST',t:'15:20'},
+    {c:[-33.8400,151.2080],l:'✅ View Sydney · 17 Blue St North Sydney NSW 2060 · 3 nights · Booking ID 1003005966 · $465.50 USD charged 5/18',t:'17:00'},
+    {c:[-33.8568,151.2153],l:'Vivid Sydney evening walk (festival opens Sat 5/23)',t:'19:00'},
+  ]},
+  // Day 9 May 24 SUN - SYD BridgeClimb Burrawa + Bondi-Coogee coastal
   {center:[-33.8688,151.2093],zoom:12,cityCode:'SYD',pins:[
-    {c:[-33.8733,151.2064],l:'Hilton Sydney · base for TBD Sat',t:'all day'},
+    {c:[-33.8523,151.2108],l:'BridgeClimb Sydney · Burrawa First Nations climb',t:'09:00'},
+    {c:[-33.8915,151.2767],l:'Bondi-to-Coogee Coastal Walk · ~6km · 2-3hr',t:'13:00'},
+    {c:[-33.8400,151.2080],l:'View Sydney · sleep N2',t:'21:00'},
   ]},
-  // Day 9 May 24 SUN - TBD
-  {center:[-33.8688,151.2093],zoom:12,cityCode:'SYD',pins:[
-    {c:[-33.8733,151.2064],l:'Hilton Sydney · base for TBD Sun',t:'all day'},
+  // Day 10 May 25 MON Memorial Day - Symbio Wildlife (quokkas) + final SYD chill
+  {center:[-34.0000,151.0000],zoom:9,cityCode:'SYD',pins:[
+    {c:[-33.8400,151.2080],l:'View Sydney · slow breakfast',t:'09:00'},
+    {c:[-34.1830,150.9620],l:'Symbio Wildlife Park · Helensburgh · paid quokka/koala experience (Corey + Jiho rec)',t:'10:00'},
+    {c:[-33.8915,151.2767],l:'Bondi or Royal Botanic Garden · final SYD chill',t:'15:00'},
+    {c:[-33.8400,151.2080],l:'View Sydney · sleep N3',t:'21:00'},
   ]},
-  // Day 10 May 25 MON - TBD Memorial Day
-  {center:[-33.8688,151.2093],zoom:12,cityCode:'SYD',pins:[
-    {c:[-33.8733,151.2064],l:'Hilton Sydney · base for TBD Memorial Day',t:'all day'},
-  ]},
-  // Day 11 May 26 TUE - SYD to SFO QF 73 evening
+  // Day 11 May 26 TUE - SYD → SFO QF 73 evening (gain a day eastbound)
   {center:[-15,200],zoom:2,cityCode:'FLIGHT',arc:'SYD-SFO',pins:[
-    {c:[-33.8733,151.2064],l:'Hilton Sydney · evening checkout',t:'17:30'},
-    {c:[-33.9399,151.1753],l:'Sydney Airport · QF 73 dep 21:25 · seat 54K',t:'21:25'},
+    {c:[-33.8400,151.2080],l:'View Sydney · evening checkout',t:'17:30'},
+    {c:[-33.9399,151.1753],l:'Sydney Airport · QF 73 dep 21:25 · seat picked',t:'21:25'},
     {c:SFO_E,l:'SFO · arrives 17:45 same day (gain a day eastbound)',t:'17:45'},
   ]},
 ];
@@ -1533,6 +1553,16 @@ async function loadWeather(){
         <div class="weather-detail">${days}-day avg · today: ${todayDesc} ${Math.round(d.temperature_2m_max[0])}°/${Math.round(d.temperature_2m_min[0])}°</div>
       </div>`;
     }).join('');
+    // Last-loaded timestamp — Open-Meteo doesn't return a generated_at field,
+    // so client fetch time is the truthful freshness signal.
+    const u=document.getElementById('weather-updated');
+    if(u){
+      const now=new Date();
+      const pad=n=>String(n).padStart(2,'0');
+      const stamp=`${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+      const tz=Intl.DateTimeFormat().resolvedOptions().timeZone||'local';
+      u.textContent=`Forecasts loaded ${stamp} ${tz} from Open-Meteo · 16-day window covers all trip dates 5/14–5/26 · Fahrenheit shown · refresh page to reload.`;
+    }
   }catch(e){c.innerHTML='<div class="weather-error">Weather load failed.</div>';}
 }
 
