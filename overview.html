@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NZ · AUS 2026 — At a Glance</title>
+  <!-- External: Google Fonts (Syne, Outfit, DM Mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Outfit:wght@300;400;500;600&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    /* === DESIGN.md tokens === */
+    :root {
+      --bg:       #020617;
+      --surface:  #0F172A;
+      --card:     #1E293B;
+      --border:   #334155;
+      --text:     #F8FAFC;
+      --text-2:   #94A3B8;
+      --text-3:   #475569;
+      --accent:   #F59E0B;
+      --teal:     #0D9488;
+      --success:  #22C55E;
+      --danger:   #EF4444;
+      --purple:   #8B5CF6;
+      --blue:     #3B82F6;
+      --cyan:     #06B6D4;
+      --slate:    #64748B;
+      --z-nav:    50;
+      --z-drawer: 40;
+    }
+    *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Outfit', system-ui, sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    /* === SKIP LINK === */
+    .skip-link {
+      position: absolute; top: -100px; left: 0; z-index: 999;
+      background: var(--accent); color: #000; padding: 8px 16px;
+      font-weight: 700; text-decoration: none; border-radius: 0 0 8px 0;
+      transition: top 0.15s;
+    }
+    .skip-link:focus { top: 0; }
+
+    /* === SHARED NAV === */
+    .site-nav {
+      position: sticky; top: 0; z-index: var(--z-nav);
+      background: var(--surface);
+      border-top: 4px solid var(--accent);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 1280px; margin: 0 auto; padding: 0 24px;
+      height: 56px; display: flex; align-items: center;
+      justify-content: space-between; gap: 16px;
+    }
+    .nav-brand { text-decoration: none; flex-shrink: 0; }
+    .nav-brand-text {
+      font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 800;
+      letter-spacing: -0.02em; color: var(--accent);
+    }
+    nav[aria-label="Site navigation"] { display: flex; align-items: center; gap: 8px; }
+    .nav-links { display: flex; align-items: center; gap: 4px; list-style: none; }
+    .nav-link {
+      display: block; padding: 6px 14px;
+      font-family: 'Outfit', sans-serif; font-size: 0.875rem; font-weight: 500;
+      color: var(--text-2); text-decoration: none; border-radius: 6px;
+      transition: color 0.15s, background 0.15s; white-space: nowrap;
+    }
+    .nav-link:hover { color: var(--text); background: rgba(248,250,252,0.06); }
+    .nav-link[aria-current="page"] {
+      color: var(--accent); background: rgba(245,158,11,0.10);
+      border-bottom: 2px solid var(--accent);
+    }
+    .nav-link--archived { color: var(--text-3); font-size: 0.8125rem; }
+    .nav-link--archived::after { content: ' (archived)'; font-size: 0.6875rem; opacity: 0.7; }
+    .hamburger {
+      display: none; align-items: center; justify-content: center;
+      width: 44px; height: 44px; background: transparent;
+      border: 1px solid var(--border); border-radius: 8px; cursor: pointer;
+      color: var(--text-2); transition: border-color 0.15s, color 0.15s; flex-shrink: 0;
+    }
+    .hamburger:hover { border-color: var(--text-2); color: var(--text); }
+    .hamburger:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    @media (max-width: 767px) {
+      .hamburger { display: flex; }
+      .nav-links {
+        display: none; position: absolute; top: 100%; left: 0; right: 0;
+        background: var(--surface); border-bottom: 1px solid var(--border);
+        flex-direction: column; align-items: stretch; gap: 0;
+        padding: 8px 0 12px; z-index: var(--z-drawer);
+      }
+      .nav-links.is-open { display: flex; }
+      .nav-link { border-radius: 0; padding: 12px 24px; border-bottom: 1px solid rgba(51,65,85,0.4); font-size: 1rem; }
+      .nav-link--archived { font-size: 0.9375rem; }
+      .nav-link[aria-current="page"] { border-bottom: 1px solid rgba(51,65,85,0.4); border-left: 3px solid var(--accent); }
+    }
+
+    /* === PAGE HEADER === */
+    .page-hero {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 36px 24px 28px;
+    }
+    .hero-inner { max-width: 1280px; margin: 0 auto; }
+    .page-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.5rem, 4vw, 2.25rem);
+      font-weight: 800; letter-spacing: -0.025em; color: var(--text);
+      margin-bottom: 6px;
+    }
+    .page-sub {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.8125rem; color: var(--text-3); letter-spacing: 0.04em;
+    }
+
+    /* === CONTENT WRAP === */
+    .content-wrap { max-width: 1280px; margin: 0 auto; padding: 40px 24px 80px; }
+
+    /* === SECTION HEADER === */
+    .section-label {
+      font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--text-3);
+      margin-bottom: 16px; padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* === LEG CARDS === */
+    .leg-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+    .leg-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .leg-card:hover { box-shadow: 0 4px 24px rgba(0,0,0,0.4); }
+    .leg-card-header {
+      padding: 16px 18px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .leg-card-header--mel { border-top: 3px solid var(--teal); }
+    .leg-card-header--syd { border-top: 3px solid var(--purple); }
+    .leg-card-header--nz  { border-top: 3px solid var(--accent); }
+    .leg-num {
+      font-size: 0.5625rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; margin-bottom: 4px;
+    }
+    .leg-num--mel { color: var(--teal); }
+    .leg-num--syd { color: var(--purple); }
+    .leg-num--nz  { color: var(--accent); }
+    .leg-card-title {
+      font-family: 'Syne', sans-serif; font-size: 1.125rem; font-weight: 700;
+      color: var(--text); margin-bottom: 4px;
+    }
+    .leg-dates {
+      font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--text-2);
+    }
+    .leg-card-body { padding: 14px 18px 18px; }
+    .highlight-list { list-style: none; padding: 0; }
+    .highlight-list li {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 7px 0; border-bottom: 1px solid rgba(51,65,85,0.4);
+      font-size: 0.875rem; color: var(--text-2); line-height: 1.4;
+    }
+    .highlight-list li:last-child { border-bottom: none; }
+    .hi-dot {
+      width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+      margin-top: 6px;
+    }
+    .hi-dot--mel { background: var(--teal); }
+    .hi-dot--syd { background: var(--purple); }
+    .hi-dot--nz  { background: var(--accent); }
+
+    /* === NZ ROUTE === */
+    .nz-route-section { margin-bottom: 48px; }
+    .nz-route {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 20px 24px;
+      overflow-x: auto;
+    }
+    .route-track {
+      display: flex; align-items: center; gap: 0;
+      min-width: max-content;
+    }
+    .route-stop {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+    }
+    .route-stop-dot {
+      width: 12px; height: 12px; border-radius: 50%;
+      background: var(--accent); border: 2px solid rgba(245,158,11,0.4);
+    }
+    .route-stop-dot--start { background: var(--teal); border-color: rgba(13,148,136,0.4); }
+    .route-stop-dot--end   { background: var(--blue); border-color: rgba(59,130,246,0.4); }
+    .route-stop-name {
+      font-family: 'Syne', sans-serif; font-size: 0.75rem; font-weight: 700;
+      color: var(--text); white-space: nowrap; text-align: center;
+    }
+    .route-stop-sub {
+      font-family: 'DM Mono', monospace; font-size: 0.5625rem;
+      color: var(--text-3); white-space: nowrap; text-align: center;
+    }
+    .route-arrow {
+      display: flex; align-items: center;
+      padding: 0 12px; flex-shrink: 0;
+    }
+    .route-arrow svg { color: var(--text-3); }
+    .route-label {
+      font-size: 0.5625rem; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--text-3); text-align: center;
+      margin-top: 2px;
+    }
+
+    /* === BOOKING STATUS === */
+    .booking-section { margin-bottom: 48px; }
+    .booking-cols {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+    }
+    .booking-col {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 10px; overflow: hidden;
+    }
+    .booking-col-header {
+      padding: 14px 18px 12px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .booking-col-header--booked { border-top: 3px solid var(--success); }
+    .booking-col-header--pending { border-top: 3px solid var(--accent); }
+    .booking-status-icon {
+      width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .booking-status-icon--booked { background: rgba(34,197,94,0.2); }
+    .booking-status-icon--pending { background: rgba(245,158,11,0.2); }
+    .booking-col-title {
+      font-family: 'Syne', sans-serif; font-size: 0.9375rem; font-weight: 700;
+      color: var(--text);
+    }
+    .booking-list { list-style: none; padding: 0; }
+    .booking-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 18px; border-bottom: 1px solid rgba(51,65,85,0.4);
+    }
+    .booking-item:last-child { border-bottom: none; }
+    .bk-indicator {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 6px;
+    }
+    .bk-indicator--done    { background: var(--success); }
+    .bk-indicator--pending { background: var(--accent); }
+    .bk-text-wrap { flex: 1; min-width: 0; }
+    .bk-name {
+      font-size: 0.875rem; font-weight: 500; color: var(--text); line-height: 1.3;
+    }
+    .bk-detail {
+      font-family: 'DM Mono', monospace; font-size: 0.625rem;
+      color: var(--text-2); margin-top: 2px;
+    }
+    .owner-pill {
+      font-size: 0.5rem; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; padding: 2px 7px; border-radius: 9999px;
+      flex-shrink: 0;
+    }
+    .owner-allston { background: rgba(13,148,136,0.15); color: var(--teal); }
+    .owner-donnie  { background: rgba(139,92,246,0.15); color: var(--purple); }
+    .owner-joint   { background: rgba(245,158,11,0.12); color: var(--accent); }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 900px) {
+      .leg-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 720px) {
+      .booking-cols { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .page-hero { padding: 24px 16px 20px; }
+      .content-wrap { padding: 24px 16px 60px; }
+      .nav-inner { padding: 0 16px; }
+    }
+
+    /* Footer */
+    .site-footer {
+      text-align: center; padding: 20px 24px;
+      font-size: 0.75rem; color: var(--text-3);
+      border-top: 1px solid var(--border);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to content</a>
+
+<header class="site-nav" role="banner">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand" aria-label="NZ AUS 2026 — home">
+      <span class="nav-brand-text">NZ · AUS 2026</span>
+    </a>
+    <nav aria-label="Site navigation">
+      <ul class="nav-links" id="nav-links" role="list">
+        <li><a href="index.html" class="nav-link">Itinerary</a></li>
+        <li><a href="overview.html" class="nav-link" aria-current="page">At a Glance</a></li>
+        <li><a href="places.html" class="nav-link">Map &amp; Places</a></li>
+        <li><a href="may-2026.html" class="nav-link nav-link--archived">May 2026</a></li>
+      </ul>
+      <button class="hamburger" id="nav-toggle"
+        aria-expanded="false"
+        aria-controls="nav-links"
+        aria-label="Toggle navigation menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+
+  <section class="page-hero" aria-label="Page header">
+    <div class="hero-inner">
+      <h1 class="page-title">At a Glance</h1>
+      <p class="page-sub">3 legs &middot; 13 days &middot; July 1 – 13, 2026</p>
+    </div>
+  </section>
+
+  <div class="content-wrap">
+
+    <!-- LEG CARDS -->
+    <section aria-label="Trip legs overview">
+      <p class="section-label">Three Legs</p>
+      <div class="leg-grid">
+
+        <!-- Melbourne -->
+        <article class="leg-card" aria-label="Melbourne leg">
+          <div class="leg-card-header leg-card-header--mel">
+            <p class="leg-num leg-num--mel">Leg 1</p>
+            <h2 class="leg-card-title">Melbourne</h2>
+            <p class="leg-dates">Jul 3 – 6 &middot; 3 nights</p>
+          </div>
+          <div class="leg-card-body">
+            <ul class="highlight-list" aria-label="Melbourne highlights">
+              <li>
+                <span class="hi-dot hi-dot--mel" aria-hidden="true"></span>
+                Arrive from SFO via UA60 (~8 AM Fri Jul 3)
+              </li>
+              <li>
+                <span class="hi-dot hi-dot--mel" aria-hidden="true"></span>
+                Phillip Island Penguin Parade (dusk, Sat Jul 4)
+              </li>
+              <li>
+                <span class="hi-dot hi-dot--mel" aria-hidden="true"></span>
+                Peninsula Hot Springs (optional, Sat AM)
+              </li>
+              <li>
+                <span class="hi-dot hi-dot--mel" aria-hidden="true"></span>
+                Melbourne CBD &amp; time with friends (Sun Jul 5)
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- Sydney -->
+        <article class="leg-card" aria-label="Sydney leg">
+          <div class="leg-card-header leg-card-header--syd">
+            <p class="leg-num leg-num--syd">Leg 2</p>
+            <h2 class="leg-card-title">Sydney</h2>
+            <p class="leg-dates">Jul 6 – 10 &middot; 4 nights</p>
+          </div>
+          <div class="leg-card-body">
+            <ul class="highlight-list" aria-label="Sydney highlights">
+              <li>
+                <span class="hi-dot hi-dot--syd" aria-hidden="true"></span>
+                Fly MEL&rarr;SYD via JQ534 (~11 AM Mon Jul 6)
+              </li>
+              <li>
+                <span class="hi-dot hi-dot--syd" aria-hidden="true"></span>
+                The Rocks, Royal Botanic Garden, Manly ferry
+              </li>
+              <li>
+                <span class="hi-dot hi-dot--syd" aria-hidden="true"></span>
+                Bondi &rarr; Coogee coastal walk
+              </li>
+              <li>
+                <span class="hi-dot hi-dot--syd" aria-hidden="true"></span>
+                Sydney Symphony at the Opera House (Thu Jul 9)
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- New Zealand -->
+        <article class="leg-card" aria-label="New Zealand leg">
+          <div class="leg-card-header leg-card-header--nz">
+            <p class="leg-num leg-num--nz">Leg 3</p>
+            <h2 class="leg-card-title">New Zealand</h2>
+            <p class="leg-dates">Jul 10 – 13 &middot; 3 nights</p>
+          </div>
+          <div class="leg-card-body">
+            <ul class="highlight-list" aria-label="New Zealand highlights">
+              <li>
+                <span class="hi-dot hi-dot--nz" aria-hidden="true"></span>
+                Fly SYD&rarr;AKL via QF141 (07:10 &rarr; 12:20 Fri Jul 10)
+              </li>
+              <li>
+                <span class="hi-dot hi-dot--nz" aria-hidden="true"></span>
+                Waitomo Glowworm Caves (Sat AM)
+              </li>
+              <li>
+                <span class="hi-dot hi-dot--nz" aria-hidden="true"></span>
+                Hobbiton Movie Set (Sat PM)
+              </li>
+              <li>
+                <span class="hi-dot hi-dot--nz" aria-hidden="true"></span>
+                Zorb + Polynesian Spa, Rotorua (Sun)
+              </li>
+              <li>
+                <span class="hi-dot hi-dot--nz" aria-hidden="true"></span>
+                Depart AKL via UA916 (~1:50 PM Mon Jul 13)
+              </li>
+            </ul>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- NZ LOOP ROUTE -->
+    <section class="nz-route-section" aria-label="New Zealand road loop">
+      <p class="section-label">NZ Loop Route — Jul 10 – 12</p>
+      <div class="nz-route">
+        <div class="route-track" role="list" aria-label="Road trip route">
+          <div class="route-stop" role="listitem">
+            <div class="route-stop-dot route-stop-dot--start" aria-hidden="true"></div>
+            <p class="route-stop-name">Auckland</p>
+            <p class="route-stop-sub">Fri Jul 10</p>
+            <p class="route-label">Arrive AKL</p>
+          </div>
+          <div class="route-arrow" aria-hidden="true">
+            <svg width="28" height="12" viewBox="0 0 28 12" fill="none">
+              <path d="M1 6 H22 M17 2 L23 6 L17 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="route-stop" role="listitem">
+            <div class="route-stop-dot" aria-hidden="true"></div>
+            <p class="route-stop-name">Waitomo</p>
+            <p class="route-stop-sub">Sat Jul 11</p>
+            <p class="route-label">Glowworm Caves</p>
+          </div>
+          <div class="route-arrow" aria-hidden="true">
+            <svg width="28" height="12" viewBox="0 0 28 12" fill="none">
+              <path d="M1 6 H22 M17 2 L23 6 L17 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="route-stop" role="listitem">
+            <div class="route-stop-dot" aria-hidden="true"></div>
+            <p class="route-stop-name">Hobbiton</p>
+            <p class="route-stop-sub">Sat Jul 11</p>
+            <p class="route-label">Matamata</p>
+          </div>
+          <div class="route-arrow" aria-hidden="true">
+            <svg width="28" height="12" viewBox="0 0 28 12" fill="none">
+              <path d="M1 6 H22 M17 2 L23 6 L17 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="route-stop" role="listitem">
+            <div class="route-stop-dot" aria-hidden="true"></div>
+            <p class="route-stop-name">Rotorua</p>
+            <p class="route-stop-sub">Sat night</p>
+            <p class="route-label">Zorb + Spa</p>
+          </div>
+          <div class="route-arrow" aria-hidden="true">
+            <svg width="28" height="12" viewBox="0 0 28 12" fill="none">
+              <path d="M1 6 H22 M17 2 L23 6 L17 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="route-stop" role="listitem">
+            <div class="route-stop-dot route-stop-dot--end" aria-hidden="true"></div>
+            <p class="route-stop-name">Auckland</p>
+            <p class="route-stop-sub">Sun Jul 12</p>
+            <p class="route-label">Return &amp; depart</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BOOKING STATUS -->
+    <section class="booking-section" aria-label="Booking status">
+      <p class="section-label">Booking Status</p>
+      <div class="booking-cols">
+
+        <!-- Booked -->
+        <div class="booking-col">
+          <div class="booking-col-header booking-col-header--booked">
+            <div class="booking-status-icon booking-status-icon--booked" aria-hidden="true">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </div>
+            <h2 class="booking-col-title">Booked</h2>
+          </div>
+          <ul class="booking-list" aria-label="Confirmed bookings">
+            <li class="booking-item">
+              <span class="bk-indicator bk-indicator--done" aria-hidden="true"></span>
+              <div class="bk-text-wrap">
+                <p class="bk-name">SFO &rarr; MEL — United UA60</p>
+                <p class="bk-detail">Jul 1 evening departure</p>
+              </div>
+              <span class="owner-pill owner-allston">Allston</span>
+            </li>
+            <li class="booking-item">
+              <span class="bk-indicator bk-indicator--done" aria-hidden="true"></span>
+              <div class="bk-text-wrap">
+                <p class="bk-name">MEL &rarr; SYD — Jetstar JQ534</p>
+                <p class="bk-detail">Jul 6 ~11:00 AM</p>
+              </div>
+              <span class="owner-pill owner-allston">Allston</span>
+            </li>
+            <li class="booking-item">
+              <span class="bk-indicator bk-indicator--done" aria-hidden="true"></span>
+              <div class="bk-text-wrap">
+                <p class="bk-name">SYD &rarr; AKL — Qantas QF141</p>
+                <p class="bk-detail">Jul 10 07:10 &rarr; 12:20</p>
+              </div>
+              <span class="owner-pill owner-allston">Allston</span>
+            </li>
+            <li class="booking-item">
+              <span class="bk-indicator bk-indicator--done" aria-hidden="true"></span>
+              <div class="bk-text-wrap">
+                <p class="bk-name">AKL &rarr; SFO — United UA916</p>
+                <p class="bk-detail">Jul 13 ~1:50 PM</p>
+              </div>
+              <span class="owner-pill owner-allston">Allston</span>
+            </li>
+            <li class="booking-item">
+              <span class="bk-indicator bk-indicator--done" aria-hidden="true"></span>
+              <div class="bk-text-wrap">
+                <p class="bk-name">Sydney Symphony Orchestra</p>
+                <p class="bk-detail">Opera House · Jul 9 · Beilman / Mendelssohn</p>
+              </div>
+              <span class="owner-pill owner-joint">Joint</span>
+            </li>
+            <li class="booking-item">
+              <span class="bk-indicator bk-indicator--done" aria-hidden="true"></span>
+              <div class="bk-text-wrap">
+                <p class="bk-name">Penguin Parade — Phillip Island</p>
+                <p class="bk-detail">Jul 4 dusk</p>
+              </div>
+              <span class="owner-pill owner-joint">Joint</span>
+            </li>
+            <li class="booking-item">
+              <span class="bk-indicator bk-indicator--done" aria-hidden="true"></span>
+              <div class="bk-text-wrap">
+                <p class="bk-name">Melbourne hotel</p>
+                <p class="bk-detail">Jul 3 – 6 · 3 nights</p>
+              </div>
+              <span class="owner-pill owner-allston">Allston</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Being Booked -->
+        <div class="booking-col">
+          <div class="booking-col-header booking-col-header--pending">
+            <div class="booking-status-icon booking-status-icon--pending" aria-hidden="true">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+            </div>
+            <h2 class="booking-col-title">Being Booked</h2>
+          </div>
+          <ul class="booking-list" aria-label="Pending bookings">
+            <li class="booking-item">
+              <span class="bk-indicator bk-indicator--pending" aria-hidden="true"></span>
+              <div class="bk-text-wrap">
+                <p class="bk-name">Sydney hotel</p>
+                <p class="bk-detail">Jul 6 – 10 · 4 nights</p>
+              </div>
+              <span class="owner-pill owner-allston">Allston</span>
+            </li>
+            <li class="booking-item">
+              <span class="bk-indicator bk-indicator--pending" aria-hidden="true"></span>
+              <div class="bk-text-wrap">
+                <p class="bk-name">NZ hotels (Auckland + Rotorua)</p>
+                <p class="bk-detail">Jul 10 – 13</p>
+              </div>
+              <span class="owner-pill owner-joint">Joint</span>
+            </li>
+            <li class="booking-item">
+              <span class="bk-indicator bk-indicator--pending" aria-hidden="true"></span>
+              <div class="bk-text-wrap">
+                <p class="bk-name">NZ rental car</p>
+                <p class="bk-detail">Jul 11 – 12 loop</p>
+              </div>
+              <span class="owner-pill owner-joint">Joint</span>
+            </li>
+            <li class="booking-item">
+              <span class="bk-indicator bk-indicator--pending" aria-hidden="true"></span>
+              <div class="bk-text-wrap">
+                <p class="bk-name">Waitomo Glowworm Caves tickets</p>
+                <p class="bk-detail">Jul 11 AM</p>
+              </div>
+              <span class="owner-pill owner-joint">Joint</span>
+            </li>
+            <li class="booking-item">
+              <span class="bk-indicator bk-indicator--pending" aria-hidden="true"></span>
+              <div class="bk-text-wrap">
+                <p class="bk-name">Hobbiton Movie Set tickets</p>
+                <p class="bk-detail">Jul 11 PM · Matamata</p>
+              </div>
+              <span class="owner-pill owner-joint">Joint</span>
+            </li>
+            <li class="booking-item">
+              <span class="bk-indicator bk-indicator--pending" aria-hidden="true"></span>
+              <div class="bk-text-wrap">
+                <p class="bk-name">Zorb Rotorua</p>
+                <p class="bk-detail">Jul 12 AM</p>
+              </div>
+              <span class="owner-pill owner-joint">Joint</span>
+            </li>
+            <li class="booking-item">
+              <span class="bk-indicator bk-indicator--pending" aria-hidden="true"></span>
+              <div class="bk-text-wrap">
+                <p class="bk-name">Donnie's flights</p>
+                <p class="bk-detail">All legs — separate booking</p>
+              </div>
+              <span class="owner-pill owner-donnie">Donnie</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+  </div><!-- .content-wrap -->
+</main>
+
+<footer class="site-footer">
+  <p>NZ &middot; AUS 2026 &middot; Allston + Donnie &middot; July 1 – 13</p>
+</footer>
+
+<script>
+  (function() {
+    var toggle = document.getElementById('nav-toggle');
+    var links  = document.getElementById('nav-links');
+    if (!toggle || !links) return;
+    function openMenu() { links.classList.add('is-open'); toggle.setAttribute('aria-expanded', 'true'); }
+    function closeMenu() { links.classList.remove('is-open'); toggle.setAttribute('aria-expanded', 'false'); toggle.focus(); }
+    toggle.addEventListener('click', function() {
+      var isOpen = toggle.getAttribute('aria-expanded') === 'true';
+      if (isOpen) { closeMenu(); } else { openMenu(); }
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') { closeMenu(); }
+    });
+    document.addEventListener('click', function(e) {
+      if (toggle.getAttribute('aria-expanded') === 'true' && !links.contains(e.target) && !toggle.contains(e.target)) { closeMenu(); }
+    });
+  })();
+</script>
+</body>
+</html>

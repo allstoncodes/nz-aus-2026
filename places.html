@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NZ · AUS 2026 — Map &amp; Places</title>
+  <!-- External: Google Fonts (Syne, Outfit, DM Mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Outfit:wght@300;400;500;600&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    /* === DESIGN.md tokens === */
+    :root {
+      --bg:       #020617;
+      --surface:  #0F172A;
+      --card:     #1E293B;
+      --border:   #334155;
+      --text:     #F8FAFC;
+      --text-2:   #94A3B8;
+      --text-3:   #475569;
+      --accent:   #F59E0B;
+      --teal:     #0D9488;
+      --success:  #22C55E;
+      --danger:   #EF4444;
+      --purple:   #8B5CF6;
+      --blue:     #3B82F6;
+      --cyan:     #06B6D4;
+      --slate:    #64748B;
+      --z-nav:    50;
+      --z-drawer: 40;
+    }
+    *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Outfit', system-ui, sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    /* === SKIP LINK === */
+    .skip-link {
+      position: absolute; top: -100px; left: 0; z-index: 999;
+      background: var(--accent); color: #000; padding: 8px 16px;
+      font-weight: 700; text-decoration: none; border-radius: 0 0 8px 0;
+      transition: top 0.15s;
+    }
+    .skip-link:focus { top: 0; }
+
+    /* === SHARED NAV === */
+    .site-nav {
+      position: sticky; top: 0; z-index: var(--z-nav);
+      background: var(--surface);
+      border-top: 4px solid var(--accent);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 1280px; margin: 0 auto; padding: 0 24px;
+      height: 56px; display: flex; align-items: center;
+      justify-content: space-between; gap: 16px;
+    }
+    .nav-brand { text-decoration: none; flex-shrink: 0; }
+    .nav-brand-text {
+      font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 800;
+      letter-spacing: -0.02em; color: var(--accent);
+    }
+    nav[aria-label="Site navigation"] { display: flex; align-items: center; gap: 8px; }
+    .nav-links { display: flex; align-items: center; gap: 4px; list-style: none; }
+    .nav-link {
+      display: block; padding: 6px 14px;
+      font-family: 'Outfit', sans-serif; font-size: 0.875rem; font-weight: 500;
+      color: var(--text-2); text-decoration: none; border-radius: 6px;
+      transition: color 0.15s, background 0.15s; white-space: nowrap;
+    }
+    .nav-link:hover { color: var(--text); background: rgba(248,250,252,0.06); }
+    .nav-link[aria-current="page"] {
+      color: var(--accent); background: rgba(245,158,11,0.10);
+      border-bottom: 2px solid var(--accent);
+    }
+    .nav-link--archived { color: var(--text-3); font-size: 0.8125rem; }
+    .nav-link--archived::after { content: ' (archived)'; font-size: 0.6875rem; opacity: 0.7; }
+    .hamburger {
+      display: none; align-items: center; justify-content: center;
+      width: 44px; height: 44px; background: transparent;
+      border: 1px solid var(--border); border-radius: 8px; cursor: pointer;
+      color: var(--text-2); transition: border-color 0.15s, color 0.15s; flex-shrink: 0;
+    }
+    .hamburger:hover { border-color: var(--text-2); color: var(--text); }
+    .hamburger:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    @media (max-width: 767px) {
+      .hamburger { display: flex; }
+      .nav-links {
+        display: none; position: absolute; top: 100%; left: 0; right: 0;
+        background: var(--surface); border-bottom: 1px solid var(--border);
+        flex-direction: column; align-items: stretch; gap: 0;
+        padding: 8px 0 12px; z-index: var(--z-drawer);
+      }
+      .nav-links.is-open { display: flex; }
+      .nav-link { border-radius: 0; padding: 12px 24px; border-bottom: 1px solid rgba(51,65,85,0.4); font-size: 1rem; }
+      .nav-link--archived { font-size: 0.9375rem; }
+      .nav-link[aria-current="page"] { border-bottom: 1px solid rgba(51,65,85,0.4); border-left: 3px solid var(--accent); }
+    }
+
+    /* === PAGE HEADER === */
+    .page-hero {
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      padding: 36px 24px 28px;
+    }
+    .hero-inner { max-width: 1280px; margin: 0 auto; }
+    .page-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.5rem, 4vw, 2.25rem);
+      font-weight: 800; letter-spacing: -0.025em; color: var(--text); margin-bottom: 6px;
+    }
+    .page-sub {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.8125rem; color: var(--text-3); letter-spacing: 0.04em;
+    }
+
+    /* === CONTENT === */
+    .content-wrap { max-width: 1280px; margin: 0 auto; padding: 40px 24px 80px; }
+
+    .section-label {
+      font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--text-3);
+      margin-bottom: 16px; padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-label-pill {
+      font-size: 0.5rem; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; padding: 2px 8px; border-radius: 9999px;
+    }
+    .pill-mel-sm { background: rgba(13,148,136,0.15); color: var(--teal); }
+    .pill-syd-sm { background: rgba(139,92,246,0.15); color: var(--purple); }
+    .pill-nz-sm  { background: rgba(245,158,11,0.15); color: var(--accent); }
+
+    /* City section spacing */
+    .city-section { margin-bottom: 48px; }
+
+    /* Places grid */
+    .places-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 12px;
+    }
+    .place-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      cursor: default;
+    }
+    .place-card:hover {
+      box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+    }
+    .place-card--mel { border-left: 3px solid var(--teal); }
+    .place-card--syd { border-left: 3px solid var(--purple); }
+    .place-card--nz  { border-left: 3px solid var(--accent); }
+
+    .place-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.9375rem; font-weight: 700; color: var(--text);
+      line-height: 1.3;
+    }
+    .place-type {
+      font-size: 0.75rem; color: var(--text-2); line-height: 1.4;
+    }
+    .place-map-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+      border: 1px solid rgba(245,158,11,0.3);
+      border-radius: 6px;
+      padding: 6px 12px;
+      transition: background 0.15s, border-color 0.15s;
+      align-self: flex-start;
+      margin-top: 4px;
+    }
+    .place-map-link:hover {
+      background: rgba(245,158,11,0.10);
+      border-color: var(--accent);
+    }
+    .place-map-link:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    .place-card--mel .place-map-link {
+      color: var(--teal);
+      border-color: rgba(13,148,136,0.3);
+    }
+    .place-card--mel .place-map-link:hover {
+      background: rgba(13,148,136,0.10);
+      border-color: var(--teal);
+    }
+    .place-card--syd .place-map-link {
+      color: var(--purple);
+      border-color: rgba(139,92,246,0.3);
+    }
+    .place-card--syd .place-map-link:hover {
+      background: rgba(139,92,246,0.10);
+      border-color: var(--purple);
+    }
+
+    /* responsive */
+    @media (max-width: 800px) {
+      .places-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .places-grid { grid-template-columns: 1fr; }
+      .page-hero { padding: 24px 16px 20px; }
+      .content-wrap { padding: 24px 16px 60px; }
+      .nav-inner { padding: 0 16px; }
+    }
+
+    /* Footer */
+    .site-footer {
+      text-align: center; padding: 20px 24px;
+      font-size: 0.75rem; color: var(--text-3);
+      border-top: 1px solid var(--border);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to content</a>
+
+<header class="site-nav" role="banner">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand" aria-label="NZ AUS 2026 — home">
+      <span class="nav-brand-text">NZ · AUS 2026</span>
+    </a>
+    <nav aria-label="Site navigation">
+      <ul class="nav-links" id="nav-links" role="list">
+        <li><a href="index.html" class="nav-link">Itinerary</a></li>
+        <li><a href="overview.html" class="nav-link">At a Glance</a></li>
+        <li><a href="places.html" class="nav-link" aria-current="page">Map &amp; Places</a></li>
+        <li><a href="may-2026.html" class="nav-link nav-link--archived">May 2026</a></li>
+      </ul>
+      <button class="hamburger" id="nav-toggle"
+        aria-expanded="false"
+        aria-controls="nav-links"
+        aria-label="Toggle navigation menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+
+  <section class="page-hero" aria-label="Page header">
+    <div class="hero-inner">
+      <h1 class="page-title">Map &amp; Places</h1>
+      <p class="page-sub">All destinations — click any card to open in Google Maps</p>
+    </div>
+  </section>
+
+  <div class="content-wrap">
+
+    <!-- MELBOURNE -->
+    <section class="city-section" aria-label="Melbourne places">
+      <p class="section-label">
+        Melbourne
+        <span class="section-label-pill pill-mel-sm">Leg 1 &middot; Jul 3 – 6</span>
+      </p>
+      <div class="places-grid">
+
+        <article class="place-card place-card--mel">
+          <h2 class="place-name">Phillip Island Penguin Parade</h2>
+          <p class="place-type">Wildlife experience &middot; dusk viewing of Little Penguins</p>
+          <a href="https://www.google.com/maps/search/?api=1&query=Phillip+Island+Penguin+Parade+Victoria+Australia"
+             target="_blank" rel="noopener noreferrer"
+             class="place-map-link"
+             aria-label="Open Phillip Island Penguin Parade in Google Maps">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            Open in Maps
+          </a>
+        </article>
+
+        <article class="place-card place-card--mel">
+          <h2 class="place-name">Peninsula Hot Springs</h2>
+          <p class="place-type">Thermal spa &middot; outdoor bathing pools on Mornington Peninsula</p>
+          <a href="https://www.google.com/maps/search/?api=1&query=Peninsula+Hot+Springs+Mornington+Peninsula+Victoria"
+             target="_blank" rel="noopener noreferrer"
+             class="place-map-link"
+             aria-label="Open Peninsula Hot Springs in Google Maps">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            Open in Maps
+          </a>
+        </article>
+
+        <article class="place-card place-card--mel">
+          <h2 class="place-name">Queen Victoria Market</h2>
+          <p class="place-type">Historic open-air market &middot; Melbourne CBD</p>
+          <a href="https://www.google.com/maps/search/?api=1&query=Queen+Victoria+Market+Melbourne"
+             target="_blank" rel="noopener noreferrer"
+             class="place-map-link"
+             aria-label="Open Queen Victoria Market in Google Maps">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            Open in Maps
+          </a>
+        </article>
+
+        <article class="place-card place-card--mel">
+          <h2 class="place-name">Great Ocean Road</h2>
+          <p class="place-type">Scenic coastal drive &middot; 12 Apostles &middot; optional day trip</p>
+          <a href="https://www.google.com/maps/search/?api=1&query=Great+Ocean+Road+Victoria+Australia"
+             target="_blank" rel="noopener noreferrer"
+             class="place-map-link"
+             aria-label="Open Great Ocean Road in Google Maps">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            Open in Maps
+          </a>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- SYDNEY -->
+    <section class="city-section" aria-label="Sydney places">
+      <p class="section-label">
+        Sydney
+        <span class="section-label-pill pill-syd-sm">Leg 2 &middot; Jul 6 – 10</span>
+      </p>
+      <div class="places-grid">
+
+        <article class="place-card place-card--syd">
+          <h2 class="place-name">Sydney Opera House</h2>
+          <p class="place-type">Iconic performing arts venue &middot; Bennelong Point, Sydney Harbour</p>
+          <a href="https://www.google.com/maps/search/?api=1&query=Sydney+Opera+House+New+South+Wales+Australia"
+             target="_blank" rel="noopener noreferrer"
+             class="place-map-link"
+             aria-label="Open Sydney Opera House in Google Maps">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            Open in Maps
+          </a>
+        </article>
+
+        <article class="place-card place-card--syd">
+          <h2 class="place-name">The Rocks</h2>
+          <p class="place-type">Historic precinct &middot; weekend markets, sandstone architecture</p>
+          <a href="https://www.google.com/maps/search/?api=1&query=The+Rocks+Sydney+Australia"
+             target="_blank" rel="noopener noreferrer"
+             class="place-map-link"
+             aria-label="Open The Rocks in Google Maps">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            Open in Maps
+          </a>
+        </article>
+
+        <article class="place-card place-card--syd">
+          <h2 class="place-name">Royal Botanic Garden</h2>
+          <p class="place-type">Harborside gardens &middot; fruit bats, Sydney Harbour views</p>
+          <a href="https://www.google.com/maps/search/?api=1&query=Royal+Botanic+Garden+Sydney+Australia"
+             target="_blank" rel="noopener noreferrer"
+             class="place-map-link"
+             aria-label="Open Royal Botanic Garden in Google Maps">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            Open in Maps
+          </a>
+        </article>
+
+        <article class="place-card place-card--syd">
+          <h2 class="place-name">Mrs Macquarie's Chair</h2>
+          <p class="place-type">Sandstone lookout &middot; best Opera House + Harbour Bridge photo angle</p>
+          <a href="https://www.google.com/maps/search/?api=1&query=Mrs+Macquarie%27s+Chair+Sydney+Australia"
+             target="_blank" rel="noopener noreferrer"
+             class="place-map-link"
+             aria-label="Open Mrs Macquarie's Chair in Google Maps">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            Open in Maps
+          </a>
+        </article>
+
+        <article class="place-card place-card--syd">
+          <h2 class="place-name">Bondi Beach</h2>
+          <p class="place-type">Iconic surf beach &middot; start of Bondi–Coogee coastal walk</p>
+          <a href="https://www.google.com/maps/search/?api=1&query=Bondi+Beach+Sydney+Australia"
+             target="_blank" rel="noopener noreferrer"
+             class="place-map-link"
+             aria-label="Open Bondi Beach in Google Maps">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            Open in Maps
+          </a>
+        </article>
+
+        <article class="place-card place-card--syd">
+          <h2 class="place-name">Coogee Beach</h2>
+          <p class="place-type">End of Bondi–Coogee coastal cliff walk (~6 km)</p>
+          <a href="https://www.google.com/maps/search/?api=1&query=Coogee+Beach+Sydney+Australia"
+             target="_blank" rel="noopener noreferrer"
+             class="place-map-link"
+             aria-label="Open Coogee Beach in Google Maps">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            Open in Maps
+          </a>
+        </article>
+
+        <article class="place-card place-card--syd">
+          <h2 class="place-name">Manly</h2>
+          <p class="place-type">Beach suburb &middot; reachable by 30-min Manly Ferry from Circular Quay</p>
+          <a href="https://www.google.com/maps/search/?api=1&query=Manly+Beach+Sydney+Australia"
+             target="_blank" rel="noopener noreferrer"
+             class="place-map-link"
+             aria-label="Open Manly in Google Maps">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            Open in Maps
+          </a>
+        </article>
+
+        <article class="place-card place-card--syd">
+          <h2 class="place-name">QVB — Queen Victoria Building</h2>
+          <p class="place-type">Victorian Romanesque shopping arcade &middot; George Street, CBD</p>
+          <a href="https://www.google.com/maps/search/?api=1&query=Queen+Victoria+Building+Sydney+Australia"
+             target="_blank" rel="noopener noreferrer"
+             class="place-map-link"
+             aria-label="Open Queen Victoria Building in Google Maps">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            Open in Maps
+          </a>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- NEW ZEALAND -->
+    <section class="city-section" aria-label="New Zealand places">
+      <p class="section-label">
+        New Zealand
+        <span class="section-label-pill pill-nz-sm">Leg 3 &middot; Jul 10 – 13</span>
+      </p>
+      <div class="places-grid">
+
+        <article class="place-card place-card--nz">
+          <h2 class="place-name">Waitomo Glowworm Caves</h2>
+          <p class="place-type">Underground bioluminescent cave system &middot; boat tour through the glowworm grotto</p>
+          <a href="https://www.google.com/maps/search/?api=1&query=Waitomo+Glowworm+Caves+New+Zealand"
+             target="_blank" rel="noopener noreferrer"
+             class="place-map-link"
+             aria-label="Open Waitomo Glowworm Caves in Google Maps">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            Open in Maps
+          </a>
+        </article>
+
+        <article class="place-card place-card--nz">
+          <h2 class="place-name">Hobbiton Movie Set</h2>
+          <p class="place-type">Working farm + original film set &middot; Matamata, Waikato</p>
+          <a href="https://www.google.com/maps/search/?api=1&query=Hobbiton+Movie+Set+Matamata+New+Zealand"
+             target="_blank" rel="noopener noreferrer"
+             class="place-map-link"
+             aria-label="Open Hobbiton Movie Set in Google Maps">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            Open in Maps
+          </a>
+        </article>
+
+        <article class="place-card place-card--nz">
+          <h2 class="place-name">Zorb Rotorua</h2>
+          <p class="place-type">Roll downhill in a giant inflatable ball &middot; the original Zorb site</p>
+          <a href="https://www.google.com/maps/search/?api=1&query=Zorb+Rotorua+New+Zealand"
+             target="_blank" rel="noopener noreferrer"
+             class="place-map-link"
+             aria-label="Open Zorb Rotorua in Google Maps">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            Open in Maps
+          </a>
+        </article>
+
+        <article class="place-card place-card--nz">
+          <h2 class="place-name">Polynesian Spa</h2>
+          <p class="place-type">Geothermal hot pools on Lake Rotorua &middot; relaxation post-Zorb</p>
+          <a href="https://www.google.com/maps/search/?api=1&query=Polynesian+Spa+Rotorua+New+Zealand"
+             target="_blank" rel="noopener noreferrer"
+             class="place-map-link"
+             aria-label="Open Polynesian Spa in Google Maps">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            Open in Maps
+          </a>
+        </article>
+
+        <article class="place-card place-card--nz">
+          <h2 class="place-name">Waiheke Island</h2>
+          <p class="place-type">Wine island 35 min by ferry from Auckland CBD &middot; optional day/afternoon</p>
+          <a href="https://www.google.com/maps/search/?api=1&query=Waiheke+Island+Auckland+New+Zealand"
+             target="_blank" rel="noopener noreferrer"
+             class="place-map-link"
+             aria-label="Open Waiheke Island in Google Maps">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            Open in Maps
+          </a>
+        </article>
+
+      </div>
+    </section>
+
+  </div><!-- .content-wrap -->
+</main>
+
+<footer class="site-footer">
+  <p>NZ &middot; AUS 2026 &middot; Allston + Donnie &middot; July 1 – 13</p>
+</footer>
+
+<script>
+  (function() {
+    var toggle = document.getElementById('nav-toggle');
+    var links  = document.getElementById('nav-links');
+    if (!toggle || !links) return;
+    function openMenu() { links.classList.add('is-open'); toggle.setAttribute('aria-expanded', 'true'); }
+    function closeMenu() { links.classList.remove('is-open'); toggle.setAttribute('aria-expanded', 'false'); toggle.focus(); }
+    toggle.addEventListener('click', function() {
+      var isOpen = toggle.getAttribute('aria-expanded') === 'true';
+      if (isOpen) { closeMenu(); } else { openMenu(); }
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') { closeMenu(); }
+    });
+    document.addEventListener('click', function(e) {
+      if (toggle.getAttribute('aria-expanded') === 'true' && !links.contains(e.target) && !toggle.contains(e.target)) { closeMenu(); }
+    });
+  })();
+</script>
+</body>
+</html>
