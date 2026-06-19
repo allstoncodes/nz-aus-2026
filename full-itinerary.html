@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Full Itinerary · AUS + NZ · July 2026</title>
+  <!-- External: Google Fonts (Syne, Outfit, DM Mono) + Leaflet 1.9.4 CDN -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Outfit:wght@300;400;500;600&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    /* === Design tokens — OLED Dark "Expedition Log" (matches site tokens) === */
+    :root {
+      --bg:       #020617;
+      --surface:  #0F172A;
+      --card:     #1E293B;
+      --border:   #334155;
+      --text:     #F8FAFC;
+      --text-2:   #94A3B8;
+      --text-3:   #475569;
+      --accent:   #F59E0B;
+      --teal:     #0D9488;
+      --success:  #22C55E;
+      --danger:   #EF4444;
+      --purple:   #8B5CF6;
+      --blue:     #3B82F6;
+      --cyan:     #06B6D4;
+      --slate:    #64748B;
+      --col-w:    136px;
+      --time-w:   50px;
+      --total-h:  720px;
+      --z-nav:    50;
+      --z-drawer: 40;
+    }
+    *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'Outfit', system-ui, sans-serif; font-size: 16px; line-height: 1.6; }
+
+    /* ── SKIP LINK ── */
+    .skip-link { position: absolute; top: -100px; left: 0; z-index: 999; background: var(--accent); color: #000; padding: 8px 16px; font-weight: 700; text-decoration: none; border-radius: 0 0 8px 0; transition: top 0.15s; }
+    .skip-link:focus { top: 0; }
+
+    /* ── NAV ── */
+    .site-nav { position: sticky; top: 0; z-index: var(--z-nav); background: var(--surface); border-top: 4px solid var(--accent); border-bottom: 1px solid var(--border); }
+    .nav-inner { max-width: 1280px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .nav-brand { text-decoration: none; flex-shrink: 0; }
+    .nav-brand-text { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 800; letter-spacing: -0.02em; color: var(--accent); }
+    nav[aria-label="Site navigation"] { display: flex; align-items: center; gap: 8px; }
+    .nav-links { display: flex; align-items: center; gap: 4px; list-style: none; }
+    .nav-link { display: block; padding: 6px 14px; font-family: 'Outfit', sans-serif; font-size: 0.875rem; font-weight: 500; color: var(--text-2); text-decoration: none; border-radius: 6px; transition: color 0.15s, background 0.15s; white-space: nowrap; }
+    .nav-link:hover { color: var(--text); background: rgba(248,250,252,0.06); }
+    .nav-link[aria-current="page"] { color: var(--accent); background: rgba(245,158,11,0.10); border-bottom: 2px solid var(--accent); }
+    .nav-link--archived { color: var(--text-3); font-size: 0.8125rem; }
+    .nav-link--archived::after { content: ' (archived)'; font-size: 0.6875rem; opacity: 0.7; }
+    .hamburger { display: none; align-items: center; justify-content: center; width: 44px; height: 44px; background: transparent; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; color: var(--text-2); transition: border-color 0.15s, color 0.15s; flex-shrink: 0; }
+    .hamburger:hover { border-color: var(--text-2); color: var(--text); }
+    .hamburger:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    @media (max-width: 767px) {
+      .hamburger { display: flex; }
+      .nav-links { display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--surface); border-bottom: 1px solid var(--border); flex-direction: column; align-items: stretch; gap: 0; padding: 8px 0 12px; z-index: var(--z-drawer); }
+      .nav-links.is-open { display: flex; }
+      .nav-link { border-radius: 0; padding: 12px 24px; border-bottom: 1px solid rgba(51,65,85,0.4); font-size: 1rem; }
+      .nav-link--archived { font-size: 0.9375rem; }
+      .nav-link[aria-current="page"] { border-bottom: 1px solid rgba(51,65,85,0.4); border-left: 3px solid var(--accent); }
+    }
+
+    /* ── HEADER ── */
+    .site-header { background: var(--surface); border-bottom: 1px solid var(--border); border-top: 4px solid var(--accent); padding: 26px 40px 22px; }
+    .header-inner { max-width: 1340px; margin: 0 auto; display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+    .trip-title { font-family: 'Syne', sans-serif; font-size: clamp(1.6rem,4vw,2.4rem); font-weight: 800; letter-spacing: -.025em; line-height: 1.1; background: linear-gradient(125deg,var(--accent) 0%,#FDE68A 45%,var(--teal) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .trip-sub { margin-top: 8px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .trip-dates { font-family: 'DM Mono', monospace; font-size: .8125rem; color: var(--text-2); }
+    .city-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+    .city-pill { font-size: .5625rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 3px 10px; border-radius: 9999px; white-space: nowrap; }
+    .pill-sfo { background: rgba(100,116,139,.15); color: var(--slate); border: 1px solid rgba(100,116,139,.3); }
+    .pill-mel { background: rgba(13,148,136,.15); color: var(--teal); border: 1px solid rgba(13,148,136,.3); }
+    .pill-syd { background: rgba(139,92,246,.15); color: var(--purple); border: 1px solid rgba(139,92,246,.3); }
+    .pill-nz  { background: rgba(245,158,11,.15); color: var(--accent); border: 1px solid rgba(245,158,11,.3); }
+    .header-right { text-align: right; flex-shrink: 0; }
+    .travelers { font-size: .875rem; color: var(--text-2); }
+    .booked-badge { display: inline-block; margin-top: 6px; font-size: .5625rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 2px 8px; border-radius: 4px; background: rgba(34,197,94,.15); color: var(--success); border: 1px solid rgba(34,197,94,.3); }
+
+    /* ── STATS ── */
+    .stats-bar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 40px; }
+    .stats-inner { max-width: 1340px; margin: 0 auto; display: flex; gap: 24px; overflow-x: auto; padding-bottom: 2px; }
+    .stat-item { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .stat-swatch { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+    .stat-label { font-size: .5625rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-3); }
+    .stat-val { font-family: 'DM Mono', monospace; font-size: .875rem; color: var(--text); }
+
+    /* ── TIMELINE ── */
+    .timeline-section { padding: 28px 0 0; }
+    .tl-pad { padding: 0 40px; max-width: 1380px; margin: 0 auto; }
+    .section-lede { font-size: .5625rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-3); margin-bottom: 12px; }
+    .timeline-scroll { overflow-x: auto; padding: 0 40px 8px; }
+    .timeline-scroll::-webkit-scrollbar { height: 4px; }
+    .timeline-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    .timeline-grid { display: flex; align-items: flex-start; min-width: max-content; }
+    .time-rail { width: var(--time-w); flex-shrink: 0; position: relative; height: var(--total-h); border-right: 1px solid var(--border); margin-top: 70px; }
+    .hr-label { position: absolute; right: 8px; font-family: 'DM Mono', monospace; font-size: .5rem; color: var(--text-3); transform: translateY(-50%); user-select: none; }
+    .hr-tick { position: absolute; right: 0; width: 4px; height: 1px; background: var(--border); }
+    .days-wrap { display: flex; }
+    .day-col { width: var(--col-w); flex-shrink: 0; border-right: 1px solid var(--border); }
+    .day-col:last-child { border-right: none; }
+    .day-hdr { height: 70px; padding: 8px 7px 6px; border-bottom: 1px solid var(--border); border-top: 3px solid transparent; display: flex; flex-direction: column; justify-content: center; cursor: pointer; transition: background .15s; user-select: none; }
+    .day-hdr:hover,.day-hdr.active { background: var(--card); }
+    .day-hdr:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+    .city-mel .day-hdr { border-top-color: var(--teal); }
+    .city-syd .day-hdr { border-top-color: var(--purple); }
+    .city-nz .day-hdr  { border-top-color: var(--accent); }
+    .city-sfo .day-hdr { border-top-color: var(--slate); }
+    .city-flight .day-hdr { border-top: 3px dashed rgba(51,65,85,.6); }
+    .d-num { font-family: 'Syne', sans-serif; font-size: .5rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--text-3); }
+    .d-date { font-family: 'DM Mono', monospace; font-size: .75rem; color: var(--text-2); margin-top: 2px; }
+    .d-lbl { font-size: .5rem; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
+    .day-body { position: relative; height: var(--total-h); background: repeating-linear-gradient(to bottom,transparent,transparent 29px,rgba(51,65,85,.2) 29px,rgba(51,65,85,.2) 30px); }
+    .blk { position: absolute; left: 2px; right: 2px; border-radius: 3px; padding: 1px 4px; font-size: .5rem; font-weight: 600; letter-spacing: .02em; color: #fff; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; transition: opacity .12s, transform .12s; z-index: 2; }
+    .blk:hover { opacity: .85; transform: scaleX(1.02); z-index: 10; }
+    .blk.cat-sleep { border: 1px solid var(--border); color: var(--text-3); background: var(--surface)!important; }
+
+    /* ── DAY NAV STRIP ── */
+    .day-nav-strip { padding: 10px 40px 16px; max-width: 1380px; margin: 0 auto; display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+    .dnav-label { font-size: .5625rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--text-3); margin-right: 6px; white-space: nowrap; }
+    .dnav-pill { background: var(--card); border: 1px solid var(--border); border-radius: 9999px; padding: 3px 10px; font-size: .625rem; font-weight: 600; color: var(--text-2); cursor: pointer; transition: border-color .15s, color .15s; white-space: nowrap; }
+    .dnav-pill:hover { border-color: var(--text-2); color: var(--text); }
+    .dnav-pill.active { background: var(--surface); border-color: var(--accent); color: var(--accent); }
+    .dnav-pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    /* ── MAP ── */
+    .map-section { padding: 0 40px 24px; max-width: 1380px; margin: 0 auto; }
+    .map-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
+    .map-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text); }
+    .map-toggle-btn { font-size: .625rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 5px 12px; color: var(--text-2); cursor: pointer; transition: border-color .15s, color .15s; }
+    .map-toggle-btn:hover,.map-toggle-btn.active { border-color: var(--accent); color: var(--accent); }
+    #trip-map { height: 340px; border-radius: 10px; border: 1px solid var(--border); overflow: hidden; }
+    .leaflet-popup-content-wrapper { background: var(--card); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,.5); }
+    .leaflet-popup-content-wrapper,.leaflet-popup-tip { background: var(--card); color: var(--text); }
+    .leaflet-popup-content { font-family: 'Outfit', sans-serif; font-size: .8125rem; color: var(--text); }
+    .leaflet-popup-content b { color: var(--accent); }
+    .leaflet-popup-content small { color: var(--text-2); font-family: 'DM Mono', monospace; }
+    .leaflet-popup-close-button { color: var(--text-2)!important; }
+    .leaflet-control-zoom a { background: var(--card)!important; color: var(--text)!important; border-color: var(--border)!important; }
+    .leaflet-control-attribution { background: rgba(2,6,23,.8)!important; color: var(--text-3)!important; font-size: .5rem!important; }
+    .leaflet-control-attribution a { color: var(--text-2)!important; }
+
+    /* ── LEGEND ── */
+    .legend-section { padding: 0 40px 20px; max-width: 1340px; margin: 0 auto; }
+    .legend { display: flex; gap: 16px; flex-wrap: wrap; }
+    .leg-item { display: flex; align-items: center; gap: 5px; font-size: .5625rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--text-2); }
+    .leg-dot { width: 7px; height: 7px; border-radius: 2px; }
+
+    /* ── TOOLTIP ── */
+    .tooltip { position: fixed; background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 9px 13px; font-size: .8rem; pointer-events: none; z-index: 200; max-width: 240px; box-shadow: 0 8px 32px rgba(0,0,0,.6); opacity: 0; transition: opacity .08s; }
+    .tooltip.vis { opacity: 1; }
+    .tt-time { font-family: 'DM Mono', monospace; font-size: .5625rem; color: var(--text-2); margin-bottom: 3px; display: flex; align-items: center; gap: 5px; }
+    .tt-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .tt-lbl { font-size: .8125rem; color: var(--text); line-height: 1.35; }
+    .tt-tz { font-family: 'DM Mono', monospace; font-size: .5rem; color: var(--accent); margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--border); letter-spacing: .05em; text-transform: uppercase; }
+
+    hr.div { border: none; border-top: 1px solid var(--border); }
+
+    /* ── DETAIL PANEL ── */
+    .detail-section { padding: 24px 40px; max-width: 1340px; margin: 0 auto; }
+    .detail-hdr { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+    .det-nav-btn { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 5px 12px; font-size: .75rem; color: var(--text-2); cursor: pointer; transition: border-color .15s, color .15s; font-family: 'DM Mono', monospace; }
+    .det-nav-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .det-nav-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .det-nav-btn:disabled { opacity: .3; cursor: default; }
+    .detail-title { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 700; flex: 1; }
+    .detail-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(280px,1fr)); gap: 6px; }
+    .det-item { display: flex; align-items: flex-start; gap: 9px; background: var(--card); border-radius: 7px; padding: 8px 11px; border-left: 3px solid transparent; }
+    .det-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+    .det-time { font-family: 'DM Mono', monospace; font-size: .5625rem; color: var(--text-2); flex-shrink: 0; width: 86px; padding-top: 2px; }
+    .det-lbl { font-size: .8125rem; color: var(--text); line-height: 1.3; }
+
+    /* ── PAGE SECTIONS ── */
+    .page-section { padding: 24px 40px; max-width: 1340px; margin: 0 auto; }
+    .section-head { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 700; display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+
+    /* ── BOOKING QUICK LINKS ── */
+    .booking-quicklinks { background: var(--surface); border-top: 2px solid var(--accent); border-bottom: 1px solid var(--border); }
+    .ql-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(320px,1fr)); gap: 12px; margin-top: 10px; }
+    .ql-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; border-left: 4px solid var(--text-3); display: flex; flex-direction: column; }
+    .ql-card.ok { border-left-color: #22c55e; }
+    .ql-card.pending { border-left-color: #3b82f6; }
+    .ql-num { font-family: 'DM Mono', monospace; font-size: .75rem; font-weight: 700; color: var(--text-3); letter-spacing: .06em; }
+    .ql-name { font-family: 'Syne', sans-serif; font-size: .9375rem; font-weight: 700; color: var(--text); margin: 4px 0 6px; }
+    .ql-slot { font-size: .8125rem; color: var(--text-2); margin-bottom: 4px; }
+    .ql-slot strong { color: var(--accent); }
+    .ql-status { font-size: .75rem; color: var(--text-3); margin-bottom: 10px; line-height: 1.4; flex: 1; }
+    .ql-status.ok { color: #22c55e; }
+    .ql-status.pending { color: #3b82f6; }
+    .ql-intro { font-size: .8125rem; color: var(--text-2); margin: 8px 0 4px; }
+    .ql-intro strong { color: var(--text); }
+
+    /* ── HOTELS ── */
+    .hotel-box { display: grid; grid-template-columns: repeat(auto-fill,minmax(260px,1fr)); gap: 10px; margin-bottom: 12px; }
+    .hotel-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; border-left: 4px solid var(--accent); }
+    .hotel-city { font-size: .5625rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-3); margin-bottom: 4px; }
+    .hotel-name { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text); }
+    .hotel-meta { font-size: .8125rem; color: var(--text-2); margin-top: 4px; }
+
+    /* ── RESTAURANT TABLE ── */
+    .contact-table { width: 100%; border-collapse: collapse; font-size: .8125rem; margin-bottom: 24px; }
+    .contact-table thead tr { background: var(--surface); }
+    .contact-table th { font-size: .5625rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-3); padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border); }
+    .contact-table td { padding: 8px 10px; border-bottom: 1px solid rgba(51,65,85,.4); color: var(--text); }
+    .contact-table tr:hover td { background: rgba(30,41,59,.6); }
+    .city-header { font-family: 'Syne', sans-serif; font-size: .875rem; font-weight: 700; color: var(--text-2); margin: 16px 0 8px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+
+    /* ── PRACTICAL INFO ── */
+    .info-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(280px,1fr)); gap: 10px; margin-bottom: 12px; }
+    .info-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; }
+    .info-card-title { font-family: 'Syne', sans-serif; font-size: .9375rem; font-weight: 700; color: var(--text); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+    .info-table { width: 100%; border-collapse: collapse; font-size: .8125rem; margin-bottom: 8px; }
+    .info-table td { padding: 4px 0; color: var(--text-2); }
+    .info-table td:first-child { font-family: 'DM Mono', monospace; font-size: .6875rem; color: var(--text-3); width: 35%; }
+    .info-table td:last-child { color: var(--text); font-weight: 500; }
+    .info-card p { font-size: .8125rem; color: var(--text-2); line-height: 1.5; margin-bottom: 6px; }
+    .info-card ul { list-style: none; padding: 0; }
+    .info-card li { font-size: .8125rem; color: var(--text-2); padding: 3px 0; border-bottom: 1px solid rgba(51,65,85,.3); }
+    .info-card li:last-child { border-bottom: none; }
+    .info-card li strong { color: var(--text); }
+
+    /* ── WEATHER ── */
+    .weather-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(180px,1fr)); gap: 10px; margin-top: 10px; }
+    .weather-tile { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+    .weather-city { font-weight: 600; font-size: .875rem; color: var(--text); margin-bottom: 4px; }
+    .weather-dates { font-size: .75rem; color: var(--text-3); margin-bottom: 8px; }
+    .weather-temp { font-size: 1.25rem; color: var(--accent); font-weight: 600; }
+    .weather-rain { font-size: .8125rem; color: var(--text-2); margin-top: 2px; }
+    .weather-detail { font-size: .75rem; color: var(--text-3); margin-top: 6px; line-height: 1.4; }
+    .weather-loading,.weather-error { font-size: .8125rem; color: var(--text-3); }
+
+    /* ── FOOTER ── */
+    .site-footer { text-align: center; padding: 18px 40px; font-size: .75rem; color: var(--text-3); border-top: 1px solid var(--border); }
+    .site-footer a { color: var(--text-2); text-decoration: none; }
+    .site-footer a:hover { color: var(--accent); }
+
+    ::-webkit-scrollbar { height: 4px; width: 4px; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    @media (prefers-reduced-motion: reduce) { *,*::before,*::after { transition: none!important; animation: none!important; } }
+
+    @media (max-width: 800px) {
+      .site-header,.stats-bar,.timeline-scroll,.day-nav-strip,.map-section,.legend-section,.detail-section,.page-section { padding-left: 16px; padding-right: 16px; }
+      .tl-pad { padding: 0 16px; }
+      .header-inner { flex-direction: column; }
+      .header-right { text-align: left; }
+      .ql-grid { grid-template-columns: 1fr; }
+      .hotel-box { grid-template-columns: 1fr; }
+      .info-grid { grid-template-columns: 1fr; }
+      .weather-grid { grid-template-columns: 1fr 1fr; }
+      .detail-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .weather-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Wide table mobile scrollbox — prevents horizontal page overflow */
+    .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    @media (max-width: 720px) {
+      .contact-table { min-width: 540px; }
+    }
+  </style>
+</head>
+<body>
+
+<a class="skip-link" href="#main-content">Skip to content</a>
+
+<!-- ── SHARED NAV ── -->
+<header class="site-nav" role="banner">
+  <div class="nav-inner">
+    <a class="nav-brand" href="index.html" aria-label="NZ AUS 2026 — home">
+      <span class="nav-brand-text">NZ · AUS 2026</span>
+    </a>
+    <nav aria-label="Site navigation">
+      <ul class="nav-links" id="nav-links" role="list">
+        <li><a href="index.html" class="nav-link">Itinerary</a></li>
+        <li><a href="full-itinerary.html" class="nav-link" aria-current="page">Full Itinerary</a></li>
+        <li><a href="overview.html" class="nav-link">At a Glance</a></li>
+        <li><a href="places.html" class="nav-link">Map &amp; Places</a></li>
+        <li><a href="may-2026.html" class="nav-link nav-link--archived">May 2026</a></li>
+      </ul>
+      <button class="hamburger" id="nav-toggle"
+        aria-expanded="false"
+        aria-controls="nav-links"
+        aria-label="Toggle navigation menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+
+<!-- ── TRIP HEADER ── -->
+<header class="site-header" role="banner" aria-label="Trip details">
+  <div class="header-inner">
+    <div>
+      <h1 class="trip-title">Australia + New Zealand · July 2026</h1>
+      <div class="trip-sub">
+        <span class="trip-dates">Jul 1–13, 2026 · 13 days · Allston + Donnie</span>
+        <div class="city-pills">
+          <span class="city-pill pill-sfo">SFO dep</span>
+          <span class="city-pill pill-mel">MEL · 3 nt</span>
+          <span class="city-pill pill-syd">SYD · 4 nt</span>
+          <span class="city-pill pill-nz">NZ · 3 nt</span>
+        </div>
+      </div>
+    </div>
+    <div class="header-right">
+      <p class="travelers">Allston + Donnie</p>
+      <span class="booked-badge">All Flights Booked</span>
+    </div>
+  </div>
+</header>
+
+<!-- ── BOOKING QUICK LINKS ── -->
+<section class="page-section booking-quicklinks" aria-label="Booking status overview">
+  <h2 class="section-head">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--accent)"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+    Booking Status
+  </h2>
+  <p class="ql-intro"><strong>Status:</strong> all 4 flights booked. Key experiences locked. Hotels + NZ activities pending.</p>
+  <div class="ql-grid">
+
+    <div class="ql-card ok">
+      <span class="ql-num">01 · BOOKED</span>
+      <div class="ql-name">Flights — All 4 legs</div>
+      <div class="ql-slot">UA60 · SFO→MEL · <strong>Wed Jul 1 11:20 PM</strong></div>
+      <div class="ql-slot">JQ534 · MEL→SYD · <strong>Mon Jul 6 11:05 AM</strong></div>
+      <div class="ql-slot">QF141 · SYD→AKL · <strong>Fri Jul 10 07:10</strong></div>
+      <div class="ql-slot">UA916 · AKL→SFO · <strong>Mon Jul 13 1:50 PM</strong></div>
+      <div class="ql-status ok">Booked — status only, no conf codes shown</div>
+    </div>
+
+    <div class="ql-card ok">
+      <span class="ql-num">02 · BOOKED</span>
+      <div class="ql-name">Penguin Parade · Phillip Island</div>
+      <div class="ql-slot"><strong>Sat Jul 4</strong> · dusk · Little Penguins at Summerland Beach</div>
+      <div class="ql-status ok">Booked</div>
+    </div>
+
+    <div class="ql-card ok">
+      <span class="ql-num">03 · BOOKED</span>
+      <div class="ql-name">Sydney Symphony Orchestra · Opera House</div>
+      <div class="ql-slot"><strong>Thu Jul 9 · 7:00 PM</strong> · Concert Hall, Opera House</div>
+      <div class="ql-status ok">Booked — 2 tickets</div>
+    </div>
+
+    <div class="ql-card pending">
+      <span class="ql-num">04 · PENDING</span>
+      <div class="ql-name">Waitomo Glowworm Caves</div>
+      <div class="ql-slot"><strong>Sat Jul 11 ~9 AM</strong> · 45-min underground boat tour</div>
+      <div class="ql-status pending">Pending — book before trip</div>
+    </div>
+
+    <div class="ql-card pending">
+      <span class="ql-num">05 · PENDING</span>
+      <div class="ql-name">Hobbiton Movie Set</div>
+      <div class="ql-slot"><strong>Sat Jul 11 · early PM</strong> · Matamata (Shire's Rest)</div>
+      <div class="ql-status pending">Pending — book well in advance (popular tour)</div>
+    </div>
+
+    <div class="ql-card pending">
+      <span class="ql-num">06 · PENDING</span>
+      <div class="ql-name">Zorb + Polynesian Spa · Rotorua</div>
+      <div class="ql-slot"><strong>Sun Jul 12 AM</strong> · Zorb (hamster-ball) + geothermal pools</div>
+      <div class="ql-status pending">Pending — walk-up OK for Zorb; Polynesian Spa recommend pre-book</div>
+    </div>
+
+    <div class="ql-card pending">
+      <span class="ql-num">07 · PENDING</span>
+      <div class="ql-name">NZ Rental Car · AKL pickup Fri Jul 10</div>
+      <div class="ql-slot"><strong>Fri Jul 10</strong> pickup AKL airport · return Mon Jul 13 AM</div>
+      <div class="ql-status pending">Pending — Compact SUV or similar, left-hand drive</div>
+    </div>
+
+    <div class="ql-card pending">
+      <span class="ql-num">08 · PENDING</span>
+      <div class="ql-name">Phillip Island Transport · Sat Jul 4</div>
+      <div class="ql-slot"><strong>Sat Jul 4</strong> · Melbourne → Phillip Island (~1.25h)</div>
+      <div class="ql-status pending">Pending — rental car or tour bus</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── STATS BAR ── -->
+<div class="stats-bar" aria-label="Time allocation">
+  <div class="stats-inner" id="stats-inner"></div>
+</div>
+
+<!-- ── TIMELINE ── -->
+<section class="timeline-section" aria-label="Trip timeline">
+  <div class="tl-pad">
+    <p class="section-lede">Full schedule Jul 1–13 · click any column for day breakdown · all times in LOCAL time for each city</p>
+  </div>
+  <div class="timeline-scroll" role="region" aria-label="Scrollable day-by-day timeline">
+    <div class="timeline-grid">
+      <div class="time-rail" id="time-rail" aria-hidden="true"></div>
+      <div class="days-wrap" id="days-wrap"></div>
+    </div>
+  </div>
+</section>
+
+<div class="day-nav-strip" id="day-nav-strip" aria-label="Day selector"></div>
+
+<!-- ── MAP ── -->
+<div class="map-section" aria-label="Interactive trip map">
+  <div class="map-header">
+    <span class="map-title">Trip Map — Per-Day View</span>
+    <button class="map-toggle-btn" id="map-overview-btn" aria-pressed="false">Show Full Route Overview</button>
+  </div>
+  <div id="trip-map" role="region" aria-label="Interactive map of trip locations"></div>
+</div>
+
+<div class="legend-section" aria-label="Legend">
+  <div class="legend" id="legend"></div>
+</div>
+
+<hr class="div">
+
+<!-- ── DETAIL PANEL ── -->
+<section class="detail-section" id="detail-section" aria-label="Day schedule">
+  <div class="detail-hdr">
+    <button class="det-nav-btn" id="btn-prev" aria-label="Previous day">← Prev</button>
+    <h2 class="detail-title" id="detail-title">Select a day above</h2>
+    <span class="city-pill" id="detail-pill"></span>
+    <button class="det-nav-btn" id="btn-next" aria-label="Next day">Next →</button>
+  </div>
+  <div class="detail-grid" id="detail-grid">
+    <p style="color:var(--text-3);font-size:.875rem;">Click any day column or use the nav pills to see the full schedule.</p>
+  </div>
+</section>
+
+<hr class="div">
+
+<!-- ── WEATHER ── -->
+<section class="page-section" aria-label="Real-time weather forecast">
+  <h2 class="section-head">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--accent)"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    Weather Forecast (real-time · Open-Meteo)
+  </h2>
+  <div class="weather-grid" id="weather-widget"><div class="weather-loading">Loading forecast…</div></div>
+  <p id="weather-updated" style="font-size:.75rem;color:var(--text-3);margin-top:8px;">Forecasts auto-load on page open. Open-Meteo's 16-day window shows the available forecast window — closer to July the full trip range will be covered. Fahrenheit shown.</p>
+</section>
+
+<hr class="div">
+
+<!-- ── HOTELS ── -->
+<section class="page-section" aria-label="Hotels">
+  <h2 class="section-head">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--teal)"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    Hotels
+  </h2>
+  <div class="hotel-box">
+    <div class="hotel-card" style="border-left-color:var(--success)">
+      <div class="hotel-city">Melbourne · Jul 3–6 · 3 nights · Booked</div>
+      <div class="hotel-name">Melbourne City Apartment Hotel area · Twin Studio</div>
+      <div class="hotel-meta">Twin beds · CBD location · check-in Fri Jul 3</div>
+    </div>
+    <div class="hotel-card" style="border-left-color:var(--blue)">
+      <div class="hotel-city">Sydney · Jul 6–10 · 4 nights · Pending</div>
+      <div class="hotel-name">Twin room · CBD or North Sydney area</div>
+      <div class="hotel-meta">4 nights · Jul 6 check-in · Jul 10 checkout for early QF141 (07:10 dep)</div>
+    </div>
+    <div class="hotel-card" style="border-left-color:var(--blue)">
+      <div class="hotel-city">Auckland (NZ N1) · Fri Jul 10 · 1 night · Pending</div>
+      <div class="hotel-name">Auckland CBD · arriving midday after QF141</div>
+      <div class="hotel-meta">Check-in Fri Jul 10 ~12:30 PM · relaxed arrival day</div>
+    </div>
+    <div class="hotel-card" style="border-left-color:var(--blue)">
+      <div class="hotel-city">Rotorua (NZ N2) · Sat Jul 11 · 1 night · Pending</div>
+      <div class="hotel-name">Rotorua city hotel · central to Eat Streat</div>
+      <div class="hotel-meta">Check-in late afternoon after Hobbiton + drive from Matamata</div>
+    </div>
+    <div class="hotel-card" style="border-left-color:var(--blue)">
+      <div class="hotel-city">Auckland (NZ N3) · Sun Jul 12 · 1 night · Pending</div>
+      <div class="hotel-name">Auckland — airport-adjacent or CBD</div>
+      <div class="hotel-meta">Easy access for UA916 Mon Jul 13 1:50 PM departure</div>
+    </div>
+  </div>
+  <p style="font-size:.8125rem;color:var(--text-3);">Melbourne booked (twin). Sydney + NZ hotels pending — twin beds, refundable preferred.</p>
+</section>
+
+<hr class="div">
+
+<!-- ── RESTAURANTS / ACTIVITY PICKS ── -->
+<section class="page-section" aria-label="Restaurant and activity ideas">
+  <h2 class="section-head">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--accent)"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
+    Restaurants &amp; Activity Ideas
+  </h2>
+  <p style="font-size:.8125rem;color:var(--text-3);margin-bottom:16px;">These are ideas — not booked unless labeled otherwise. Confirm hours and availability before arrival.</p>
+
+  <div class="city-header" style="color:var(--teal)">Melbourne (Jul 3–6)</div>
+  <div class="table-scroll">
+  <table class="contact-table" aria-label="Melbourne picks">
+    <thead><tr><th>Name</th><th>Type</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><strong>NGV — National Gallery of Victoria</strong></td><td>Culture</td><td>Free permanent collection · Federation Square area · good for jetlag day browse</td></tr>
+      <tr><td><strong>Melbourne laneways</strong></td><td>Outdoor / food</td><td>Hosier Lane street art · Degraves St cafés · AC/DC Lane · ideal CBD wander</td></tr>
+      <tr><td><strong>Queen Victoria Market</strong></td><td>Market</td><td>Open Tue/Thu/Fri/Sat/Sun · fresh food + crafts · rooftop night market in summer (check Jul schedule)</td></tr>
+      <tr><td><strong>Circular Quay-area cafés</strong></td><td>Food</td><td>Pre-Opera House dinner cluster — Bennelong, Opera Bar, Aria</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="city-header" style="color:var(--purple)">Sydney (Jul 6–10)</div>
+  <div class="table-scroll">
+  <table class="contact-table" aria-label="Sydney picks">
+    <thead><tr><th>Name</th><th>Type</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><strong>The Rocks</strong></td><td>Culture / food</td><td>Historic sandstone district north of Circular Quay · weekend market + gastropubs</td></tr>
+      <tr><td><strong>Royal Botanic Garden</strong></td><td>Outdoor</td><td>Free · best Opera House + Harbour Bridge framing from the waterfront path · Mrs Macquarie's Chair at eastern tip</td></tr>
+      <tr><td><strong>Manly Ferry</strong></td><td>Transit / outdoor</td><td>30-min Circular Quay → Manly · iconic harbour crossing · Manly Beach at the end</td></tr>
+      <tr><td><strong>Bondi → Coogee Coastal Walk</strong></td><td>Outdoor</td><td>6 km · Tamarama, Bronte, Clovelly, Icebergs ocean pool · best mid-morning</td></tr>
+      <tr><td><strong>Paddington / QVB</strong></td><td>Shopping / culture</td><td>Queen Victoria Building · Paddington terrace houses + boutiques</td></tr>
+      <tr><td><strong>Bondi-to-Coogee cafés</strong></td><td>Food</td><td>Multiple café stops along the coastal walk · Bronte is a local favourite</td></tr>
+      <tr><td><strong>Haigh's Chocolates</strong></td><td>Food</td><td>South Australian chocolate institution · Sydney CBD branch · gifts</td></tr>
+      <tr><td><strong>Pre-concert dinner · Circular Quay area</strong></td><td>Food</td><td>Thu Jul 9 pre-SSO dinner · Opera Bar (harbour view walk-up) or book ahead at Aria/Quay</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="city-header" style="color:var(--accent)">New Zealand (Jul 10–13)</div>
+  <div class="table-scroll">
+  <table class="contact-table" aria-label="New Zealand picks">
+    <thead><tr><th>Name</th><th>Type</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Waiheke ferry from Auckland</strong></td><td>Optional day-trip</td><td>35-min ferry from Downtown Ferry Terminal · wine + beaches · only viable if arriving AKL very early on Fri</td></tr>
+      <tr><td><strong>Rotorua Eat Streat</strong></td><td>Food</td><td>Tutanekai St pedestrian food strip · geothermal steam vents visible nearby · Sat Jul 11 dinner</td></tr>
+      <tr><td><strong>Last dinner · Auckland</strong></td><td>Food</td><td>Sun Jul 12 · CBD pick after Rotorua→AKL drive · waterfront or Britomart precinct</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<hr class="div">
+
+<!-- ── PRACTICAL INFO ── -->
+<section class="page-section" aria-label="Practical information">
+  <h2 class="section-head">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--cyan)"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    Practical Info
+  </h2>
+  <div class="info-grid">
+
+    <div class="info-card">
+      <div class="info-card-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--accent)"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        Currency
+      </div>
+      <table class="info-table">
+        <tr><td>Melbourne · Sydney</td><td>AUD (Australian Dollar)</td></tr>
+        <tr><td>Auckland · Rotorua · Waitomo</td><td>NZD (New Zealand Dollar)</td></tr>
+      </table>
+      <p>Both countries are very cashless — Visa/Mastercard/Apple Pay accepted almost everywhere. Withdraw AUD at MEL airport on arrival, NZD at AKL airport on Jul 10 (better rates than currency counters).</p>
+    </div>
+
+    <div class="info-card">
+      <div class="info-card-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--accent)"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        Time Zones &amp; Seasons
+      </div>
+      <table class="info-table">
+        <tr><td>SFO ↔ MEL/SYD</td><td>+17–18h (AEST)</td></tr>
+        <tr><td>AKL/Rotorua</td><td>NZST UTC+12 (+2h from AEST)</td></tr>
+        <tr><td>July = Winter</td><td>Southern hemisphere — pack layers</td></tr>
+      </table>
+      <p>UA60 SFO→MEL crosses the dateline westward — you arrive Fri Jul 3 (skip Thu Jul 2 entirely). UA916 AKL→SFO gains a day eastbound — depart Mon Jul 13, arrive Mon Jul 13.</p>
+    </div>
+
+    <div class="info-card">
+      <div class="info-card-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--teal)"><path d="M12 2L2 22h20L12 2z"/><line x1="12" y1="9" x2="12" y2="14"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Left-Side Driving (NZ leg)
+      </div>
+      <p><strong>New Zealand drives on the LEFT side of the road</strong> — steering wheel is front-right. Pedals are the same order as US. July 10–13 NZ rental leg only.</p>
+      <ul>
+        <li><strong>Roundabouts go clockwise</strong> — yield to traffic from your right</li>
+        <li><strong>Right turns cross oncoming traffic</strong> — the harder turn; use turn lanes</li>
+        <li><strong>Lane drift warning</strong> — most common rental incident on unfamiliar-side roads</li>
+        <li><strong>International Driver's Permit (IDP)</strong> — required in NZ with a US license</li>
+        <li>Route: AKL → Waitomo → Matamata → Rotorua → AKL · ~5–6h total driving over 3 days</li>
+      </ul>
+    </div>
+
+    <div class="info-card">
+      <div class="info-card-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--cyan)"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        eSIM — Airalo
+      </div>
+      <p><strong>Best: Oceania Regional Plan</strong> — covers both AU + NZ in one eSIM, no switching between countries.</p>
+      <p>Each person buys their own via the Airalo iOS app. Activate before Jul 1 departure.</p>
+    </div>
+
+    <div class="info-card">
+      <div class="info-card-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--blue)"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
+        Getting Around
+      </div>
+      <ul>
+        <li><strong>Melbourne:</strong> Uber + DiDi + Bolt. Free CBD trams (Zone 1). Myki card for suburbs. Car likely needed for Phillip Island (Jul 4).</li>
+        <li><strong>Sydney:</strong> Uber + Opal card for trains/ferries. Manly ferry from Circular Quay. No car needed in Sydney.</li>
+        <li><strong>New Zealand:</strong> Rental car from AKL airport Jul 10. Self-drive all NZ days — AKL → Waitomo → Matamata → Rotorua → AKL.</li>
+      </ul>
+    </div>
+
+    <div class="info-card">
+      <div class="info-card-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--success)"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        Cards &amp; Payments
+      </div>
+      <ul>
+        <li><strong>Visa / Mastercard / Apple Pay</strong> — universally accepted in both countries</li>
+        <li><strong>No-FTF cards</strong> — use cards with no foreign transaction fees for everything</li>
+        <li><strong>Amex</strong> — accepted at hotels and restaurants; less common at small retailers</li>
+        <li><strong>Cash</strong> — keep AUD 100–150 and NZD 80–100 for markets and cash-only spots</li>
+      </ul>
+    </div>
+
+    <div class="info-card">
+      <div class="info-card-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--accent)"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        July Packing Notes
+      </div>
+      <p>July = austral winter. Melbourne and Sydney are mild (8–17°C / 46–62°F). New Zealand (inland/Rotorua area) can be cold at night. Waitomo caves are cool inside year-round.</p>
+      <ul>
+        <li><strong>Layers</strong> — fleece + light waterproof jacket essential</li>
+        <li><strong>Evening wear</strong> — SSO concert (Thu Jul 9) — smart casual</li>
+        <li><strong>Cave / outdoor gear</strong> — Waitomo: wear clothes you don't mind getting wet</li>
+        <li><strong>Zorb</strong> — swimsuit or quick-dry clothes underneath</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<hr class="div">
+
+<!-- ── FOOTER ── -->
+<footer class="site-footer">
+  NZ · AUS 2026 · Allston + Donnie · Jul 1–13 ·
+  <a href="https://github.com/allstoncodes/nz-aus-2026" target="_blank" rel="noopener">GitHub</a>
+</footer>
+
+</main>
+
+<!-- ── TOOLTIP ── -->
+<div class="tooltip" id="tooltip" role="tooltip">
+  <div class="tt-time" id="tt-time"></div>
+  <div class="tt-lbl" id="tt-lbl"></div>
+  <div class="tt-tz">Local time for this city</div>
+</div>
+
+<script>
+'use strict';
+
+/* ── CATEGORY TOKENS ── */
+const CAT = {
+  transit:   { color: '#3B82F6', label: 'Transit'   },
+  outdoor:   { color: '#22C55E', label: 'Outdoor'   },
+  food:      { color: '#F59E0B', label: 'Food'       },
+  culture:   { color: '#8B5CF6', label: 'Culture'   },
+  downtime:  { color: '#475569', label: 'Downtime'  },
+  wellness:  { color: '#06B6D4', label: 'Wellness'  },
+  logistics: { color: '#64748B', label: 'Logistics' },
+  sleep:     { color: '#0F172A', label: 'Sleep'     },
+};
+const PX_PER_MIN = 30 / 60;
+const CITY_COLORS = { MEL: '#0D9488', SYD: '#8B5CF6', NZ: '#F59E0B', SFO: '#64748B', FLIGHT: '#3B82F6' };
+
+/* ── TRIP DATA — July Option D ── */
+const DAYS = [
+  { tag: 'DEP', date: 'Jul 1', wd: 'WED', city: 'SFO', cityFull: 'San Francisco', lbl: 'Depart SFO · UA60 11:20 PM', blocks: [
+    { s: '08:00', e: '14:00', c: 'logistics', t: 'Last-minute packing · SF errands · final prep' },
+    { s: '14:00', e: '18:00', c: 'downtime',  t: 'Rest before long-haul · charge devices' },
+    { s: '18:00', e: '20:30', c: 'transit',   t: 'Travel to SFO airport' },
+    { s: '20:30', e: '23:20', c: 'logistics', t: 'SFO check-in · security · United lounge' },
+    { s: '23:20', e: '24:00', c: 'transit',   t: 'UA60 SFO → MEL · airborne over Pacific' },
+  ]},
+  { tag: 'FLT', date: 'Jul 2', wd: 'THU', city: 'SFO', cityFull: 'Over the Pacific', lbl: 'In-flight · crosses dateline', blocks: [
+    { s: '00:00', e: '24:00', c: 'transit', t: 'UA60 SFO → MEL · ~15h nonstop · crosses dateline · arrives Fri Jul 3 8:15 AM AEST' },
+  ]},
+  { tag: 1, date: 'Jul 3', wd: 'FRI', city: 'MEL', cityFull: 'Melbourne (MEL N1)', lbl: 'MEL N1 · Arrive 8:15 AM · CBD ease-in (jetlag day)', blocks: [
+    { s: '08:15', e: '09:30', c: 'transit',   t: 'Land MEL 8:15 AM · customs + immigration + bag claim' },
+    { s: '09:30', e: '11:00', c: 'transit',   t: 'SkyBus or Uber MEL airport → CBD hotel (~40min)' },
+    { s: '11:00', e: '12:00', c: 'logistics', t: 'Hotel check-in / bag drop · Twin Studio' },
+    { s: '12:00', e: '13:30', c: 'food',      t: 'Late breakfast / brunch near CBD · ease into day' },
+    { s: '13:30', e: '16:00', c: 'downtime',  t: 'Rest · jetlag recovery nap after redeye' },
+    { s: '16:00', e: '18:30', c: 'culture',   t: 'Optional: Hosier Lane street art + Federation Square evening light' },
+    { s: '18:30', e: '20:30', c: 'food',      t: 'Dinner Melbourne CBD · laneways pick' },
+    { s: '20:30', e: '22:00', c: 'downtime',  t: 'Wind down · plan Sat Phillip Island day' },
+    { s: '22:00', e: '24:00', c: 'sleep',     t: 'Sleep · MEL N1' },
+  ]},
+  { tag: 2, date: 'Jul 4', wd: 'SAT', city: 'MEL', cityFull: 'Melbourne + Phillip Island', lbl: 'MEL N2 · Peninsula Hot Springs (opt) + Penguin Parade (dusk) booked', blocks: [
+    { s: '07:30', e: '08:30', c: 'food',      t: 'Early breakfast · fuel before drive' },
+    { s: '08:30', e: '10:00', c: 'transit',   t: 'Drive Melbourne → Phillip Island (~1.25h)' },
+    { s: '10:00', e: '13:00', c: 'wellness',  t: 'Optional: Peninsula Hot Springs · thermal pools + onsen AM session' },
+    { s: '13:00', e: '14:00', c: 'food',      t: 'Lunch near Phillip Island' },
+    { s: '14:00', e: '16:30', c: 'outdoor',   t: 'Summerland Beach · Nobbies Centre · koala reserve walk' },
+    { s: '16:30', e: '17:30', c: 'downtime',  t: 'Wait for dusk · penguins emerge after sunset' },
+    { s: '17:30', e: '19:30', c: 'outdoor',   t: 'Penguin Parade (dusk) · Little Penguins return from sea · BOOKED' },
+    { s: '19:30', e: '21:00', c: 'transit',   t: 'Drive back to Melbourne CBD (~1.25h)' },
+    { s: '21:00', e: '22:30', c: 'food',      t: 'Late dinner near hotel' },
+    { s: '22:30', e: '24:00', c: 'sleep',     t: 'Sleep · MEL N2' },
+  ]},
+  { tag: 3, date: 'Jul 5', wd: 'SUN', city: 'MEL', cityFull: 'Melbourne (MEL N3)', lbl: 'MEL N3 · Social / Melbourne city', blocks: [
+    { s: '09:00', e: '11:00', c: 'downtime',  t: 'Slow morning · hang with Melbourne friends (Selena etc.) or CBD wander' },
+    { s: '11:00', e: '13:00', c: 'food',      t: 'Brunch · LUNE croissants or Top Paddock' },
+    { s: '13:00', e: '15:30', c: 'culture',   t: 'NGV National Gallery Victoria · free permanent collection' },
+    { s: '15:30', e: '17:30', c: 'outdoor',   t: 'Queen Victoria Market or South Melbourne · browse + food stalls' },
+    { s: '17:30', e: '21:00', c: 'food',      t: 'Dinner with Aussie friends · MEL CBD pick (Selena / Corey recs)' },
+    { s: '21:00', e: '22:30', c: 'downtime',  t: 'Pack for Mon JQ534 transit day to Sydney' },
+    { s: '22:30', e: '24:00', c: 'sleep',     t: 'Sleep · MEL N3' },
+  ]},
+  { tag: 4, date: 'Jul 6', wd: 'MON', city: 'MEL', cityFull: 'MEL → SYD (JQ534)', lbl: 'SYD N1 · JQ534 11:05 AM → arrive SYD · check in · dinner', blocks: [
+    { s: '08:00', e: '09:00', c: 'food',      t: 'Last Melbourne breakfast' },
+    { s: '09:00', e: '10:00', c: 'logistics', t: 'Pack + check out hotel · Uber to MEL airport' },
+    { s: '10:00', e: '11:05', c: 'logistics', t: 'MEL airport check-in + security + gate' },
+    { s: '11:05', e: '12:30', c: 'transit',   t: 'JQ534 MEL → SYD · 1h25m nonstop · same timezone AEST' },
+    { s: '12:30', e: '13:30', c: 'transit',   t: 'SYD airport → hotel (Opal rail or Uber)' },
+    { s: '13:30', e: '15:00', c: 'logistics', t: 'Check in Sydney hotel · settle' },
+    { s: '15:00', e: '17:00', c: 'outdoor',   t: 'Harbour orient walk · Circular Quay · Opera House exterior' },
+    { s: '17:00', e: '19:30', c: 'downtime',  t: 'Rest · freshen up' },
+    { s: '19:30', e: '21:30', c: 'food',      t: 'Dinner Sydney N1 · Circular Quay or CBD' },
+    { s: '21:30', e: '24:00', c: 'sleep',     t: 'Sleep · SYD N1' },
+  ]},
+  { tag: 5, date: 'Jul 7', wd: 'TUE', city: 'SYD', cityFull: 'Sydney (SYD N2)', lbl: 'SYD N2 · The Rocks · Royal Botanic · Manly ferry', blocks: [
+    { s: '08:30', e: '09:30', c: 'food',      t: 'Breakfast · hotel or nearby café' },
+    { s: '09:30', e: '11:30', c: 'culture',   t: 'The Rocks historic precinct · sandstone buildings + weekend market' },
+    { s: '11:30', e: '13:00', c: 'outdoor',   t: 'Royal Botanic Garden → Mrs Macquarie\'s Chair · best Opera House framing' },
+    { s: '13:00', e: '14:30', c: 'food',      t: 'Lunch near Circular Quay' },
+    { s: '14:30', e: '15:00', c: 'transit',   t: 'Manly Ferry from Circular Quay (~30min crossing)' },
+    { s: '15:00', e: '17:00', c: 'outdoor',   t: 'Manly Beach · Corso · ocean pool walk' },
+    { s: '17:00', e: '17:30', c: 'transit',   t: 'Ferry back to Circular Quay' },
+    { s: '17:30', e: '19:30', c: 'downtime',  t: 'Rest · freshen up' },
+    { s: '19:30', e: '21:30', c: 'food',      t: 'Dinner SYD N2 · CBD or Surry Hills' },
+    { s: '21:30', e: '24:00', c: 'sleep',     t: 'Sleep · SYD N2' },
+  ]},
+  { tag: 6, date: 'Jul 8', wd: 'WED', city: 'SYD', cityFull: 'Sydney (SYD N3)', lbl: 'SYD N3 · Bondi → Coogee coastal walk · Paddington', blocks: [
+    { s: '08:30', e: '09:30', c: 'food',      t: 'Breakfast · CBD café' },
+    { s: '09:30', e: '10:00', c: 'transit',   t: 'Bus/train to Bondi Beach' },
+    { s: '10:00', e: '14:00', c: 'outdoor',   t: 'Bondi → Coogee coastal walk · 6km · Tamarama · Bronte · Clovelly · Icebergs ocean pool' },
+    { s: '14:00', e: '15:00', c: 'food',      t: 'Lunch at Coogee or Bronte café on the walk' },
+    { s: '15:00', e: '16:00', c: 'transit',   t: 'Bus back to CBD' },
+    { s: '16:00', e: '18:00', c: 'culture',   t: 'Paddington terrace houses · Oxford St boutiques · QVB (Queen Victoria Building)' },
+    { s: '18:00', e: '19:30', c: 'downtime',  t: 'Rest / hotel · prep for tomorrow\'s big SSO night' },
+    { s: '19:30', e: '21:30', c: 'food',      t: 'Dinner SYD N3 · Haigh\'s chocolate · Surry Hills' },
+    { s: '21:30', e: '24:00', c: 'sleep',     t: 'Sleep · SYD N3' },
+  ]},
+  { tag: 7, date: 'Jul 9', wd: 'THU', city: 'SYD', cityFull: 'Sydney (SYD N4)', lbl: 'SYD N4 · Harbour flex + SSO Opera House 7 PM · BOOKED', blocks: [
+    { s: '09:00', e: '10:30', c: 'food',      t: 'Slow morning · late breakfast' },
+    { s: '10:30', e: '13:00', c: 'outdoor',   t: 'Harbour day: ferry loop or museums or Royal Botanic Garden' },
+    { s: '13:00', e: '14:30', c: 'food',      t: 'Lunch · CBD or waterfront' },
+    { s: '14:30', e: '17:30', c: 'culture',   t: 'Optional: Sydney Museum / MCA / Observatory Hill · rest between' },
+    { s: '17:30', e: '18:15', c: 'food',      t: 'Pre-concert drinks · Opera Bar (harbour view) or Circular Quay area' },
+    { s: '18:15', e: '19:00', c: 'food',      t: 'Pre-concert dinner · Circular Quay restaurant (arrive 18:15 for 7PM curtain)' },
+    { s: '19:00', e: '21:30', c: 'culture',   t: 'Sydney Symphony Orchestra · Opera House Concert Hall · BOOKED' },
+    { s: '21:30', e: '23:00', c: 'downtime',  t: 'Post-concert debrief walk + drinks near Opera House · last night in Sydney' },
+    { s: '23:00', e: '24:00', c: 'sleep',     t: 'Sleep · SYD N4 · early check-out tomorrow for 7:10 AM flight' },
+  ]},
+  { tag: 8, date: 'Jul 10', wd: 'FRI', city: 'NZ', cityFull: 'SYD → Auckland (NZ N1)', lbl: 'NZ N1 · QF141 07:10 → AKL 12:20 · rental car · relaxed Auckland day', blocks: [
+    { s: '04:30', e: '05:30', c: 'logistics', t: 'Early wake · hotel checkout · Uber to SYD airport' },
+    { s: '05:30', e: '07:10', c: 'logistics', t: 'SYD airport check-in + security + gate' },
+    { s: '07:10', e: '12:20', c: 'transit',   t: 'QF141 SYD → AKL · 3h10m nonstop (+2h timezone change AEST→NZST)' },
+    { s: '12:20', e: '13:30', c: 'logistics', t: 'AKL customs + bag claim + rental car pickup' },
+    { s: '13:30', e: '15:00', c: 'transit',   t: 'Drive AKL airport → Auckland CBD hotel (~30-40min)' },
+    { s: '15:00', e: '16:00', c: 'logistics', t: 'Hotel check-in Auckland · settle' },
+    { s: '16:00', e: '18:00', c: 'outdoor',   t: 'Optional: Waiheke ferry explore OR Auckland CBD waterfront / Britomart wander' },
+    { s: '18:00', e: '20:00', c: 'downtime',  t: 'Rest · no timed activity tonight · early start tomorrow' },
+    { s: '20:00', e: '21:30', c: 'food',      t: 'Dinner Auckland CBD · waterfront or Federal St' },
+    { s: '21:30', e: '24:00', c: 'sleep',     t: 'Sleep · AKL N1 · early 7:30 AM departure tomorrow' },
+  ]},
+  { tag: 9, date: 'Jul 11', wd: 'SAT', city: 'NZ', cityFull: 'Auckland → Waitomo → Matamata → Rotorua', lbl: 'NZ N2 · Waitomo 9 AM + Hobbiton PM + Rotorua overnight', blocks: [
+    { s: '06:30', e: '07:30', c: 'food',      t: 'Early breakfast at hotel · pack day bag (camera, cash, snacks)' },
+    { s: '07:30', e: '09:00', c: 'transit',   t: 'Drive AKL → Waitomo Glowworm Caves (~1.5h)' },
+    { s: '09:00', e: '10:00', c: 'outdoor',   t: 'Arrive Waitomo · Glowworm Caves 45-min underground boat tour · PENDING BOOKING' },
+    { s: '10:00', e: '11:30', c: 'transit',   t: 'Drive Waitomo → Matamata / Hobbiton (~1h30m)' },
+    { s: '11:30', e: '14:00', c: 'culture',   t: 'Hobbiton Movie Set Tour · Shire\'s Rest visitor centre · shuttle to set · PENDING BOOKING' },
+    { s: '14:00', e: '15:00', c: 'transit',   t: 'Drive Matamata → Rotorua (~1h)' },
+    { s: '15:00', e: '16:00', c: 'logistics', t: 'Check in Rotorua hotel · settle · freshen up' },
+    { s: '16:00', e: '18:00', c: 'downtime',  t: 'Rest · explore geothermal steam vents near CBD' },
+    { s: '18:00', e: '20:00', c: 'food',      t: 'Dinner · Rotorua Eat Streat (Tutanekai St)' },
+    { s: '20:00', e: '22:00', c: 'downtime',  t: 'Evening wander Rotorua · Lakefront reserve' },
+    { s: '22:00', e: '24:00', c: 'sleep',     t: 'Sleep · Rotorua N2' },
+  ]},
+  { tag: 10, date: 'Jul 12', wd: 'SUN', city: 'NZ', cityFull: 'Rotorua → Auckland (NZ N3)', lbl: 'NZ N3 · Zorb + Polynesian Spa AM · drive back Auckland · last dinner', blocks: [
+    { s: '08:00', e: '09:00', c: 'food',      t: 'Breakfast Rotorua hotel' },
+    { s: '09:00', e: '10:30', c: 'outdoor',   t: 'Zorb (hamster-ball downhill) · PENDING BOOKING' },
+    { s: '10:30', e: '12:30', c: 'wellness',  t: 'Polynesian Spa · geothermal hot springs · lake-edge pools · PENDING BOOKING' },
+    { s: '12:30', e: '13:30', c: 'food',      t: 'Lunch near Polynesian Spa · pack + checkout Rotorua' },
+    { s: '13:30', e: '16:15', c: 'transit',   t: 'Drive Rotorua → Auckland CBD (~2h45m)' },
+    { s: '16:15', e: '17:00', c: 'logistics', t: 'Check in Auckland airport-area hotel' },
+    { s: '17:00', e: '19:00', c: 'outdoor',   t: 'Optional: Auckland CBD waterfront stroll · Viaduct Harbour' },
+    { s: '19:00', e: '21:00', c: 'food',      t: 'Last dinner · Auckland CBD · Britomart or Federal St pick' },
+    { s: '21:00', e: '22:00', c: 'logistics', t: 'Final repack · lay out tomorrow\'s travel clothes' },
+    { s: '22:00', e: '24:00', c: 'sleep',     t: 'Sleep · AKL N3 · 1:50 PM departure tomorrow' },
+  ]},
+  { tag: 'RET', date: 'Jul 13', wd: 'MON', city: 'NZ', cityFull: 'Auckland → SFO (UA916)', lbl: 'Depart AKL · UA916 1:50 PM → arrive SFO Mon 6:50 AM', blocks: [
+    { s: '08:00', e: '09:30', c: 'food',      t: 'Final NZ breakfast · slow morning' },
+    { s: '09:30', e: '11:00', c: 'outdoor',   t: 'Optional: last AKL walk or airport souvenir run' },
+    { s: '11:00', e: '12:00', c: 'logistics', t: 'Hotel checkout · drive to AKL airport (or return rental car if drop-off there)' },
+    { s: '12:00', e: '13:50', c: 'logistics', t: 'AKL airport check-in · security · departure lounge' },
+    { s: '13:50', e: '24:00', c: 'transit',   t: 'UA916 AKL → SFO · departs 1:50 PM · gains a day eastbound · arrives Mon 6:50 AM SFO' },
+  ]},
+];
+
+/* ── GREAT CIRCLE ARCS ──
+   gcArc() computes spherical interpolation waypoints.
+   SFO shifted 360° east for correct Pacific rendering. */
+function gcArc(lat1, lon1, lat2, lon2, n = 40) {
+  const D = Math.PI / 180, R = 180 / Math.PI;
+  const [f1, l1, f2, l2] = [lat1, lon1, lat2, lon2].map(v => v * D);
+  const d = Math.acos(Math.max(-1, Math.min(1, Math.sin(f1) * Math.sin(f2) + Math.cos(f1) * Math.cos(f2) * Math.cos(l2 - l1))));
+  if (d < 1e-5) return [[lat1, lon1], [lat2, lon2]];
+  const pts = Array.from({ length: n + 1 }, (_, i) => {
+    const t = i / n, A = Math.sin((1 - t) * d) / Math.sin(d), B = Math.sin(t * d) / Math.sin(d);
+    const x = A * Math.cos(f1) * Math.cos(l1) + B * Math.cos(f2) * Math.cos(l2);
+    const y = A * Math.cos(f1) * Math.sin(l1) + B * Math.cos(f2) * Math.sin(l2);
+    const z = A * Math.sin(f1) + B * Math.sin(f2);
+    return [Math.atan2(z, Math.sqrt(x * x + y * y)) * R, Math.atan2(y, x) * R];
+  });
+  pts[0] = [lat1, lon1];
+  for (let i = 1; i < pts.length; i++) {
+    let dl = pts[i][1] - pts[i - 1][1];
+    while (dl > 180) { pts[i][1] -= 360; dl -= 360; }
+    while (dl < -180) { pts[i][1] += 360; dl += 360; }
+  }
+  return pts;
+}
+
+const SFO_E = [37.6213, -122.3790 + 360]; // [37.6213, 237.6210]
+const MEL_COORD = [-37.8136, 144.9631];
+const SYD_COORD = [-33.8688, 151.2093];
+const AKL_COORD = [-36.8485, 174.7633];
+
+const ARCS = {
+  'SFO-MEL': gcArc(SFO_E[0], SFO_E[1], MEL_COORD[0], MEL_COORD[1]),
+  'MEL-SYD': gcArc(MEL_COORD[0], MEL_COORD[1], SYD_COORD[0], SYD_COORD[1], 10),
+  'SYD-AKL': gcArc(SYD_COORD[0], SYD_COORD[1], AKL_COORD[0], AKL_COORD[1], 15),
+  'AKL-SFO': gcArc(AKL_COORD[0], AKL_COORD[1], SFO_E[0], SFO_E[1]),
+};
+
+const OVERVIEW_CITIES = [
+  { c: SFO_E,      l: 'San Francisco (SFO) · Jul 1 dep', code: 'SFO' },
+  { c: MEL_COORD,  l: 'Melbourne (MEL) · Jul 3–6',       code: 'MEL' },
+  { c: SYD_COORD,  l: 'Sydney (SYD) · Jul 6–10',         code: 'SYD' },
+  { c: AKL_COORD,  l: 'Auckland (AKL) · Jul 10 + 12',    code: 'NZ'  },
+  { c: [-38.1368, 176.2497], l: 'Rotorua · Jul 11–12', code: 'NZ' },
+];
+
+/* ── MAP DATA ── */
+const MAP_DAYS = [
+  // DEP — Wed Jul 1
+  { center: [37.7749, -122.4194], zoom: 11, cityCode: 'SFO', pins: [
+    { c: [37.7749, -122.4194], l: 'Home · San Francisco', t: 'all day' },
+    { c: [37.6213, -122.3790], l: 'SFO Airport · UA60 dep 11:20 PM', t: '23:20' },
+  ]},
+  // FLT — Thu Jul 2
+  { center: [-15, 200], zoom: 2, cityCode: 'FLIGHT', arc: 'SFO-MEL', pins: [
+    { c: SFO_E,     l: 'SFO · UA60 departed 11:20 PM Jul 1', t: 'Jul 1' },
+    { c: MEL_COORD, l: 'MEL · arriving Fri Jul 3 8:15 AM', t: 'Jul 3' },
+  ]},
+  // Day 1 — Fri Jul 3 MEL N1
+  { center: [-37.8136, 144.9631], zoom: 12, cityCode: 'MEL', pins: [
+    { c: [-37.6690, 144.8410], l: 'Melbourne Airport (MEL) · UA60 lands 8:15 AM', t: '08:15' },
+    { c: [-37.8136, 144.9631], l: 'Melbourne CBD hotel · Twin Studio · check-in', t: '11:00' },
+    { c: [-37.8180, 144.9688], l: 'Hosier Lane street art + Federation Square (optional)', t: '16:00' },
+  ]},
+  // Day 2 — Sat Jul 4 Phillip Island
+  { center: [-38.4000, 144.9000], zoom: 9, cityCode: 'MEL', pins: [
+    { c: [-37.8136, 144.9631], l: 'Melbourne CBD · early start', t: '08:30' },
+    { c: [-38.4460, 145.2930], l: 'Peninsula Hot Springs (optional AM session)', t: '10:00' },
+    { c: [-38.5140, 145.1250], l: 'Phillip Island · Summerland Beach', t: '14:00' },
+    { c: [-38.5069, 145.1531], l: 'Penguin Parade · Little Penguins at dusk · BOOKED', t: '17:30' },
+    { c: [-37.8136, 144.9631], l: 'Melbourne CBD · return late', t: '21:00' },
+  ]},
+  // Day 3 — Sun Jul 5 MEL Social
+  { center: [-37.8136, 144.9631], zoom: 12, cityCode: 'MEL', pins: [
+    { c: [-37.8136, 144.9631], l: 'Melbourne CBD · slow morning + NGV + markets', t: 'all day' },
+    { c: [-37.8007, 144.9570], l: 'Queen Victoria Market · browse + food stalls', t: '15:30' },
+  ]},
+  // Day 4 — Mon Jul 6 MEL→SYD
+  { center: [-36.0000, 148.0000], zoom: 6, cityCode: 'FLIGHT', arc: 'MEL-SYD', pins: [
+    { c: [-37.6690, 144.8410], l: 'Melbourne Airport · JQ534 dep 11:05 AM', t: '11:05' },
+    { c: [-33.9399, 151.1753], l: 'Sydney Airport · JQ534 arr 12:30 PM', t: '12:30' },
+    { c: SYD_COORD,            l: 'Sydney CBD hotel · check in', t: '14:00' },
+    { c: [-33.8568, 151.2153], l: 'Sydney Opera House exterior + Circular Quay orient', t: '15:30' },
+  ]},
+  // Day 5 — Tue Jul 7 SYD N2
+  { center: SYD_COORD, zoom: 12, cityCode: 'SYD', pins: [
+    { c: [-33.8602, 151.2084], l: 'The Rocks historic district', t: '09:30' },
+    { c: [-33.8641, 151.2175], l: 'Royal Botanic Garden + Mrs Macquarie\'s Chair', t: '11:30' },
+    { c: [-33.7977, 151.2873], l: 'Manly Beach · via 30-min Circular Quay ferry', t: '14:30' },
+    { c: SYD_COORD,            l: 'Sydney hotel · return', t: '19:30' },
+  ]},
+  // Day 6 — Wed Jul 8 Bondi→Coogee
+  { center: [-33.9200, 151.2600], zoom: 12, cityCode: 'SYD', pins: [
+    { c: [-33.8915, 151.2767], l: 'Bondi Beach · start of coastal walk', t: '10:00' },
+    { c: [-33.9035, 151.2740], l: 'Tamarama + Bronte Beach café stops', t: '11:30' },
+    { c: [-33.9175, 151.2553], l: 'Coogee Beach · end of coastal walk', t: '14:00' },
+    { c: [-33.8836, 151.2234], l: 'Paddington / QVB', t: '16:00' },
+    { c: SYD_COORD,            l: 'Sydney hotel · return', t: '19:30' },
+  ]},
+  // Day 7 — Thu Jul 9 SYD N4 SSO night
+  { center: SYD_COORD, zoom: 12, cityCode: 'SYD', pins: [
+    { c: SYD_COORD,            l: 'Sydney CBD · harbour flex day', t: 'morning' },
+    { c: [-33.8582, 151.2100], l: 'Opera Bar · pre-concert drinks + dinner area', t: '18:15' },
+    { c: [-33.8568, 151.2153], l: 'Sydney Opera House · Concert Hall · SSO · BOOKED · 7:00 PM', t: '19:00' },
+  ]},
+  // Day 8 — Fri Jul 10 SYD→AKL
+  { center: [-28.0000, 165.0000], zoom: 4, cityCode: 'FLIGHT', arc: 'SYD-AKL', pins: [
+    { c: [-33.9399, 151.1753], l: 'SYD Airport · QF141 dep 07:10', t: '07:10' },
+    { c: [-37.0082, 174.7850], l: 'AKL Airport · QF141 arr 12:20 · rental car pickup', t: '12:20' },
+    { c: AKL_COORD,            l: 'Auckland CBD hotel · check in', t: '14:00' },
+    { c: [-36.8434, 174.7706], l: 'Britomart waterfront / Viaduct Harbour (optional)', t: '16:00' },
+  ]},
+  // Day 9 — Sat Jul 11 Waitomo→Hobbiton→Rotorua
+  { center: [-38.0000, 175.5000], zoom: 8, cityCode: 'NZ', pins: [
+    { c: AKL_COORD,                    l: 'Auckland · early 7:30 AM departure', t: '07:30' },
+    { c: [-38.2614, 175.1003],         l: 'Waitomo Glowworm Caves · 45-min underground boat tour · ~9 AM · PENDING', t: '09:00' },
+    { c: [-37.8721, 175.6836],         l: 'Hobbiton (Matamata) · Shire\'s Rest · early PM tour · PENDING', t: '11:30' },
+    { c: [-38.1368, 176.2497],         l: 'Rotorua · check in · Eat Streat dinner', t: '15:00' },
+  ]},
+  // Day 10 — Sun Jul 12 Rotorua→AKL
+  { center: [-37.5000, 175.9000], zoom: 9, cityCode: 'NZ', pins: [
+    { c: [-38.1368, 176.2497],         l: 'Rotorua · Zorb + Polynesian Spa AM · PENDING', t: '09:00' },
+    { c: [-38.1490, 176.2540],         l: 'Polynesian Spa · geothermal hot springs · lakeside', t: '10:30' },
+    { c: AKL_COORD,                    l: 'Auckland · drive back ~2h45m · last dinner', t: '16:30' },
+  ]},
+  // Day 11 — Mon Jul 13 AKL→SFO
+  { center: [-15, 200], zoom: 2, cityCode: 'FLIGHT', arc: 'AKL-SFO', pins: [
+    { c: AKL_COORD, l: 'Auckland · slow morning · hotel checkout', t: 'morning' },
+    { c: [-37.0082, 174.7850], l: 'AKL Airport · UA916 dep 1:50 PM', t: '13:50' },
+    { c: SFO_E,     l: 'SFO · arrives Mon 6:50 AM (gains a day eastbound)', t: 'Mon 6:50 AM' },
+  ]},
+];
+
+/* ── HELPERS ── */
+function toMins(t) { if (!t || t === '24:00') return 1440; const [h, m] = t.split(':').map(Number); return h * 60 + (m || 0); }
+function fmtT(t) { return t === '24:00' ? '00:00' : t; }
+function pad2(n) { return String(n).padStart(2, '0'); }
+function blockGeom(s, e) {
+  const sm = toMins(s), em = Math.min(toMins(e), 1440);
+  return { top: sm * PX_PER_MIN, height: Math.max((em - sm) * PX_PER_MIN, 4) };
+}
+
+/* ── STATS ── */
+function renderStats() {
+  const tot = {}; Object.keys(CAT).forEach(k => tot[k] = 0);
+  DAYS.forEach(d => d.blocks.forEach(b => { const dur = Math.min(toMins(b.e), 1440) - toMins(b.s); if (dur > 0) tot[b.c] = (tot[b.c] || 0) + dur; }));
+  const fmtH = m => { const h = Math.floor(m / 60), r = m % 60; return r ? `${h}h ${r}m` : `${h}h`; };
+  const order = ['transit', 'outdoor', 'food', 'culture', 'wellness', 'logistics', 'downtime', 'sleep'];
+  document.getElementById('stats-inner').innerHTML = order.map(k => `
+    <div class="stat-item">
+      <div class="stat-swatch" style="background:${CAT[k].color}" aria-hidden="true"></div>
+      <div><div class="stat-label">${CAT[k].label}</div><div class="stat-val">${fmtH(tot[k] || 0)}</div></div>
+    </div>`).join('');
+}
+
+/* ── TIME RAIL ── */
+function renderRail() {
+  document.getElementById('time-rail').innerHTML = [0, 4, 8, 12, 16, 20, 24].map(h => {
+    const top = h * 60 * PX_PER_MIN, lbl = h === 24 ? '00' : pad2(h);
+    return `<div class="hr-label" style="top:${top}px">${lbl}</div><div class="hr-tick" style="top:${top}px"></div>`;
+  }).join('');
+}
+
+/* ── CITY CLASS ── */
+function cityClass(city) { return ({ MEL: 'city-mel', SYD: 'city-syd', NZ: 'city-nz', FLIGHT: 'city-flight', SFO: 'city-sfo' })[city] || 'city-sfo'; }
+function pillClass(city) { return ({ MEL: 'pill-mel', SYD: 'pill-syd', NZ: 'pill-nz', SFO: 'pill-sfo' })[city] || 'pill-nz'; }
+
+/* ── DAYS ── */
+let activeDayIdx = -1;
+function renderDays() {
+  const wrap = document.getElementById('days-wrap');
+  wrap.innerHTML = DAYS.map((day, i) => {
+    const blks = day.blocks.map(b => {
+      const { top, height } = blockGeom(b.s, b.e);
+      const col = CAT[b.c]?.color || '#475569';
+      const isSleep = b.c === 'sleep';
+      return `<div class="blk cat-${b.c}" style="top:${top}px;height:${height}px;${isSleep ? '' : 'background:' + col + 'DC;'}"
+        data-s="${b.s}" data-e="${b.e}" data-c="${b.c}"
+        data-t="${b.t.replace(/"/g, '&quot;').replace(/'/g, '&#39;')}"
+        tabindex="0" role="button" aria-label="${b.t}"
+      >${height >= 13 ? b.t : ''}</div>`;
+    }).join('');
+    const tagDisp = typeof day.tag === 'number' ? `Day ${day.tag}` : day.tag;
+    return `<div class="day-col ${cityClass(day.city)}" data-idx="${i}">
+      <div class="day-hdr" data-idx="${i}" tabindex="0" role="button" aria-label="${day.date}: ${day.cityFull}">
+        <div class="d-num">${tagDisp} · ${day.wd}</div>
+        <div class="d-date">${day.date}</div>
+        <div class="d-lbl">${day.lbl}</div>
+      </div>
+      <div class="day-body" aria-hidden="true">${blks}</div>
+    </div>`;
+  }).join('');
+}
+
+/* ── NAV STRIP ── */
+function renderNavStrip() {
+  document.getElementById('day-nav-strip').innerHTML =
+    `<span class="dnav-label">Jump to →</span>` +
+    DAYS.map((day, i) => {
+      const tagDisp = typeof day.tag === 'number' ? `Day ${day.tag}` : day.tag;
+      return `<button class="dnav-pill" data-idx="${i}">${tagDisp}</button>`;
+    }).join('');
+}
+function updateNavStrip(idx) { document.querySelectorAll('.dnav-pill').forEach((p, i) => p.classList.toggle('active', i === idx)); }
+
+/* ── LEGEND ── */
+function renderLegend() {
+  const cats = ['transit', 'outdoor', 'food', 'culture', 'wellness', 'logistics', 'downtime'];
+  document.getElementById('legend').innerHTML = cats.map(k =>
+    `<div class="leg-item"><div class="leg-dot" style="background:${CAT[k].color}" aria-hidden="true"></div>${CAT[k].label}</div>`
+  ).join('');
+}
+
+/* ── LEAFLET MAP ── */
+let leafMap, markersLayer, routeLayer, isOverview = false;
+function initMap() {
+  leafMap = L.map('trip-map', { center: [-25, 160], zoom: 3, attributionControl: true, zoomControl: true });
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains: 'abcd', maxZoom: 19
+  }).addTo(leafMap);
+  markersLayer = L.layerGroup().addTo(leafMap);
+  routeLayer   = L.layerGroup().addTo(leafMap);
+}
+
+function updateMapForDay(idx) {
+  if (!leafMap) return;
+  isOverview = false;
+  document.getElementById('map-overview-btn').classList.remove('active');
+  document.getElementById('map-overview-btn').setAttribute('aria-pressed', 'false');
+  markersLayer.clearLayers();
+  routeLayer.clearLayers();
+  const md = MAP_DAYS[idx];
+  if (!md) return;
+  const col = CITY_COLORS[md.cityCode] || '#94A3B8';
+  leafMap.setView(md.center, md.zoom, { animate: true, duration: 0.4 });
+  md.pins.forEach((pin, pi) => {
+    L.circleMarker(pin.c, { radius: pi === 0 ? 7 : 8, fillColor: col, color: '#fff', weight: 2, opacity: 1, fillOpacity: 0.9 })
+      .bindPopup(`<b>${pin.l}</b><br><small>${pin.t}</small>`)
+      .addTo(markersLayer);
+  });
+  if (md.arc && ARCS[md.arc]) {
+    L.polyline(ARCS[md.arc], { color: col, weight: 2.5, opacity: 0.85 }).addTo(routeLayer);
+  }
+  if (md.pins.length > 1) {
+    for (let i = 0; i < md.pins.length - 1; i++) {
+      const a = md.pins[i].c, b = md.pins[i + 1].c;
+      const dist = Math.hypot(a[0] - b[0], a[1] - b[1]);
+      if (dist < 2) L.polyline([a, b], { color: col, weight: 2, opacity: 0.6, dashArray: '5 4' }).addTo(routeLayer);
+    }
+  }
+}
+
+function showOverview() {
+  if (!leafMap) return;
+  isOverview = true;
+  document.getElementById('map-overview-btn').classList.add('active');
+  document.getElementById('map-overview-btn').setAttribute('aria-pressed', 'true');
+  markersLayer.clearLayers();
+  routeLayer.clearLayers();
+  leafMap.setView([-25, 175], 3, { animate: true, duration: 0.4 });
+  OVERVIEW_CITIES.forEach(city => {
+    const col = CITY_COLORS[city.code] || '#94A3B8';
+    L.circleMarker(city.c, { radius: 12, fillColor: col, color: '#fff', weight: 2.5, fillOpacity: 0.95 })
+      .bindPopup(`<b>${city.l}</b>`)
+      .addTo(markersLayer);
+  });
+  L.polyline(ARCS['SFO-MEL'], { color: '#0D9488', weight: 2, opacity: 0.8 }).addTo(routeLayer);
+  L.polyline(ARCS['MEL-SYD'], { color: '#8B5CF6', weight: 2, opacity: 0.8 }).addTo(routeLayer);
+  L.polyline(ARCS['SYD-AKL'], { color: '#F59E0B', weight: 2, opacity: 0.8 }).addTo(routeLayer);
+  L.polyline(ARCS['AKL-SFO'], { color: '#94A3B8', weight: 2, opacity: 0.7, dashArray: '8 5' }).addTo(routeLayer);
+}
+
+/* ── DETAIL PANEL ── */
+function showDetail(idx, scroll = true) {
+  if (idx < 0 || idx >= DAYS.length) return;
+  activeDayIdx = idx;
+  const day = DAYS[idx];
+  document.querySelectorAll('.day-hdr').forEach((h, i) => h.classList.toggle('active', i === idx));
+  updateNavStrip(idx);
+  updateMapForDay(idx);
+  const tagDisp = typeof day.tag === 'number' ? `Day ${day.tag}` : day.tag;
+  document.getElementById('detail-title').textContent = `${tagDisp} · ${day.date} · ${day.cityFull}`;
+  const pill = document.getElementById('detail-pill');
+  pill.textContent = day.lbl; pill.className = `city-pill ${pillClass(day.city)}`;
+  document.getElementById('detail-grid').innerHTML = day.blocks.map(b => {
+    const col = CAT[b.c]?.color || '#475569';
+    return `<div class="det-item" style="border-left-color:${col}">
+      <div class="det-dot" style="background:${col}" aria-hidden="true"></div>
+      <div class="det-time">${fmtT(b.s)} – ${fmtT(b.e)}</div>
+      <div class="det-lbl">${b.t}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('btn-prev').disabled = (idx <= 0);
+  document.getElementById('btn-next').disabled = (idx >= DAYS.length - 1);
+  if (scroll) document.getElementById('detail-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+/* ── TOOLTIP ── */
+const tip = document.getElementById('tooltip');
+const ttT = document.getElementById('tt-time');
+const ttL = document.getElementById('tt-lbl');
+function showTip(e, el) {
+  const col = CAT[el.dataset.c]?.color || '#fff';
+  ttT.innerHTML = `<div class="tt-dot" style="background:${col}" aria-hidden="true"></div>${fmtT(el.dataset.s)} – ${fmtT(el.dataset.e)}`;
+  ttL.textContent = el.dataset.t;
+  tip.classList.add('vis'); moveTip(e);
+}
+function moveTip(e) {
+  tip.style.left = Math.min(e.clientX + 14, window.innerWidth - 250) + 'px';
+  tip.style.top  = Math.min(e.clientY - 6,  window.innerHeight - 90) + 'px';
+}
+function hideTip() { tip.classList.remove('vis'); }
+
+/* ── WEATHER WIDGET (Open-Meteo · free, no auth) ── */
+async function loadWeather() {
+  const cities = [
+    { name: 'Melbourne', lat: -37.8136, lon: 144.9631, dates: '7/3–7/6' },
+    { name: 'Sydney',    lat: -33.8688, lon: 151.2093, dates: '7/6–7/10' },
+    { name: 'Auckland',  lat: -36.8485, lon: 174.7633, dates: '7/10 · 7/12' },
+    { name: 'Rotorua',   lat: -38.1368, lon: 176.2497, dates: '7/11–7/12' },
+  ];
+  const c = document.getElementById('weather-widget');
+  if (!c) return;
+  try {
+    const results = await Promise.all(cities.map(async city => {
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lon}&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weather_code&temperature_unit=fahrenheit&timezone=auto&forecast_days=16`;
+      try { const r = await fetch(url); if (!r.ok) throw 0; return { city, data: await r.json() }; }
+      catch (e) { return { city, error: true }; }
+    }));
+    const wcDesc = { 0: 'Clear', 1: 'Mostly clear', 2: 'Partly cloudy', 3: 'Overcast', 45: 'Fog', 48: 'Fog', 51: 'Light drizzle', 53: 'Drizzle', 55: 'Heavy drizzle', 61: 'Light rain', 63: 'Rain', 65: 'Heavy rain', 71: 'Light snow', 73: 'Snow', 75: 'Heavy snow', 80: 'Showers', 81: 'Heavy showers', 82: 'Violent showers', 95: 'Thunder', 96: 'Thunder+hail', 99: 'Severe thunder' };
+    c.innerHTML = results.map(({ city, data, error }) => {
+      if (error || !data?.daily) return `<div class="weather-tile"><div class="weather-city">${city.name}</div><div class="weather-error">Forecast unavailable</div></div>`;
+      const d = data.daily;
+      const days = d.time.length;
+      const tmaxAvg = Math.round(d.temperature_2m_max.reduce((a, b) => a + b, 0) / days);
+      const tminAvg = Math.round(d.temperature_2m_min.reduce((a, b) => a + b, 0) / days);
+      const rainMax = Math.max(...d.precipitation_probability_max);
+      const todayDesc = wcDesc[d.weather_code[0]] || '—';
+      return `<div class="weather-tile">
+        <div class="weather-city">${city.name}</div>
+        <div class="weather-dates">${city.dates}</div>
+        <div class="weather-temp">${tmaxAvg}° / ${tminAvg}°F</div>
+        <div class="weather-rain">Max rain: ${rainMax}%</div>
+        <div class="weather-detail">${days}-day avg · today: ${todayDesc} ${Math.round(d.temperature_2m_max[0])}°/${Math.round(d.temperature_2m_min[0])}°</div>
+      </div>`;
+    }).join('');
+    const u = document.getElementById('weather-updated');
+    if (u) {
+      const now = new Date();
+      const pad = n => String(n).padStart(2, '0');
+      const stamp = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'local';
+      u.textContent = `Forecasts loaded ${stamp} ${tz} from Open-Meteo · 16-day window · trip is Jul 1–13 (further out = less accurate / may not be covered yet) · Fahrenheit shown · refresh page to reload.`;
+    }
+  } catch (e) { c.innerHTML = '<div class="weather-error">Weather load failed.</div>'; }
+}
+
+/* ── INIT ── */
+function init() {
+  renderStats(); renderRail(); renderDays(); renderNavStrip(); renderLegend();
+  loadWeather();
+  initMap();
+
+  const wrap = document.getElementById('days-wrap');
+  wrap.addEventListener('click', e => { const h = e.target.closest('.day-hdr'); if (h) showDetail(+h.dataset.idx); });
+  wrap.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { const h = e.target.closest('.day-hdr'); if (h) { e.preventDefault(); showDetail(+h.dataset.idx); } } });
+  wrap.addEventListener('mouseover', e => { const b = e.target.closest('.blk'); if (b) showTip(e, b); });
+  wrap.addEventListener('mousemove', e => { if (tip.classList.contains('vis')) moveTip(e); });
+  wrap.addEventListener('mouseout',  e => { if (e.target.closest('.blk')) hideTip(); });
+
+  document.getElementById('day-nav-strip').addEventListener('click',   e => { const p = e.target.closest('.dnav-pill'); if (p) showDetail(+p.dataset.idx); });
+  document.getElementById('day-nav-strip').addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { const p = e.target.closest('.dnav-pill'); if (p) { e.preventDefault(); showDetail(+p.dataset.idx); } } });
+  document.getElementById('btn-prev').addEventListener('click', () => showDetail(activeDayIdx - 1));
+  document.getElementById('btn-next').addEventListener('click', () => showDetail(activeDayIdx + 1));
+  document.getElementById('map-overview-btn').addEventListener('click', () => { if (isOverview) showDetail(activeDayIdx); else showOverview(); });
+
+  showDetail(0, false);
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+
+<!-- NAV HAMBURGER JS -->
+<script>
+(function () {
+  var toggle = document.getElementById('nav-toggle');
+  var links  = document.getElementById('nav-links');
+  if (!toggle || !links) return;
+  function open()  { links.classList.add('is-open');    toggle.setAttribute('aria-expanded', 'true'); }
+  function close() { links.classList.remove('is-open'); toggle.setAttribute('aria-expanded', 'false'); toggle.focus(); }
+  toggle.addEventListener('click', function () { toggle.getAttribute('aria-expanded') === 'true' ? close() : open(); });
+  document.addEventListener('keydown',  function (e) { if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') close(); });
+  document.addEventListener('click',    function (e) { if (toggle.getAttribute('aria-expanded') === 'true' && !links.contains(e.target) && !toggle.contains(e.target)) close(); });
+})();
+</script>
+
+</body>
+</html>
