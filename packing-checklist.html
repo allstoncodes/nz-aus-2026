@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NZ · AUS 2026 — Packing Checklist</title>
+  <!--
+    External dependencies:
+    - Google Fonts (Syne, Outfit, DM Mono): https://fonts.googleapis.com
+    - Convex browser client (ESM): https://esm.sh/convex/browser
+    - Convex server helpers (ESM): https://esm.sh/convex/server
+    Convex URL: https://giant-rabbit-834.convex.cloud
+    Deployment: anyApi.packing.list (query), anyApi.packing.toggle (mutation)
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Outfit:wght@300;400;500;600&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    /* === DESIGN.md tokens — OLED Dark "Expedition Log" === */
+    :root {
+      --bg:       #020617;
+      --surface:  #0F172A;
+      --card:     #1E293B;
+      --border:   #334155;
+      --text:     #F8FAFC;
+      --text-2:   #94A3B8;
+      --text-3:   #475569;
+      --accent:   #F59E0B;
+      --teal:     #0D9488;
+      --success:  #22C55E;
+      --danger:   #EF4444;
+      --purple:   #8B5CF6;
+      --blue:     #3B82F6;
+      --cyan:     #06B6D4;
+      --slate:    #64748B;
+      /* Z-index scale */
+      --z-nav:    50;
+      --z-drawer: 40;
+      --z-overlay:30;
+    }
+
+    *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Outfit', system-ui, sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    /* === SKIP LINK === */
+    .skip-link {
+      position: absolute;
+      top: -100px;
+      left: 0;
+      z-index: 999;
+      background: var(--accent);
+      color: #000;
+      padding: 8px 16px;
+      font-weight: 700;
+      text-decoration: none;
+      border-radius: 0 0 8px 0;
+      transition: top 0.15s;
+    }
+    .skip-link:focus { top: 0; }
+
+    /* === SHARED NAV === */
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: var(--z-nav);
+      background: var(--surface);
+      border-top: 4px solid var(--accent);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .nav-brand { text-decoration: none; flex-shrink: 0; }
+    .nav-brand-text {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--accent);
+    }
+    nav[aria-label="Site navigation"] { display: flex; align-items: center; gap: 8px; }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      list-style: none;
+    }
+    .nav-link {
+      display: block;
+      padding: 6px 14px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-2);
+      text-decoration: none;
+      border-radius: 6px;
+      transition: color 0.15s, background 0.15s;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .nav-link:hover { color: var(--text); background: rgba(248,250,252,0.06); }
+    .nav-link[aria-current="page"] {
+      color: var(--accent);
+      background: rgba(245,158,11,0.10);
+      border-bottom: 2px solid var(--accent);
+    }
+    .nav-link--archived { color: var(--text-3); font-size: 0.8125rem; }
+    .nav-link--archived::after { content: ' (archived)'; font-size: 0.6875rem; opacity: 0.7; }
+    .hamburger {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      color: var(--text-2);
+      transition: border-color 0.15s, color 0.15s;
+      flex-shrink: 0;
+    }
+    .hamburger:hover { border-color: var(--text-2); color: var(--text); }
+    .hamburger:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    @media (max-width: 767px) {
+      .hamburger { display: flex; }
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        padding: 8px 0 12px;
+        z-index: var(--z-drawer);
+      }
+      .nav-links.is-open { display: flex; }
+      .nav-link { border-radius: 0; padding: 12px 24px; border-bottom: 1px solid rgba(51,65,85,0.4); font-size: 1rem; }
+      .nav-link--archived { font-size: 0.9375rem; }
+      .nav-link[aria-current="page"] { border-bottom: 1px solid rgba(51,65,85,0.4); border-left: 3px solid var(--accent); }
+    }
+
+    /* === PAGE HERO === */
+    .page-hero {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 32px 24px 28px;
+    }
+    .hero-inner { max-width: 1280px; margin: 0 auto; }
+    .page-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.5rem, 4vw, 2.25rem);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      line-height: 1.1;
+      background: linear-gradient(125deg, var(--accent) 0%, #FDE68A 45%, var(--teal) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+    }
+    .page-sub {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.8125rem;
+      color: var(--text-3);
+      letter-spacing: 0.04em;
+      margin-bottom: 16px;
+    }
+
+    /* === SYNC STATUS PILL === */
+    .sync-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: background 0.2s, color 0.2s;
+    }
+    .sync-pill--live {
+      background: rgba(34,197,94,0.12);
+      color: var(--success);
+      border: 1px solid rgba(34,197,94,0.25);
+    }
+    .sync-pill--offline {
+      background: rgba(239,68,68,0.12);
+      color: var(--danger);
+      border: 1px solid rgba(239,68,68,0.25);
+    }
+    .sync-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+    .sync-dot--live { animation: pulse-dot 2s ease-in-out infinite; }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* === IDENTITY PICKER === */
+    .identity-bar {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin: 24px auto;
+      max-width: 1280px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .identity-label {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-2);
+      flex-shrink: 0;
+    }
+    .identity-btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
+    .identity-btn {
+      padding: 8px 20px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-2);
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      min-height: 44px;
+      min-width: 100px;
+    }
+    .identity-btn:hover { border-color: var(--accent); color: var(--text); background: rgba(245,158,11,0.06); }
+    .identity-btn.active {
+      background: rgba(245,158,11,0.15);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .identity-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .identity-notice {
+      font-size: 0.75rem;
+      color: var(--text-3);
+      font-family: 'DM Mono', monospace;
+      margin-left: auto;
+    }
+
+    /* === PROGRESS BARS === */
+    .progress-wrap {
+      max-width: 1280px;
+      margin: 0 auto 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .progress-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 18px;
+    }
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .progress-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.9375rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .progress-count {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.8125rem;
+      color: var(--text-2);
+    }
+    .progress-bar-track {
+      height: 6px;
+      background: rgba(51,65,85,0.8);
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 9999px;
+      transition: width 0.3s ease;
+      background: var(--accent);
+    }
+    .progress-bar-fill--donnie { background: var(--teal); }
+    .progress-card--allston { border-left: 3px solid var(--accent); }
+    .progress-card--donnie { border-left: 3px solid var(--teal); }
+
+    @media (max-width: 640px) {
+      .progress-wrap { grid-template-columns: 1fr; }
+    }
+
+    /* === CONTROLS BAR === */
+    .controls-bar {
+      max-width: 1280px;
+      margin: 0 auto 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .clear-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: transparent;
+      border: 1px solid rgba(239,68,68,0.35);
+      border-radius: 8px;
+      color: var(--danger);
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      min-height: 44px;
+    }
+    .clear-btn:hover { background: rgba(239,68,68,0.08); border-color: var(--danger); }
+    .clear-btn:focus-visible { outline: 2px solid var(--danger); outline-offset: 2px; }
+    .clear-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* === MAIN CONTENT LAYOUT === */
+    .content-wrap {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    /* === SECTION GROUP === */
+    .section-group { margin-bottom: 36px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 0 12px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+    .section-accent {
+      width: 4px;
+      height: 32px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    .section-accent--critical { background: var(--danger); }
+    .section-accent--high { background: var(--accent); }
+    .section-accent--bag { background: var(--teal); }
+    .section-accent--nice { background: var(--slate); }
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .section-count {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-3);
+      margin-left: auto;
+    }
+
+    /* === ITEM TABLE === */
+    .item-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .item-table thead tr {
+      background: var(--surface);
+    }
+    .item-table thead th {
+      padding: 10px 16px;
+      text-align: left;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      border-bottom: 1px solid var(--border);
+    }
+    .item-table thead th.col-check {
+      width: 64px;
+      text-align: center;
+    }
+    .item-table tbody tr {
+      border-bottom: 1px solid rgba(51,65,85,0.35);
+      transition: background 0.15s;
+    }
+    .item-table tbody tr:hover { background: rgba(30,41,59,0.6); }
+    .item-table tbody tr.is-checked {
+      opacity: 0.5;
+    }
+    .item-table tbody tr.is-checked .item-label {
+      text-decoration: line-through;
+      color: var(--text-3);
+    }
+    .item-table td {
+      padding: 12px 16px;
+      vertical-align: middle;
+    }
+    .item-table td.col-check {
+      text-align: center;
+      width: 64px;
+    }
+
+    .item-label {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.4;
+    }
+    .item-note {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.8125rem;
+      color: var(--text-2);
+      line-height: 1.5;
+      margin-top: 3px;
+    }
+
+    /* Checkbox styling */
+    .pack-check {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 22px;
+      height: 22px;
+      border: 2px solid var(--border);
+      border-radius: 5px;
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.15s;
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .pack-check:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+    /* Allston's checkboxes */
+    .pack-check--allston:hover:not(:disabled) {
+      border-color: var(--accent);
+      background: rgba(245,158,11,0.08);
+    }
+    .pack-check--allston:checked {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+    .pack-check--allston:checked::after {
+      content: '';
+      display: block;
+      width: 6px;
+      height: 10px;
+      border: 2px solid #000;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg) translate(-1px, -1px);
+    }
+
+    /* Donnie's checkboxes */
+    .pack-check--donnie:hover:not(:disabled) {
+      border-color: var(--teal);
+      background: rgba(13,148,136,0.08);
+    }
+    .pack-check--donnie:checked {
+      background: var(--teal);
+      border-color: var(--teal);
+    }
+    .pack-check--donnie:checked::after {
+      content: '';
+      display: block;
+      width: 6px;
+      height: 10px;
+      border: 2px solid #fff;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg) translate(-1px, -1px);
+    }
+
+    /* Disabled / read-only (other person's column) */
+    .pack-check:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+    }
+
+    /* Column header pills */
+    .col-person-allston {
+      color: var(--accent);
+      background: rgba(245,158,11,0.10);
+      border-radius: 4px;
+      padding: 2px 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .col-person-donnie {
+      color: var(--teal);
+      background: rgba(13,148,136,0.10);
+      border-radius: 4px;
+      padding: 2px 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* === LOCK ICON for read-only column === */
+    .lock-icon { display: inline-block; vertical-align: middle; }
+
+    /* === MOBILE RESPONSIVE — TWO-COLUMN TABLE === */
+    @media (max-width: 640px) {
+      /* On small screens: stack item info then two compact checkbox rows */
+      .item-table thead { display: none; }
+      .item-table, .item-table tbody, .item-table tr, .item-table td { display: block; }
+      .item-table tr {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        margin-bottom: 8px;
+        padding: 12px;
+      }
+      .item-table tr:hover { background: var(--card); }
+      .item-table td { padding: 0; width: auto !important; }
+      .item-table td.col-item { margin-bottom: 10px; }
+      .item-table td.col-check { text-align: left; }
+
+      /* Mobile: show inline label before checkbox */
+      .mobile-check-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 6px;
+      }
+      .mobile-check-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        min-width: 64px;
+      }
+      .mobile-check-label--allston { color: var(--accent); }
+      .mobile-check-label--donnie { color: var(--teal); }
+    }
+
+    @media (min-width: 641px) {
+      .mobile-check-row { display: contents; }
+      .mobile-check-label { display: none; }
+    }
+
+    /* === FOOTER === */
+    .site-footer {
+      text-align: center;
+      padding: 20px 24px;
+      font-size: 0.75rem;
+      color: var(--text-3);
+      border-top: 1px solid var(--border);
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+    }
+
+    /* === SECTION PADDING === */
+    @media (max-width: 480px) {
+      .content-wrap { padding: 0 12px 60px; }
+      .nav-inner { padding: 0 16px; }
+      .page-hero { padding: 24px 16px 20px; }
+      .identity-bar { margin: 16px 12px; }
+      .progress-wrap, .controls-bar { margin-left: 0; margin-right: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to content</a>
+
+<header class="site-nav" role="banner">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand" aria-label="NZ AUS 2026 — home">
+      <span class="nav-brand-text">NZ · AUS 2026</span>
+    </a>
+    <nav aria-label="Site navigation">
+      <ul class="nav-links" id="nav-links" role="list">
+        <li><a href="index.html" class="nav-link">Itinerary</a></li>
+        <li><a href="full-itinerary.html" class="nav-link">Full Itinerary</a></li>
+        <li><a href="overview.html" class="nav-link">At a Glance</a></li>
+        <li><a href="packing-checklist.html" class="nav-link" aria-current="page">Packing</a></li>
+        <li><a href="places.html" class="nav-link">Map &amp; Places</a></li>
+      </ul>
+      <button class="hamburger" id="nav-toggle"
+        aria-expanded="false"
+        aria-controls="nav-links"
+        aria-label="Toggle navigation menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+
+  <!-- HERO -->
+  <section class="page-hero" aria-label="Packing checklist header">
+    <div class="hero-inner">
+      <h1 class="page-title">Packing Checklist</h1>
+      <p class="page-sub">NZ · AUS 2026 &middot; July 1 – 13 &middot; Allston + Donnie</p>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <span id="sync-status" class="sync-pill sync-pill--offline" aria-live="polite">
+          <span class="sync-dot" id="sync-dot"></span>
+          <span id="sync-label">Connecting...</span>
+        </span>
+        <span style="font-size:0.75rem;color:var(--text-3);font-family:'DM Mono',monospace;">
+          State syncs live for both of you — anyone with the link can view.
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- IDENTITY PICKER -->
+  <div class="content-wrap">
+    <div class="identity-bar" role="group" aria-label="Select your identity">
+      <span class="identity-label">I am</span>
+      <div class="identity-btn-group">
+        <button class="identity-btn" id="btn-allston" onclick="setIdentity('allston')" aria-pressed="false">
+          Allston
+        </button>
+        <button class="identity-btn" id="btn-donnie" onclick="setIdentity('donnie')" aria-pressed="false">
+          Donnie
+        </button>
+      </div>
+      <span class="identity-notice" id="identity-notice" aria-live="polite">Pick who you are to toggle your column.</span>
+    </div>
+
+    <!-- PROGRESS BARS -->
+    <div class="progress-wrap" aria-label="Packing progress">
+      <div class="progress-card progress-card--allston">
+        <div class="progress-header">
+          <span class="progress-name">Allston</span>
+          <span class="progress-count" id="allston-progress-text" aria-live="polite">0 / 53</span>
+        </div>
+        <div class="progress-bar-track" role="progressbar" aria-label="Allston packing progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="53" id="allston-progress-bar-wrap">
+          <div class="progress-bar-fill" id="allston-progress-fill" style="width:0%"></div>
+        </div>
+      </div>
+      <div class="progress-card progress-card--donnie">
+        <div class="progress-header">
+          <span class="progress-name">Donnie</span>
+          <span class="progress-count" id="donnie-progress-text" aria-live="polite">0 / 53</span>
+        </div>
+        <div class="progress-bar-track" role="progressbar" aria-label="Donnie packing progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="53" id="donnie-progress-bar-wrap">
+          <div class="progress-bar-fill progress-bar-fill--donnie" id="donnie-progress-fill" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTROLS -->
+    <div class="controls-bar">
+      <button class="clear-btn" id="clear-btn" onclick="clearMyColumn()" disabled>
+        <!-- Inline SVG trash icon -->
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="3 6 5 6 21 6"/>
+          <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/>
+          <path d="M10 11v6M14 11v6"/>
+          <path d="M9 6V4h6v2"/>
+        </svg>
+        Clear my column
+      </button>
+      <span id="clear-notice" style="font-size:0.75rem;color:var(--text-3);">Select your identity to enable.</span>
+    </div>
+
+    <!-- CHECKLIST SECTIONS — built by JS from PACK_ITEMS -->
+    <div id="checklist-root"></div>
+  </div><!-- .content-wrap -->
+
+</main>
+
+<footer class="site-footer">
+  <p>NZ &middot; AUS 2026 &middot; Allston + Donnie &middot; July 1 – 13</p>
+</footer>
+
+<!-- === NAV JS === -->
+<script>
+  (function() {
+    var toggle = document.getElementById('nav-toggle');
+    var links  = document.getElementById('nav-links');
+    if (!toggle || !links) return;
+    function openMenu() { links.classList.add('is-open'); toggle.setAttribute('aria-expanded','true'); }
+    function closeMenu() { links.classList.remove('is-open'); toggle.setAttribute('aria-expanded','false'); toggle.focus(); }
+    toggle.addEventListener('click', function() {
+      if (toggle.getAttribute('aria-expanded') === 'true') closeMenu(); else openMenu();
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') closeMenu();
+    });
+    document.addEventListener('click', function(e) {
+      if (toggle.getAttribute('aria-expanded') === 'true' && !links.contains(e.target) && !toggle.contains(e.target)) closeMenu();
+    });
+  })();
+</script>
+
+<!-- === DATA ISLAND === -->
+<script>
+/* PACK_ITEMS_START */
+const PACK_ITEMS = [
+  {"id": "passport", "section": "Critical", "label": "Passport", "note": "expiration after Jan 2027 (NZ + AU require 6-month forward validity)"},
+  {"id": "nzeta-nz-electronic-travel-authority", "section": "Critical", "label": "NZeTA (NZ Electronic Travel Authority)", "note": "both travelers · apply via app, allow up to 72h"},
+  {"id": "australian-eta-subclass-601", "section": "Critical", "label": "Australian ETA (subclass 601)", "note": "free via \"AustralianETA\" app · usually instant · do before boarding"},
+  {"id": "international-power-adapter-type-i-nz-au", "section": "Critical", "label": "International power adapter (Type I — NZ + AU)", "note": "universal adapter + MacBook charger"},
+  {"id": "boarding-pass-in-apple-wallet", "section": "Critical", "label": "boarding pass in Apple Wallet", "note": "(Allston; Donnie flies own outbound separately via friend)"},
+  {"id": "venture-x-backup-card", "section": "Critical", "label": "Venture X + backup card", "note": "(any Visa/MC for redundancy)"},
+  {"id": "us-drivers-license", "section": "Critical", "label": "US Driver's License", "note": "hotel ID + rental-car pickup (NZ — Donnie driving; IDP if required)"},
+  {"id": "warm-insulating-layer", "section": "High priority", "label": "Warm insulating layer", "note": "(fleece / light puffer) — NZ winter nights ~6°C; Penguin Parade dusk is cold"},
+  {"id": "packable-rain-shell-waterproof-jacket", "section": "High priority", "label": "Packable rain shell / waterproof jacket", "note": "winter rain is frequent in NZ + Melbourne"},
+  {"id": "beanie-gloves", "section": "High priority", "label": "Beanie + gloves", "note": "🔺 bumped up for winter: Penguin Parade (Jul 4 dusk), early starts, Rotorua mornings"},
+  {"id": "warm-scarf-neck-gaiter", "section": "High priority", "label": "Warm scarf / neck gaiter", "note": "cheap warmth for outdoor evenings"},
+  {"id": "1-smart-casual-top", "section": "High priority", "label": "1 smart-casual top", "note": "🎻 Sydney Opera House SSO concert Thu Jul 9, 7 PM (button-down or polo)"},
+  {"id": "compression-socks", "section": "High priority", "label": "Compression socks", "note": "for the long SFO→MEL haul () — reduces leg swelling / DVT risk"},
+  {"id": "swimwear-1-per-person", "section": "High priority", "label": "Swimwear (1 per person)", "note": "🚨 Zorb Rotorua (Sun Jul 12, 11 AM — operator explicitly says bring swimwear + towels; the rides use warm water) · Polynesian Spa Deluxe Lake Spa (same day) · Peninsula Hot Springs (Jul 4, if booked)"},
+  {"id": "towel-1-per-person", "section": "High priority", "label": "Towel (1 per person)", "note": "🚨 Zorb says bring your own. *(Polynesian Spa's Deluxe Lake Spa includes towels, but bring your own as backup + for Zorb.)*"},
+  {"id": "quick-dry-microfiber-towel", "section": "High priority", "label": "Quick-dry microfiber towel", "note": "⭐ best pick: packs ¼ the size of cotton, dries fast between Zorb → spa → next day"},
+  {"id": "large-ziploc-dry-bag", "section": "High priority", "label": "Large ziploc / dry bag", "note": "contain WET swimwear + towel after Zorb (you stay in Rotorua that night, but still want them bagged)"},
+  {"id": "extra-dry-base-layer-socks-underwear", "section": "High priority", "label": "Extra dry base layer + socks + underwear", "note": "change into dry clothes after Zorb's warm-water rides before the rest of the day"},
+  {"id": "daypack-small-backpack", "section": "High priority", "label": "Daypack / small backpack", "note": "flights, museums, Hobbiton, Waitomo, coastal walks · carries rain shell + water + camera + layers"},
+  {"id": "sunglasses", "section": "High priority", "label": "Sunglasses", "note": "winter sun is low + bright; glare off water at the Hot Springs"},
+  {"id": "water-shoes-optional", "section": "High priority", "label": "Water shoes (optional)", "note": "Bondi-Coogee rocky sections / poolside grip (less critical than May, no Black Lab cave)"},
+  {"id": "macbook-magsafe-charger", "section": "High priority", "label": "MacBook + MagSafe charger", "note": ""},
+  {"id": "international-power-adapter-universal", "section": "High priority", "label": "International power adapter (universal)", "note": ""},
+  {"id": "phone-charger-cable", "section": "High priority", "label": "Phone charger + cable", "note": "+ 1 backup cable"},
+  {"id": "power-bank-10000mah", "section": "High priority", "label": "Power bank (10000mAh+)", "note": "must travel in personal item / backpack (lithium — not checked, not overhead)"},
+  {"id": "reusable-water-bottle", "section": "High priority", "label": "Reusable water bottle", "note": "empty through TSA, refill at hotels (NZ + AU tap water safe)"},
+  {"id": "sunscreen-spf-30", "section": "High priority", "label": "Sunscreen SPF 30+", "note": "winter UV is lower but real outdoors (Hobbiton, coastal walks, Hot Springs)"},
+  {"id": "lip-balm", "section": "High priority", "label": "Lip balm", "note": "(Burt's Bees / Aquaphor) — winter dry + wind"},
+  {"id": "moisturizer", "section": "High priority", "label": "Moisturizer", "note": "geothermal mineral water + winter air are drying"},
+  {"id": "motion-sickness-pills", "section": "High priority", "label": "Motion sickness pills", "note": "(Bonine / Dramamine) — winding NZ roads (Waitomo / Rotorua) + the long-haul flight"},
+  {"id": "imodium", "section": "High priority", "label": "Imodium", "note": "· Antihistamines (Zyrtec/Benadryl) · Saline nasal spray · Eye drops (plane dryness)"},
+  {"id": "bandaids-blister-patches", "section": "High priority", "label": "Bandaids + blister patches", "note": "walking days"},
+  {"id": "daily-multivitamin", "section": "High priority", "label": "Daily multivitamin", "note": "for the 12-day trip"},
+  {"id": "macbook-magsafe-charger-2", "section": "Bag inventory", "label": "MacBook + MagSafe charger", "note": ""},
+  {"id": "electronics-pack-power-bank-charging-cables-lithium-items", "section": "Bag inventory", "label": "Electronics pack (power bank, charging cables, lithium items)", "note": ""},
+  {"id": "health-travel-kit-in-flight-meds", "section": "Bag inventory", "label": "Health travel kit (in-flight meds)", "note": ""},
+  {"id": "phone-magsafe-case-nd-filter-lens-cloth-2", "section": "Bag inventory", "label": "Phone + MagSafe case + ND filter + lens cloth ×2", "note": ""},
+  {"id": "dji-mic-kit-case-txs-rx-clips-windscreens", "section": "Bag inventory", "label": "DJI Mic kit (case + TXs + RX + clips + windscreens)", "note": ""},
+  {"id": "camera-body-spare-lithium-batteries-if-separate", "section": "Bag inventory", "label": "Camera body + spare lithium batteries (if separate)", "note": ""},
+  {"id": "airpods-headphones", "section": "Bag inventory", "label": "AirPods / headphones", "note": ""},
+  {"id": "passport-id-venture-x-backup-card", "section": "Bag inventory", "label": "Passport + ID + Venture X + backup card", "note": ""},
+  {"id": "nzeta-australian-eta-confirmations-on-phone", "section": "Bag inventory", "label": "NZeTA + Australian ETA confirmations on phone", "note": ""},
+  {"id": "boarding-pass-in-apple-wallet-2", "section": "Bag inventory", "label": "boarding pass in Apple Wallet", "note": ""},
+  {"id": "booking-confirmations-saved-offline-on-phone", "section": "Bag inventory", "label": "Booking confirmations saved offline on phone", "note": ""},
+  {"id": "compression-socks-wear-in-flight-sunglasses", "section": "Bag inventory", "label": "Compression socks (wear in flight) · Sunglasses", "note": ""},
+  {"id": "eye-mask-earplugs", "section": "Nice to have", "label": "Eye mask + earplugs", "note": "· Travel pillow — long-haul"},
+  {"id": "packing-cubes", "section": "Nice to have", "label": "Packing cubes", "note": "multiple stays (multiple stays)"},
+  {"id": "reusable-shopping-bag", "section": "Nice to have", "label": "Reusable shopping bag", "note": "NZ + AU charge for plastic bags"},
+  {"id": "hand-sanitizer", "section": "Nice to have", "label": "Hand sanitizer", "note": "(TSA-friendly) · Small TSA lock + luggage tags"},
+  {"id": "passport-photocopy", "section": "Nice to have", "label": "Passport photocopy", "note": "in a separate bag"},
+  {"id": "hotelairbnb-confirmation-pdfs", "section": "Nice to have", "label": "Hotel/Airbnb confirmation PDFs", "note": "offline on phone"},
+  {"id": "small-usd-float", "section": "Nice to have", "label": "Small USD float", "note": "+ plan to hit ATM at AKL/MEL/SYD for NZD + AUD cash"},
+  {"id": "one-rotorua-stay-has-no-co-alarm-pack-a-portable-co-detector", "section": "Nice to have", "label": "⚠️ one Rotorua stay has NO CO alarm — pack a portable CO detector", "note": "(per booking note)"},
+];
+/* PACK_ITEMS_END */
+
+// Section render order
+const SECTION_ORDER = ["Critical", "High priority", "Bag inventory", "Nice to have"];
+
+const SECTION_META = {
+  "Critical":       { accent: "section-accent--critical", label: "Critical" },
+  "High priority":  { accent: "section-accent--high",     label: "High Priority" },
+  "Bag inventory":  { accent: "section-accent--bag",       label: "Bag Inventory" },
+  "Nice to have":   { accent: "section-accent--nice",      label: "Nice to Have" }
+};
+
+// === STATE ===
+let currentIdentity = localStorage.getItem('nzaus_packing_identity') || null;
+// checkedMap: { "itemId:person" : true|false }
+let checkedMap = {};
+
+// === IDENTITY ===
+function setIdentity(who) {
+  currentIdentity = who;
+  localStorage.setItem('nzaus_packing_identity', who);
+  updateIdentityUI();
+  renderChecklist();
+  const clearBtn = document.getElementById('clear-btn');
+  clearBtn.disabled = false;
+  document.getElementById('clear-notice').textContent = 'Clears your checked items only.';
+}
+
+function updateIdentityUI() {
+  const btnA = document.getElementById('btn-allston');
+  const btnD = document.getElementById('btn-donnie');
+  const notice = document.getElementById('identity-notice');
+  if (!currentIdentity) {
+    btnA.classList.remove('active'); btnA.setAttribute('aria-pressed','false');
+    btnD.classList.remove('active'); btnD.setAttribute('aria-pressed','false');
+    notice.textContent = 'Pick who you are to toggle your column.';
+    return;
+  }
+  if (currentIdentity === 'allston') {
+    btnA.classList.add('active'); btnA.setAttribute('aria-pressed','true');
+    btnD.classList.remove('active'); btnD.setAttribute('aria-pressed','false');
+    notice.textContent = 'Your column is Allston (amber). Donnie\'s column is read-only.';
+  } else {
+    btnA.classList.remove('active'); btnA.setAttribute('aria-pressed','false');
+    btnD.classList.add('active'); btnD.setAttribute('aria-pressed','true');
+    notice.textContent = 'Your column is Donnie (teal). Allston\'s column is read-only.';
+  }
+}
+
+// === PROGRESS ===
+function updateProgress() {
+  const total = PACK_ITEMS.length;
+  let aCount = 0, dCount = 0;
+  PACK_ITEMS.forEach(item => {
+    if (checkedMap[item.id + ':allston']) aCount++;
+    if (checkedMap[item.id + ':donnie']) dCount++;
+  });
+  document.getElementById('allston-progress-text').textContent = aCount + ' / ' + total;
+  document.getElementById('donnie-progress-text').textContent = dCount + ' / ' + total;
+  const aPct = Math.round((aCount / total) * 100);
+  const dPct = Math.round((dCount / total) * 100);
+  document.getElementById('allston-progress-fill').style.width = aPct + '%';
+  document.getElementById('donnie-progress-fill').style.width = dPct + '%';
+  document.getElementById('allston-progress-bar-wrap').setAttribute('aria-valuenow', aCount);
+  document.getElementById('donnie-progress-bar-wrap').setAttribute('aria-valuenow', dCount);
+}
+
+// === APPLY STATE from Convex rows ===
+function applyState(rows) {
+  // rows: [{itemId, person, checked, ...}]
+  checkedMap = {};
+  rows.forEach(row => {
+    if (row.checked) {
+      checkedMap[row.itemId + ':' + row.person] = true;
+    }
+  });
+  updateAllCheckboxes();
+  updateProgress();
+}
+
+function updateAllCheckboxes() {
+  PACK_ITEMS.forEach(item => {
+    const aBox = document.getElementById('cb-' + item.id + '-allston');
+    const dBox = document.getElementById('cb-' + item.id + '-donnie');
+    if (aBox) {
+      aBox.checked = !!checkedMap[item.id + ':allston'];
+    }
+    if (dBox) {
+      dBox.checked = !!checkedMap[item.id + ':donnie'];
+    }
+    // Update row strikethrough
+    const rowA = document.getElementById('tr-' + item.id + '-allston');
+    const rowD = document.getElementById('tr-' + item.id + '-donnie');
+    // For desktop: single row, check if BOTH or use per-person class
+    const row = document.getElementById('tr-' + item.id);
+    if (row) {
+      const aCk = !!checkedMap[item.id + ':allston'];
+      const dCk = !!checkedMap[item.id + ':donnie'];
+      // Highlight row as checked if the current user's column is checked
+      if (currentIdentity === 'allston' && aCk) row.classList.add('is-checked');
+      else if (currentIdentity === 'donnie' && dCk) row.classList.add('is-checked');
+      else row.classList.remove('is-checked');
+    }
+  });
+}
+
+// === RENDER CHECKLIST ===
+function renderChecklist() {
+  const root = document.getElementById('checklist-root');
+  root.innerHTML = '';
+
+  SECTION_ORDER.forEach(sectionName => {
+    const items = PACK_ITEMS.filter(i => i.section === sectionName);
+    if (!items.length) return;
+    const meta = SECTION_META[sectionName];
+
+    const group = document.createElement('div');
+    group.className = 'section-group';
+    group.setAttribute('aria-label', meta.label + ' section');
+
+    // Section header
+    group.innerHTML = `
+      <div class="section-header">
+        <div class="section-accent ${meta.accent}" aria-hidden="true"></div>
+        <h2 class="section-title">${meta.label}</h2>
+        <span class="section-count" aria-label="${items.length} items">${items.length} items</span>
+      </div>
+    `;
+
+    // Table
+    const tbl = document.createElement('table');
+    tbl.className = 'item-table';
+    tbl.setAttribute('role', 'table');
+
+    // Lock SVG for read-only column header
+    const lockSvg = `<svg class="lock-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>`;
+
+    const aIsMe = currentIdentity === 'allston';
+    const dIsMe = currentIdentity === 'donnie';
+    const noId  = !currentIdentity;
+
+    // Column headers
+    const thead = document.createElement('thead');
+    thead.innerHTML = `
+      <tr>
+        <th scope="col" style="min-width:180px;">Item</th>
+        <th scope="col" class="col-check">
+          <span class="col-person-allston" title="${aIsMe ? 'Your column' : noId ? '' : 'Read-only'}">
+            Allston ${!aIsMe && !noId ? lockSvg : ''}
+          </span>
+        </th>
+        <th scope="col" class="col-check">
+          <span class="col-person-donnie" title="${dIsMe ? 'Your column' : noId ? '' : 'Read-only'}">
+            Donnie ${!dIsMe && !noId ? lockSvg : ''}
+          </span>
+        </th>
+      </tr>
+    `;
+    tbl.appendChild(thead);
+
+    const tbody = document.createElement('tbody');
+    items.forEach(item => {
+      const tr = document.createElement('tr');
+      tr.id = 'tr-' + item.id;
+
+      const aChecked = !!checkedMap[item.id + ':allston'];
+      const dChecked = !!checkedMap[item.id + ':donnie'];
+      const aDisabled = !aIsMe;
+      const dDisabled = !dIsMe;
+
+      tr.innerHTML = `
+        <td class="col-item">
+          <div class="item-label">${escHtml(item.label)}</div>
+          ${item.note ? '<div class="item-note">' + escHtml(item.note) + '</div>' : ''}
+        </td>
+        <td class="col-check">
+          <div class="mobile-check-row">
+            <span class="mobile-check-label mobile-check-label--allston">Allston</span>
+            <input
+              type="checkbox"
+              class="pack-check pack-check--allston"
+              id="cb-${item.id}-allston"
+              aria-label="Allston: ${escHtml(item.label)}"
+              ${aChecked ? 'checked' : ''}
+              ${aDisabled ? 'disabled' : ''}
+              data-item="${item.id}"
+              data-person="allston"
+            >
+          </div>
+        </td>
+        <td class="col-check">
+          <div class="mobile-check-row">
+            <span class="mobile-check-label mobile-check-label--donnie">Donnie</span>
+            <input
+              type="checkbox"
+              class="pack-check pack-check--donnie"
+              id="cb-${item.id}-donnie"
+              aria-label="Donnie: ${escHtml(item.label)}"
+              ${dChecked ? 'checked' : ''}
+              ${dDisabled ? 'disabled' : ''}
+              data-item="${item.id}"
+              data-person="donnie"
+            >
+          </div>
+        </td>
+      `;
+
+      // Strikethrough current identity's checked row
+      if (aIsMe && aChecked) tr.classList.add('is-checked');
+      if (dIsMe && dChecked) tr.classList.add('is-checked');
+
+      tbody.appendChild(tr);
+    });
+    tbl.appendChild(tbody);
+    group.appendChild(tbl);
+    root.appendChild(group);
+  });
+
+  // Bind checkbox events
+  root.querySelectorAll('.pack-check:not([disabled])').forEach(cb => {
+    cb.addEventListener('change', onCheckboxChange);
+  });
+}
+
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+async function onCheckboxChange(e) {
+  const itemId = e.target.dataset.item;
+  const person = e.target.dataset.person;
+  const checked = e.target.checked;
+
+  // Optimistic UI: update checkedMap immediately
+  if (checked) {
+    checkedMap[itemId + ':' + person] = true;
+  } else {
+    delete checkedMap[itemId + ':' + person];
+  }
+
+  // Update row strikethrough optimistically
+  const row = document.getElementById('tr-' + itemId);
+  if (row) {
+    if (checked) row.classList.add('is-checked');
+    else row.classList.remove('is-checked');
+  }
+
+  updateProgress();
+
+  // Sync to Convex if connected
+  if (window._convexClient && window._convexReady) {
+    try {
+      await window._convexClient.mutation(window._anyApi.packing.toggle, { itemId, person, checked });
+    } catch(err) {
+      console.warn('Convex mutation failed:', err);
+    }
+  }
+}
+
+async function clearMyColumn() {
+  if (!currentIdentity) return;
+  const confirmed = window.confirm('Clear all checked items for ' + currentIdentity.charAt(0).toUpperCase() + currentIdentity.slice(1) + '? This cannot be undone.');
+  if (!confirmed) return;
+
+  const btn = document.getElementById('clear-btn');
+  btn.disabled = true;
+
+  const promises = PACK_ITEMS
+    .filter(item => checkedMap[item.id + ':' + currentIdentity])
+    .map(item => {
+      delete checkedMap[item.id + ':' + currentIdentity];
+      const cb = document.getElementById('cb-' + item.id + '-' + currentIdentity);
+      if (cb) cb.checked = false;
+      const row = document.getElementById('tr-' + item.id);
+      if (row) row.classList.remove('is-checked');
+      if (window._convexClient && window._convexReady) {
+        return window._convexClient.mutation(window._anyApi.packing.toggle, { itemId: item.id, person: currentIdentity, checked: false }).catch(()=>{});
+      }
+      return Promise.resolve();
+    });
+
+  await Promise.all(promises);
+  updateProgress();
+  btn.disabled = false;
+}
+
+// === INIT ===
+updateIdentityUI();
+renderChecklist();
+updateProgress();
+</script>
+
+<!-- === CONVEX REAL-TIME SYNC (ESM module) === -->
+<script type="module">
+import { ConvexClient } from "https://esm.sh/convex@1.16.4/browser";
+import { anyApi } from "https://esm.sh/convex@1.16.4/server";
+
+const CONVEX_URL = "https://giant-rabbit-834.convex.cloud";
+
+let client;
+try {
+  client = new ConvexClient(CONVEX_URL);
+  window._convexClient = client;
+  window._anyApi = anyApi;
+
+  // Subscribe to live state
+  const unsub = client.onUpdate(anyApi.packing.list, {}, (rows) => {
+    window._convexReady = true;
+    setSyncStatus('live');
+    if (typeof applyState === 'function') applyState(rows);
+  });
+
+  // Connectivity check timeout — if no update in 5s, mark offline gracefully
+  const connectTimeout = setTimeout(() => {
+    if (!window._convexReady) {
+      setSyncStatus('offline');
+    }
+  }, 5000);
+
+} catch(err) {
+  console.warn('Convex initialization error:', err);
+  setSyncStatus('offline');
+}
+
+function setSyncStatus(status) {
+  const pill = document.getElementById('sync-status');
+  const dot  = document.getElementById('sync-dot');
+  const lbl  = document.getElementById('sync-label');
+  if (status === 'live') {
+    pill.className = 'sync-pill sync-pill--live';
+    dot.className  = 'sync-dot sync-dot--live';
+    lbl.textContent = 'Syncing live';
+  } else {
+    pill.className = 'sync-pill sync-pill--offline';
+    dot.className  = 'sync-dot';
+    lbl.textContent = 'Sync offline';
+  }
+}
+
+// Expose for error path
+window.setSyncStatus = setSyncStatus;
+</script>
+
+</body>
+</html>
