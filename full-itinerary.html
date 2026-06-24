@@ -328,68 +328,9 @@
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--accent)"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
     Booking Status
   </h2>
-  <p class="ql-intro"><strong>Status:</strong> all 4 flights + all lodging + key NZ experiences booked. Only Phillip Island transport (Jul 4) and NZ rental car remain open.</p>
-  <div class="ql-grid">
-
-    <div class="ql-card ok">
-      <span class="ql-num">01 · BOOKED</span>
-      <div class="ql-name">Flights — All 4 legs</div>
-      <div class="ql-slot">UA60 · SFO→MEL · <strong>Wed Jul 1 11:20 PM</strong></div>
-      <div class="ql-slot">JQ534 · MEL→SYD · <strong>Mon Jul 6 11:05 AM</strong></div>
-      <div class="ql-slot">QF141 · SYD→AKL · <strong>Fri Jul 10 07:10</strong></div>
-      <div class="ql-slot">UA916 · AKL→SFO · <strong>Mon Jul 13 1:50 PM</strong></div>
-      <div class="ql-status ok">Booked — status only, no conf codes shown</div>
-    </div>
-
-    <div class="ql-card ok">
-      <span class="ql-num">02 · BOOKED</span>
-      <div class="ql-name">Penguin Parade · Phillip Island</div>
-      <div class="ql-slot"><strong>Sat Jul 4</strong> · dusk · Little Penguins at Summerland Beach</div>
-      <div class="ql-status ok">Booked</div>
-    </div>
-
-    <div class="ql-card ok">
-      <span class="ql-num">03 · BOOKED</span>
-      <div class="ql-name">Sydney Symphony Orchestra · Opera House</div>
-      <div class="ql-slot"><strong>Thu Jul 9 · 7:00 PM</strong> · Concert Hall, Opera House</div>
-      <div class="ql-status ok">Booked — 2 tickets</div>
-    </div>
-
-    <div class="ql-card ok">
-      <span class="ql-num">04 · BOOKED</span>
-      <div class="ql-name">Waitomo Glowworm Caves</div>
-      <div class="ql-slot"><strong>Sat Jul 11 ~9 AM</strong> · 45-min underground boat tour</div>
-      <div class="ql-status ok">Booked</div>
-    </div>
-
-    <div class="ql-card ok">
-      <span class="ql-num">05 · BOOKED</span>
-      <div class="ql-name">Hobbiton Movie Set</div>
-      <div class="ql-slot"><strong>Sat Jul 11 · 2:30 PM</strong> · Matamata (Shire's Rest)</div>
-      <div class="ql-status ok">Booked</div>
-    </div>
-
-    <div class="ql-card ok">
-      <span class="ql-num">06 · BOOKED</span>
-      <div class="ql-name">Zorb Rotorua</div>
-      <div class="ql-slot"><strong>Sun Jul 12 AM</strong> · Zorb (hamster-ball) + Polynesian Spa</div>
-      <div class="ql-status ok">Booked — Zorb 11 AM; Polynesian Spa Deluxe Lake walk-in</div>
-    </div>
-
-    <div class="ql-card pending">
-      <span class="ql-num">07 · PENDING</span>
-      <div class="ql-name">NZ Rental Car · AKL pickup Fri Jul 10</div>
-      <div class="ql-slot"><strong>Fri Jul 10</strong> pickup AKL airport · return Mon Jul 13 AM</div>
-      <div class="ql-status pending">Pending — Compact SUV or similar, left-hand drive (Donnie)</div>
-    </div>
-
-    <div class="ql-card pending">
-      <span class="ql-num">08 · PENDING</span>
-      <div class="ql-name">Phillip Island Transport · Sat Jul 4</div>
-      <div class="ql-slot"><strong>Sat Jul 4</strong> · Melbourne → Phillip Island (~1.25h)</div>
-      <div class="ql-status pending">Pending — rental car or tour bus</div>
-    </div>
-
+  <div style="background:rgba(245,158,11,0.06);border-left:3px solid var(--accent);border-radius:8px;padding:16px 20px;margin-top:12px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+    <span style="font-family:'Outfit',sans-serif;font-size:0.9375rem;color:var(--text);font-weight:500;">Live booking status &amp; who's booking what &rarr; <a href="https://nz-aus-trip-board.vercel.app" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(245,158,11,0.4);transition:border-color 0.15s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='rgba(245,158,11,0.4)'">nz-aus-trip-board.vercel.app</a></span>
   </div>
 </section>
 
@@ -533,7 +474,7 @@
     <tbody>
       <tr><td><strong>Waiheke ferry from Auckland</strong></td><td>Optional day-trip</td><td>35-min ferry from Downtown Ferry Terminal · wine + beaches · only viable if arriving AKL very early on Fri</td></tr>
       <tr><td><strong>Rotorua Eat Streat</strong></td><td>Food</td><td>Tutanekai St pedestrian food strip · geothermal steam vents visible nearby · Sat Jul 11 dinner</td></tr>
-      <tr><td><strong>Last dinner · Auckland</strong></td><td>Food</td><td>Sun Jul 12 · CBD pick after Rotorua→AKL drive · waterfront or Britomart precinct</td></tr>
+      <tr><td><strong>Last Rotorua dinner · Eat Streat</strong></td><td>Food</td><td>Sun Jul 12 · Rotorua Eat Streat (Tutanekai St) or nearby · drive to AKL is Mon Jul 13 AM</td></tr>
     </tbody>
   </table>
   </div>
@@ -585,7 +526,7 @@
         <li><strong>Right turns cross oncoming traffic</strong> — the harder turn; use turn lanes</li>
         <li><strong>Lane drift warning</strong> — most common rental incident on unfamiliar-side roads</li>
         <li><strong>International Driver's Permit (IDP)</strong> — required in NZ with a US license</li>
-        <li>Route: AKL → Waitomo → Matamata → Rotorua → AKL · ~5–6h total driving over 3 days</li>
+        <li>Route: AKL → Hamilton → Waitomo → Matamata/Hobbiton → Rotorua → AKL · ~6–7h total driving over 3 days</li>
       </ul>
     </div>
 
@@ -606,7 +547,7 @@
       <ul>
         <li><strong>Melbourne:</strong> Uber + DiDi + Bolt. Free CBD trams (Zone 1). Myki card for suburbs. Car likely needed for Phillip Island (Jul 4).</li>
         <li><strong>Sydney:</strong> Uber + Opal card for trains/ferries. Manly ferry from Circular Quay. No car needed in Sydney.</li>
-        <li><strong>New Zealand:</strong> Rental car from AKL airport Jul 10. Self-drive all NZ days — AKL → Waitomo → Matamata → Rotorua → AKL.</li>
+        <li><strong>New Zealand:</strong> Rental car from AKL airport Jul 10. Self-drive all NZ days — AKL → Hamilton (N1) → Waitomo → Matamata/Hobbiton → Rotorua (N2+N3) → AKL airport (Jul 13 AM).</li>
       </ul>
     </div>
 
@@ -704,7 +645,7 @@ const DAYS = [
     { s: '13:00', e: '14:00', c: 'food',      t: 'Lunch near Phillip Island' },
     { s: '14:00', e: '16:30', c: 'outdoor',   t: 'Summerland Beach · Nobbies Centre · koala reserve walk' },
     { s: '16:30', e: '17:30', c: 'downtime',  t: 'Wait for dusk · penguins emerge after sunset' },
-    { s: '17:30', e: '19:30', c: 'outdoor',   t: 'Penguin Parade (dusk) · Little Penguins return from sea · BOOKED' },
+    { s: '17:30', e: '19:30', c: 'outdoor',   t: 'Penguin Parade (dusk) · Little Penguins return from sea' },
     { s: '19:30', e: '21:00', c: 'transit',   t: 'Drive back to Melbourne CBD (~1.25h)' },
     { s: '21:00', e: '22:30', c: 'food',      t: 'Late dinner near hotel' },
     { s: '22:30', e: '24:00', c: 'sleep',     t: 'Sleep · MEL N2' },
@@ -753,59 +694,59 @@ const DAYS = [
     { s: '19:30', e: '21:30', c: 'food',      t: 'Dinner SYD N3 · Haigh\'s chocolate · Surry Hills' },
     { s: '21:30', e: '24:00', c: 'sleep',     t: 'Sleep · SYD N3' },
   ]},
-  { tag: 7, date: 'Jul 9', wd: 'THU', city: 'SYD', cityFull: 'Sydney (SYD N4)', lbl: 'SYD N4 · Harbour flex + SSO Opera House 7 PM · BOOKED', blocks: [
+  { tag: 7, date: 'Jul 9', wd: 'THU', city: 'SYD', cityFull: 'Sydney (SYD N4)', lbl: 'SYD N4 · Harbour flex + SSO Opera House 7 PM', blocks: [
     { s: '09:00', e: '10:30', c: 'food',      t: 'Slow morning · late breakfast' },
     { s: '10:30', e: '13:00', c: 'outdoor',   t: 'Harbour day: ferry loop or museums or Royal Botanic Garden' },
     { s: '13:00', e: '14:30', c: 'food',      t: 'Lunch · CBD or waterfront' },
     { s: '14:30', e: '17:30', c: 'culture',   t: 'Optional: Sydney Museum / MCA / Observatory Hill · rest between' },
     { s: '17:30', e: '18:15', c: 'food',      t: 'Pre-concert drinks · Opera Bar (harbour view) or Circular Quay area' },
     { s: '18:15', e: '19:00', c: 'food',      t: 'Pre-concert dinner · Circular Quay restaurant (arrive 18:15 for 7PM curtain)' },
-    { s: '19:00', e: '21:30', c: 'culture',   t: 'Sydney Symphony Orchestra · Opera House Concert Hall · BOOKED' },
+    { s: '19:00', e: '21:30', c: 'culture',   t: 'Sydney Symphony Orchestra · Opera House Concert Hall' },
     { s: '21:30', e: '23:00', c: 'downtime',  t: 'Post-concert debrief walk + drinks near Opera House · last night in Sydney' },
     { s: '23:00', e: '24:00', c: 'sleep',     t: 'Sleep · SYD N4 · early check-out tomorrow for 7:10 AM flight' },
   ]},
-  { tag: 8, date: 'Jul 10', wd: 'FRI', city: 'NZ', cityFull: 'SYD → Auckland (NZ N1)', lbl: 'NZ N1 · QF141 07:10 → AKL 12:20 · rental car · relaxed Auckland day', blocks: [
+  { tag: 8, date: 'Jul 10', wd: 'FRI', city: 'NZ', cityFull: 'SYD → Auckland → Hamilton (NZ N1)', lbl: 'NZ N1 · QF141 07:10 → AKL 12:20 · drive to Hamilton · overnight Hamilton', blocks: [
     { s: '04:30', e: '05:30', c: 'logistics', t: 'Early wake · hotel checkout · Uber to SYD airport' },
     { s: '05:30', e: '07:10', c: 'logistics', t: 'SYD airport check-in + security + gate' },
     { s: '07:10', e: '12:20', c: 'transit',   t: 'QF141 SYD → AKL · 3h10m nonstop (+2h timezone change AEST→NZST)' },
     { s: '12:20', e: '13:30', c: 'logistics', t: 'AKL customs + bag claim + rental car pickup' },
-    { s: '13:30', e: '15:00', c: 'transit',   t: 'Drive AKL airport → Auckland CBD hotel (~30-40min)' },
-    { s: '15:00', e: '16:00', c: 'logistics', t: 'Hotel check-in Auckland · settle' },
-    { s: '16:00', e: '18:00', c: 'outdoor',   t: 'Optional: Waiheke ferry explore OR Auckland CBD waterfront / Britomart wander' },
-    { s: '18:00', e: '20:00', c: 'downtime',  t: 'Rest · no timed activity tonight · early start tomorrow' },
-    { s: '20:00', e: '21:30', c: 'food',      t: 'Dinner Auckland CBD · waterfront or Federal St' },
-    { s: '21:30', e: '24:00', c: 'sleep',     t: 'Sleep · AKL N1 · early 7:30 AM departure tomorrow' },
+    { s: '13:30', e: '15:00', c: 'transit',   t: 'Drive AKL → Hamilton (~1.5h)' },
+    { s: '15:00', e: '16:00', c: 'logistics', t: 'Check in Hamilton hotel · settle' },
+    { s: '16:00', e: '18:00', c: 'downtime',  t: 'Relaxed Hamilton afternoon · explore town or rest' },
+    { s: '18:00', e: '20:00', c: 'food',      t: 'Dinner Hamilton · early evening' },
+    { s: '20:00', e: '22:00', c: 'downtime',  t: 'Wind down · early night — 7:30 AM departure tomorrow' },
+    { s: '22:00', e: '24:00', c: 'sleep',     t: 'Sleep · Hamilton N1 · early 7:30 AM departure tomorrow' },
   ]},
-  { tag: 9, date: 'Jul 11', wd: 'SAT', city: 'NZ', cityFull: 'Auckland → Waitomo → Matamata → Rotorua', lbl: 'NZ N2 · Waitomo 9 AM + Hobbiton PM + Rotorua overnight', blocks: [
-    { s: '06:30', e: '07:30', c: 'food',      t: 'Early breakfast at hotel · pack day bag (camera, cash, snacks)' },
-    { s: '07:30', e: '09:00', c: 'transit',   t: 'Drive AKL → Waitomo Glowworm Caves (~1.5h)' },
-    { s: '09:00', e: '10:00', c: 'outdoor',   t: 'Arrive Waitomo · Glowworm Caves 45-min underground boat tour · PENDING BOOKING' },
-    { s: '10:00', e: '11:30', c: 'transit',   t: 'Drive Waitomo → Matamata / Hobbiton (~1h30m)' },
-    { s: '11:30', e: '14:00', c: 'culture',   t: 'Hobbiton Movie Set Tour · Shire\'s Rest visitor centre · shuttle to set · PENDING BOOKING' },
-    { s: '14:00', e: '15:00', c: 'transit',   t: 'Drive Matamata → Rotorua (~1h)' },
-    { s: '15:00', e: '16:00', c: 'logistics', t: 'Check in Rotorua hotel · settle · freshen up' },
-    { s: '16:00', e: '18:00', c: 'downtime',  t: 'Rest · explore geothermal steam vents near CBD' },
-    { s: '18:00', e: '20:00', c: 'food',      t: 'Dinner · Rotorua Eat Streat (Tutanekai St)' },
-    { s: '20:00', e: '22:00', c: 'downtime',  t: 'Evening wander Rotorua · Lakefront reserve' },
+  { tag: 9, date: 'Jul 11', wd: 'SAT', city: 'NZ', cityFull: 'Hamilton → Waitomo → Matamata → Rotorua (NZ N2)', lbl: 'NZ N2 · Waitomo 9:30 AM + Hobbiton 2:30 PM + Rotorua overnight', blocks: [
+    { s: '06:30', e: '07:30', c: 'food',      t: 'Early breakfast at Hamilton hotel · pack day bag (camera, cash, snacks)' },
+    { s: '07:30', e: '08:30', c: 'transit',   t: 'Drive Hamilton → Waitomo Glowworm Caves (~1h)' },
+    { s: '09:30', e: '10:15', c: 'outdoor',   t: 'Waitomo Glowworm Caves · 45-min underground boat tour (9:30 AM)' },
+    { s: '10:15', e: '12:00', c: 'transit',   t: 'Drive Waitomo → Matamata (~1.5h)' },
+    { s: '12:00', e: '13:30', c: 'food',      t: 'Lunch Matamata · relax before Hobbiton' },
+    { s: '13:30', e: '14:10', c: 'logistics', t: 'Drive to Hobbiton · Shire\'s Rest check-in 2:10 PM' },
+    { s: '14:30', e: '16:30', c: 'culture',   t: 'Hobbiton Movie Set Tour · 2:30 PM · Shire\'s Rest → shuttle to set (~2h)' },
+    { s: '16:30', e: '17:30', c: 'transit',   t: 'Drive Matamata → Rotorua (~1h)' },
+    { s: '17:30', e: '18:30', c: 'logistics', t: 'Check in Rotorua hotel · freshen up' },
+    { s: '18:30', e: '20:30', c: 'food',      t: 'Dinner · Rotorua Eat Streat (Tutanekai St)' },
+    { s: '20:30', e: '22:00', c: 'downtime',  t: 'Evening wander Rotorua · Lakefront reserve · geothermal steam vents' },
     { s: '22:00', e: '24:00', c: 'sleep',     t: 'Sleep · Rotorua N2' },
   ]},
-  { tag: 10, date: 'Jul 12', wd: 'SUN', city: 'NZ', cityFull: 'Rotorua → Auckland (NZ N3)', lbl: 'NZ N3 · Zorb + Polynesian Spa AM · drive back Auckland · last dinner', blocks: [
+  { tag: 10, date: 'Jul 12', wd: 'SUN', city: 'NZ', cityFull: 'Rotorua (NZ N3)', lbl: 'NZ N3 · Zorb 11 AM + Polynesian Spa · Rotorua overnight', blocks: [
     { s: '08:00', e: '09:00', c: 'food',      t: 'Breakfast Rotorua hotel' },
-    { s: '09:00', e: '10:30', c: 'outdoor',   t: 'Zorb (hamster-ball downhill) · PENDING BOOKING' },
-    { s: '10:30', e: '12:30', c: 'wellness',  t: 'Polynesian Spa · geothermal hot springs · lake-edge pools · PENDING BOOKING' },
-    { s: '12:30', e: '13:30', c: 'food',      t: 'Lunch near Polynesian Spa · pack + checkout Rotorua' },
-    { s: '13:30', e: '16:15', c: 'transit',   t: 'Drive Rotorua → Auckland CBD (~2h45m)' },
-    { s: '16:15', e: '17:00', c: 'logistics', t: 'Check in Auckland airport-area hotel' },
-    { s: '17:00', e: '19:00', c: 'outdoor',   t: 'Optional: Auckland CBD waterfront stroll · Viaduct Harbour' },
-    { s: '19:00', e: '21:00', c: 'food',      t: 'Last dinner · Auckland CBD · Britomart or Federal St pick' },
-    { s: '21:00', e: '22:00', c: 'logistics', t: 'Final repack · lay out tomorrow\'s travel clothes' },
-    { s: '22:00', e: '24:00', c: 'sleep',     t: 'Sleep · AKL N3 · 1:50 PM departure tomorrow' },
+    { s: '09:00', e: '10:30', c: 'downtime',  t: 'Free time Rotorua · lakefront stroll or relax before Zorb' },
+    { s: '11:00', e: '12:00', c: 'outdoor',   t: 'Zorb VIP Maxi · 11:00 AM (bring swimwear + towels)' },
+    { s: '12:30', e: '14:30', c: 'wellness',  t: 'Polynesian Spa · Deluxe Lake Spa · walk-in, no booking needed · geothermal lake-edge pools' },
+    { s: '14:30', e: '16:00', c: 'food',      t: 'Lunch near Polynesian Spa · relaxed Rotorua afternoon' },
+    { s: '16:00', e: '18:00', c: 'downtime',  t: 'Relaxed Rotorua afternoon · final repack · lay out tomorrow\'s clothes' },
+    { s: '18:00', e: '20:00', c: 'food',      t: 'Dinner Rotorua · Eat Streat (Tutanekai St) or nearby' },
+    { s: '20:00', e: '22:00', c: 'downtime',  t: 'Evening wind-down Rotorua · early night (7:30 AM departure tomorrow)' },
+    { s: '22:00', e: '24:00', c: 'sleep',     t: 'Sleep · Rotorua N3 · drive Rotorua → AKL airport departs 7:30 AM' },
   ]},
-  { tag: 'RET', date: 'Jul 13', wd: 'MON', city: 'NZ', cityFull: 'Auckland → SFO (UA916)', lbl: 'Depart AKL · UA916 1:50 PM → arrive SFO Mon 6:50 AM', blocks: [
-    { s: '08:00', e: '09:30', c: 'food',      t: 'Final NZ breakfast · slow morning' },
-    { s: '09:30', e: '11:00', c: 'outdoor',   t: 'Optional: last AKL walk or airport souvenir run' },
-    { s: '11:00', e: '12:00', c: 'logistics', t: 'Hotel checkout · drive to AKL airport (or return rental car if drop-off there)' },
-    { s: '12:00', e: '13:50', c: 'logistics', t: 'AKL airport check-in · security · departure lounge' },
+  { tag: 'RET', date: 'Jul 13', wd: 'MON', city: 'NZ', cityFull: 'Rotorua → Auckland → SFO (UA916)', lbl: 'Depart · drive Rotorua → AKL 7:30 AM · UA916 1:50 PM → SFO Mon 6:50 AM', blocks: [
+    { s: '06:30', e: '07:00', c: 'food',      t: 'Early breakfast + hotel checkout Rotorua (~7:00 AM)' },
+    { s: '07:30', e: '10:15', c: 'transit',   t: 'Drive Rotorua → AKL airport (~2h45m · depart 7:30 AM)' },
+    { s: '10:15', e: '11:00', c: 'logistics', t: 'Return rental car at AKL airport' },
+    { s: '11:00', e: '13:50', c: 'logistics', t: 'AKL airport check-in · security · departure lounge' },
     { s: '13:50', e: '24:00', c: 'transit',   t: 'UA916 AKL → SFO · departs 1:50 PM · gains a day eastbound · arrives Mon 6:50 AM SFO' },
   ]},
 ];
@@ -850,8 +791,9 @@ const OVERVIEW_CITIES = [
   { c: SFO_E,      l: 'San Francisco (SFO) · Jul 1 dep', code: 'SFO' },
   { c: MEL_COORD,  l: 'Melbourne (MEL) · Jul 3–6',       code: 'MEL' },
   { c: SYD_COORD,  l: 'Sydney (SYD) · Jul 6–10',         code: 'SYD' },
-  { c: AKL_COORD,  l: 'Auckland (AKL) · Jul 10 + 12',    code: 'NZ'  },
-  { c: [-38.1368, 176.2497], l: 'Rotorua · Jul 11–12', code: 'NZ' },
+  { c: AKL_COORD,  l: 'Auckland (AKL) · Jul 10 arrival + Jul 13 departure', code: 'NZ'  },
+  { c: [-37.7870, 175.2793], l: 'Hamilton · Jul 10 NZ Night 1', code: 'NZ' },
+  { c: [-38.1368, 176.2497], l: 'Rotorua · Jul 11–12 (NZ N2+N3)', code: 'NZ' },
 ];
 
 /* ── MAP DATA ── */
@@ -877,7 +819,7 @@ const MAP_DAYS = [
     { c: [-37.8136, 144.9631], l: 'Melbourne CBD · early start', t: '08:30' },
     { c: [-38.4460, 145.2930], l: 'Peninsula Hot Springs (optional AM session)', t: '10:00' },
     { c: [-38.5140, 145.1250], l: 'Phillip Island · Summerland Beach', t: '14:00' },
-    { c: [-38.5069, 145.1531], l: 'Penguin Parade · Little Penguins at dusk · BOOKED', t: '17:30' },
+    { c: [-38.5069, 145.1531], l: 'Penguin Parade · Little Penguins at dusk', t: '17:30' },
     { c: [-37.8136, 144.9631], l: 'Melbourne CBD · return late', t: '21:00' },
   ]},
   // Day 3 — Sun Jul 5 MEL Social
@@ -911,32 +853,31 @@ const MAP_DAYS = [
   { center: SYD_COORD, zoom: 12, cityCode: 'SYD', pins: [
     { c: SYD_COORD,            l: 'Sydney CBD · harbour flex day', t: 'morning' },
     { c: [-33.8582, 151.2100], l: 'Opera Bar · pre-concert drinks + dinner area', t: '18:15' },
-    { c: [-33.8568, 151.2153], l: 'Sydney Opera House · Concert Hall · SSO · BOOKED · 7:00 PM', t: '19:00' },
+    { c: [-33.8568, 151.2153], l: 'Sydney Opera House · Concert Hall · SSO · 7:00 PM', t: '19:00' },
   ]},
-  // Day 8 — Fri Jul 10 SYD→AKL
+  // Day 8 — Fri Jul 10 SYD→AKL→Hamilton
   { center: [-28.0000, 165.0000], zoom: 4, cityCode: 'FLIGHT', arc: 'SYD-AKL', pins: [
     { c: [-33.9399, 151.1753], l: 'SYD Airport · QF141 dep 07:10', t: '07:10' },
     { c: [-37.0082, 174.7850], l: 'AKL Airport · QF141 arr 12:20 · rental car pickup', t: '12:20' },
-    { c: AKL_COORD,            l: 'Auckland CBD hotel · check in', t: '14:00' },
-    { c: [-36.8434, 174.7706], l: 'Britomart waterfront / Viaduct Harbour (optional)', t: '16:00' },
+    { c: [-37.7870, 175.2793], l: 'Hamilton · drive from AKL (~1.5h) · NZ Night 1', t: '15:00' },
   ]},
-  // Day 9 — Sat Jul 11 Waitomo→Hobbiton→Rotorua
+  // Day 9 — Sat Jul 11 Hamilton→Waitomo→Hobbiton→Rotorua
   { center: [-38.0000, 175.5000], zoom: 8, cityCode: 'NZ', pins: [
-    { c: AKL_COORD,                    l: 'Auckland · early 7:30 AM departure', t: '07:30' },
-    { c: [-38.2614, 175.1003],         l: 'Waitomo Glowworm Caves · 45-min underground boat tour · ~9 AM · PENDING', t: '09:00' },
-    { c: [-37.8721, 175.6836],         l: 'Hobbiton (Matamata) · Shire\'s Rest · early PM tour · PENDING', t: '11:30' },
-    { c: [-38.1368, 176.2497],         l: 'Rotorua · check in · Eat Streat dinner', t: '15:00' },
+    { c: [-37.7870, 175.2793],         l: 'Hamilton · 7:30 AM departure', t: '07:30' },
+    { c: [-38.2614, 175.1003],         l: 'Waitomo Glowworm Caves · 9:30 AM · 45-min underground boat tour', t: '09:30' },
+    { c: [-37.8721, 175.6836],         l: 'Hobbiton (Matamata) · Shire\'s Rest · 2:30 PM tour', t: '14:30' },
+    { c: [-38.1368, 176.2497],         l: 'Rotorua · check in · Eat Streat dinner', t: '17:30' },
   ]},
-  // Day 10 — Sun Jul 12 Rotorua→AKL
-  { center: [-37.5000, 175.9000], zoom: 9, cityCode: 'NZ', pins: [
-    { c: [-38.1368, 176.2497],         l: 'Rotorua · Zorb + Polynesian Spa AM · PENDING', t: '09:00' },
-    { c: [-38.1490, 176.2540],         l: 'Polynesian Spa · geothermal hot springs · lakeside', t: '10:30' },
-    { c: AKL_COORD,                    l: 'Auckland · drive back ~2h45m · last dinner', t: '16:30' },
+  // Day 10 — Sun Jul 12 Rotorua overnight (NZ N3)
+  { center: [-38.1368, 176.2497], zoom: 12, cityCode: 'NZ', pins: [
+    { c: [-38.1368, 176.2497],         l: 'Rotorua · Zorb VIP Maxi 11:00 AM (bring swimwear + towels)', t: '11:00' },
+    { c: [-38.1490, 176.2540],         l: 'Polynesian Spa · Deluxe Lake Spa · walk-in after Zorb', t: '12:30' },
+    { c: [-38.1368, 176.2497],         l: 'Rotorua · dinner Eat Streat · overnight NZ N3', t: '18:00' },
   ]},
-  // Day 11 — Mon Jul 13 AKL→SFO
+  // Day 11 — Mon Jul 13 Rotorua→AKL→SFO
   { center: [-15, 200], zoom: 2, cityCode: 'FLIGHT', arc: 'AKL-SFO', pins: [
-    { c: AKL_COORD, l: 'Auckland · slow morning · hotel checkout', t: 'morning' },
-    { c: [-37.0082, 174.7850], l: 'AKL Airport · UA916 dep 1:50 PM', t: '13:50' },
+    { c: [-38.1368, 176.2497], l: 'Rotorua · early breakfast + checkout ~7:00 AM · drive to AKL', t: '07:00' },
+    { c: [-37.0082, 174.7850], l: 'AKL Airport · return rental car · UA916 dep 1:50 PM', t: '10:15' },
     { c: SFO_E,     l: 'SFO · arrives Mon 6:50 AM (gains a day eastbound)', t: 'Mon 6:50 AM' },
   ]},
 ];
