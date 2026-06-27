@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NZ · AUS 2026 — Trip Map</title>
+  <!-- External: Google Fonts (Syne, Outfit, DM Mono) + Leaflet 1.9.4 (unpkg CDN) + CARTO dark_all tiles (no API key) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Outfit:wght@300;400;500;600&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    /* === DESIGN.md tokens === */
+    :root {
+      --bg:       #020617;
+      --surface:  #0F172A;
+      --card:     #1E293B;
+      --border:   #334155;
+      --text:     #F8FAFC;
+      --text-2:   #94A3B8;
+      --text-3:   #475569;
+      --accent:   #F59E0B;
+      --teal:     #0D9488;
+      --success:  #22C55E;
+      --danger:   #EF4444;
+      --purple:   #8B5CF6;
+      --blue:     #3B82F6;
+      --cyan:     #06B6D4;
+      --slate:    #64748B;
+      --z-nav:    50;
+      --z-drawer: 40;
+    }
+    *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Outfit', system-ui, sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    /* === SKIP LINK === */
+    .skip-link {
+      position: absolute; top: -100px; left: 0; z-index: 999;
+      background: var(--accent); color: #000; padding: 8px 16px;
+      font-weight: 700; text-decoration: none; border-radius: 0 0 8px 0;
+      transition: top 0.15s;
+    }
+    .skip-link:focus { top: 0; }
+
+    /* === SHARED NAV === */
+    .site-nav {
+      position: sticky; top: 0; z-index: var(--z-nav);
+      background: var(--surface);
+      border-top: 4px solid var(--accent);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 1280px; margin: 0 auto; padding: 0 24px;
+      height: 56px; display: flex; align-items: center;
+      justify-content: space-between; gap: 16px;
+    }
+    .nav-brand { text-decoration: none; flex-shrink: 0; }
+    .nav-brand-text {
+      font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 800;
+      letter-spacing: -0.02em; color: var(--accent);
+    }
+    nav[aria-label="Site navigation"] { display: flex; align-items: center; gap: 8px; }
+    .nav-links { display: flex; align-items: center; gap: 4px; list-style: none; }
+    .nav-link {
+      display: block; padding: 6px 14px;
+      font-family: 'Outfit', sans-serif; font-size: 0.875rem; font-weight: 500;
+      color: var(--text-2); text-decoration: none; border-radius: 6px;
+      transition: color 0.15s, background 0.15s; white-space: nowrap;
+    }
+    .nav-link:hover { color: var(--text); background: rgba(248,250,252,0.06); }
+    .nav-link[aria-current="page"] {
+      color: var(--accent); background: rgba(245,158,11,0.10);
+      border-bottom: 2px solid var(--accent);
+    }
+    .nav-link--archived { color: var(--text-3); font-size: 0.8125rem; }
+    .nav-link--archived::after { content: ' (archived)'; font-size: 0.6875rem; opacity: 0.7; }
+    .hamburger {
+      display: none; align-items: center; justify-content: center;
+      width: 44px; height: 44px; background: transparent;
+      border: 1px solid var(--border); border-radius: 8px; cursor: pointer;
+      color: var(--text-2); transition: border-color 0.15s, color 0.15s; flex-shrink: 0;
+    }
+    .hamburger:hover { border-color: var(--text-2); color: var(--text); }
+    .hamburger:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    @media (max-width: 767px) {
+      .hamburger { display: flex; }
+      .nav-links {
+        display: none; position: absolute; top: 100%; left: 0; right: 0;
+        background: var(--surface); border-bottom: 1px solid var(--border);
+        flex-direction: column; align-items: stretch; gap: 0;
+        padding: 8px 0 12px; z-index: var(--z-drawer);
+      }
+      .nav-links.is-open { display: flex; }
+      .nav-link { border-radius: 0; padding: 12px 24px; border-bottom: 1px solid rgba(51,65,85,0.4); font-size: 1rem; }
+      .nav-link--archived { font-size: 0.9375rem; }
+      .nav-link[aria-current="page"] { border-bottom: 1px solid rgba(51,65,85,0.4); border-left: 3px solid var(--accent); }
+    }
+
+    /* === PAGE HEADER === */
+    .page-hero {
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      padding: 36px 24px 28px;
+    }
+    .hero-inner { max-width: 1280px; margin: 0 auto; }
+    .page-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.5rem, 4vw, 2.25rem);
+      font-weight: 800; letter-spacing: -0.025em; color: var(--text); margin-bottom: 6px;
+    }
+    .page-sub {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.8125rem; color: var(--text-3); letter-spacing: 0.04em;
+    }
+
+    /* === MAP PAGE LAYOUT === */
+    .map-page-wrap {
+      max-width: 1280px; margin: 0 auto; padding: 28px 24px 80px;
+    }
+
+    /* === CONTROLS BAR (legend + filter pills) === */
+    .map-controls {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    /* Legend */
+    .map-legend {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6875rem;
+      color: var(--text-3);
+      letter-spacing: 0.04em;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    /* Filled circle swatch for each category */
+    .legend-swatch {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    /* White-ring "booked" indicator — matches the actual booked circleMarker appearance */
+    .legend-booked-ring {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: transparent;
+      border: 2.5px solid #ffffff;
+      flex-shrink: 0;
+      box-sizing: border-box;
+    }
+    .legend-divider {
+      width: 1px;
+      height: 16px;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+
+    /* Filter pills */
+    .filter-pills {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .filter-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6875rem;
+      color: var(--text-3);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .filter-pill {
+      min-height: 44px;
+      padding: 4px 16px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--text-2);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: color 0.15s, background 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+    .filter-pill:hover {
+      color: var(--text);
+      border-color: var(--text-2);
+    }
+    .filter-pill.is-active {
+      color: #000;
+      background: var(--accent);
+      border-color: var(--accent);
+      font-weight: 600;
+    }
+    .filter-pill:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    /* === MAP CONTAINER === */
+    #trip-map {
+      width: 100%;
+      min-height: 72vh;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      /* fallback colour while tiles load */
+      background: var(--surface);
+    }
+
+    /* === LEAFLET DARK OVERRIDES (same as full-itinerary.html) === */
+    .leaflet-popup-content-wrapper {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.5);
+    }
+    .leaflet-popup-content-wrapper,
+    .leaflet-popup-tip { background: var(--card); color: var(--text); }
+    .leaflet-popup-content {
+      font-family: 'Outfit', sans-serif;
+      font-size: .8125rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .leaflet-popup-content b { color: var(--accent); font-family: 'Syne', sans-serif; font-size: 0.9375rem; }
+    .leaflet-popup-content small { color: var(--text-2); font-family: 'DM Mono', monospace; }
+    .leaflet-popup-close-button { color: var(--text-2) !important; }
+    .leaflet-control-zoom a {
+      background: var(--card) !important;
+      color: var(--text) !important;
+      border-color: var(--border) !important;
+    }
+    .leaflet-control-attribution {
+      background: rgba(2,6,23,.8) !important;
+      color: var(--text-3) !important;
+      font-size: .5rem !important;
+    }
+    .leaflet-control-attribution a { color: var(--text-2) !important; }
+
+    /* Maps link inside popup */
+    .popup-maps-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 8px;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+      border: 1px solid rgba(245,158,11,0.3);
+      border-radius: 5px;
+      padding: 4px 10px;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .popup-maps-link:hover {
+      background: rgba(245,158,11,0.10);
+      border-color: var(--accent);
+    }
+
+    /* === FOOTER === */
+    .site-footer {
+      text-align: center; padding: 20px 24px;
+      font-size: 0.75rem; color: var(--text-3);
+      border-top: 1px solid var(--border);
+    }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 800px) {
+      .map-controls {
+        flex-direction: column;
+        gap: 12px;
+      }
+      #trip-map {
+        min-height: 60vh;
+      }
+    }
+    @media (max-width: 480px) {
+      .page-hero { padding: 24px 16px 20px; }
+      .map-page-wrap { padding: 20px 16px 60px; }
+      .nav-inner { padding: 0 16px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to content</a>
+
+<header class="site-nav" role="banner">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand" aria-label="NZ AUS 2026 — home">
+      <span class="nav-brand-text">NZ · AUS 2026</span>
+    </a>
+    <nav aria-label="Site navigation">
+      <ul class="nav-links" id="nav-links" role="list">
+        <li><a href="index.html"            class="nav-link">Itinerary</a></li>
+        <li><a href="full-itinerary.html"   class="nav-link">Full Itinerary</a></li>
+        <li><a href="overview.html"         class="nav-link">At a Glance</a></li>
+        <li><a href="packing-checklist.html" class="nav-link">Packing</a></li>
+        <li><a href="places.html"           class="nav-link">Places</a></li>
+        <li><a href="map.html"              class="nav-link" aria-current="page">Map</a></li>
+      </ul>
+      <button class="hamburger" id="nav-toggle"
+        aria-expanded="false"
+        aria-controls="nav-links"
+        aria-label="Toggle navigation menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+
+  <section class="page-hero" aria-label="Page header">
+    <div class="hero-inner">
+      <h1 class="page-title">Trip Map</h1>
+      <p class="page-sub">41 places across Melbourne · Sydney · New Zealand — filter by leg or click any pin</p>
+    </div>
+  </section>
+
+  <div class="map-page-wrap">
+
+    <div class="map-controls">
+
+      <!-- Legend -->
+      <div class="map-legend" role="list" aria-label="Map legend">
+        <div class="legend-item" role="listitem">
+          <span class="legend-swatch" style="background:#3B82F6" aria-hidden="true"></span>
+          <span>Transit</span>
+        </div>
+        <div class="legend-item" role="listitem">
+          <span class="legend-swatch" style="background:#F59E0B" aria-hidden="true"></span>
+          <span>Lodging</span>
+        </div>
+        <div class="legend-item" role="listitem">
+          <span class="legend-swatch" style="background:#22C55E" aria-hidden="true"></span>
+          <span>Activity</span>
+        </div>
+        <div class="legend-item" role="listitem">
+          <span class="legend-swatch" style="background:#F97316" aria-hidden="true"></span>
+          <span>Food</span>
+        </div>
+        <div class="legend-item" role="listitem">
+          <span class="legend-swatch" style="background:#8B5CF6" aria-hidden="true"></span>
+          <span>Culture</span>
+        </div>
+        <div class="legend-item" role="listitem">
+          <span class="legend-swatch" style="background:#06B6D4" aria-hidden="true"></span>
+          <span>Wellness</span>
+        </div>
+        <div class="legend-divider" aria-hidden="true"></div>
+        <div class="legend-item" role="listitem">
+          <span class="legend-booked-ring" aria-hidden="true"></span>
+          <span>Booked</span>
+        </div>
+      </div>
+
+      <!-- Leg filter -->
+      <div class="filter-pills" role="group" aria-label="Filter map by trip leg">
+        <span class="filter-label" aria-hidden="true">Leg:</span>
+        <button class="filter-pill is-active" data-leg="all"         aria-pressed="true">All</button>
+        <button class="filter-pill"           data-leg="Melbourne"   aria-pressed="false">Melbourne</button>
+        <button class="filter-pill"           data-leg="Sydney"      aria-pressed="false">Sydney</button>
+        <button class="filter-pill"           data-leg="New Zealand" aria-pressed="false">New Zealand</button>
+      </div>
+
+    </div><!-- .map-controls -->
+
+    <div id="trip-map"
+         role="application"
+         aria-label="Interactive trip map — 41 places across Melbourne, Sydney, and New Zealand"></div>
+
+  </div><!-- .map-page-wrap -->
+
+</main>
+
+<footer class="site-footer">
+  <p>NZ &middot; AUS 2026 &middot; Allston + Donnie &middot; July 1 – 13</p>
+</footer>
+
+<!-- Trip dataset (defines TRIP_PLACES — do not modify) -->
+<script src="trip-places.js"></script>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ── Category fill colors (spec-provided) ─────────────────── */
+  var CAT_COLOR = {
+    transit:  '#3B82F6',
+    lodging:  '#F59E0B',
+    activity: '#22C55E',
+    food:     '#F97316',
+    culture:  '#8B5CF6',
+    wellness: '#06B6D4'
+  };
+  function catColor(cat) { return CAT_COLOR[cat] || '#94A3B8'; }
+
+  /* ── Build map ────────────────────────────────────────────── */
+  var map = L.map('trip-map', {
+    center: [-30, 155],
+    zoom: 4,
+    attributionControl: true,
+    zoomControl: true
+  });
+
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 19
+  }).addTo(map);
+
+  /* ── Create all markers ───────────────────────────────────── */
+  var allMarkers = []; /* [{marker, place}] */
+
+  TRIP_PLACES.forEach(function (p) {
+    var color = catColor(p.category);
+    var opts = p.booked
+      ? { color: '#ffffff',  weight: 3,   radius: 9, fillColor: color, fillOpacity: 0.9  }
+      : { color: color,      weight: 1.5, radius: 6, fillColor: color, fillOpacity: 0.85 };
+
+    var marker = L.circleMarker(p.coords, opts);
+
+    /* Popup HTML — no emoji, inline SVG pin icon */
+    var mapsHref = 'https://www.google.com/maps/search/?api=1&query='
+                 + encodeURIComponent(p.name + ' ' + p.city);
+
+    var noteHtml = p.note
+      ? '<br><span style="display:block;margin-top:4px;color:#94A3B8;font-size:.75rem;">'
+        + p.note + '</span>'
+      : '';
+
+    var popupHtml =
+      '<b>' + p.name + '</b>' +
+      '<br><small>' + p.category + ' &middot; ' + p.city + '</small>' +
+      noteHtml +
+      '<br><a class="popup-maps-link"' +
+      '   href="' + mapsHref + '"' +
+      '   target="_blank" rel="noopener noreferrer"' +
+      '   aria-label="Open ' + p.name.replace(/"/g, '&quot;') + ' in Google Maps">' +
+      '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"' +
+      '  stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      '<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>' +
+      '<circle cx="12" cy="10" r="3"/></svg>' +
+      'Open in Google Maps &rarr;</a>';
+
+    marker.bindPopup(popupHtml, { maxWidth: 260 });
+    marker.addTo(map);
+    allMarkers.push({ marker: marker, place: p });
+  });
+
+  /* ── fitBounds helper ─────────────────────────────────────── */
+  function fitToMarkers(subset) {
+    if (!subset.length) return;
+    var pts = subset.map(function (m) { return m.marker.getLatLng(); });
+    map.fitBounds(L.latLngBounds(pts), { padding: [44, 44] });
+  }
+
+  /* Default view: all places excluding origin (SFO way off in California) */
+  fitToMarkers(allMarkers.filter(function (m) { return !m.place.origin; }));
+
+  /* ── Blank-map prevention ─────────────────────────────────── */
+  map.invalidateSize();
+  var mapEl = document.getElementById('trip-map');
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(function () { map.invalidateSize(); }).observe(mapEl);
+  }
+
+  /* ── Leg filter ───────────────────────────────────────────── */
+  var activeLeg  = 'all';
+  var pills      = document.querySelectorAll('.filter-pill');
+
+  pills.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var leg = btn.getAttribute('data-leg');
+      if (leg === activeLeg) return;
+      activeLeg = leg;
+
+      /* Update aria + visual state */
+      pills.forEach(function (p) {
+        p.classList.remove('is-active');
+        p.setAttribute('aria-pressed', 'false');
+      });
+      btn.classList.add('is-active');
+      btn.setAttribute('aria-pressed', 'true');
+
+      /* Toggle marker visibility */
+      var visible = [];
+      allMarkers.forEach(function (m) {
+        var show = (leg === 'all') || (m.place.leg === leg);
+        if (show) {
+          m.marker.addTo(map);
+          visible.push(m);
+        } else {
+          map.removeLayer(m.marker);
+        }
+      });
+
+      /* Re-frame: always exclude origin pins from bounds — SFO has leg:"Melbourne"
+         but sits in California; including it zooms the map out to the whole Pacific */
+      fitToMarkers(visible.filter(function (m) { return !m.place.origin; }));
+    });
+  });
+
+  /* ── Hamburger nav toggle ─────────────────────────────────── */
+  var toggle = document.getElementById('nav-toggle');
+  var links  = document.getElementById('nav-links');
+  if (toggle && links) {
+    function openMenu()  { links.classList.add('is-open');    toggle.setAttribute('aria-expanded', 'true'); }
+    function closeMenu() { links.classList.remove('is-open'); toggle.setAttribute('aria-expanded', 'false'); toggle.focus(); }
+    toggle.addEventListener('click', function () {
+      toggle.getAttribute('aria-expanded') === 'true' ? closeMenu() : openMenu();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') closeMenu();
+    });
+    document.addEventListener('click', function (e) {
+      if (toggle.getAttribute('aria-expanded') === 'true'
+          && !links.contains(e.target)
+          && !toggle.contains(e.target)) closeMenu();
+    });
+  }
+
+})();
+</script>
+</body>
+</html>
