@@ -575,7 +575,7 @@
       <ul>
         <li><strong>Layers</strong> — fleece + light waterproof jacket essential</li>
         <li><strong>Evening wear</strong> — SSO concert (Thu Jul 9) — smart casual</li>
-        <li><strong>Outdoor gear</strong> — walking shoes + warm layers for Hobbiton, coastal walks, Penguin Parade dusk (Waitomo Glowworm boat tour stays dry)</li>
+        <li><strong>Outdoor gear</strong> — walking shoes + warm layers for Hobbiton, coastal walks, Penguin Parade at sunset (Waitomo Glowworm boat tour stays dry)</li>
         <li><strong>Zorb</strong> — swimsuit or quick-dry clothes underneath</li>
       </ul>
     </div>
@@ -640,17 +640,18 @@ const DAYS = [
     { s: '20:30', e: '22:00', c: 'downtime',  t: 'Wind down · plan Sat Phillip Island day' },
     { s: '22:00', e: '24:00', c: 'sleep',     t: 'Sleep · MEL N1' },
   ]},
-  { tag: 2, date: 'Jul 4', wd: 'SAT', city: 'MEL', cityFull: 'Melbourne + Phillip Island', lbl: 'MEL N2 · Peninsula Hot Springs (opt) + Penguin Parade (dusk) booked', blocks: [
-    { s: '07:30', e: '08:30', c: 'food',      t: 'Early breakfast · fuel before drive' },
-    { s: '08:30', e: '10:00', c: 'transit',   t: 'Drive Melbourne → Phillip Island (~1.25h)' },
-    { s: '10:00', e: '13:00', c: 'wellness',  t: 'Optional: Peninsula Hot Springs · thermal pools + onsen AM session' },
-    { s: '13:00', e: '14:00', c: 'food',      t: 'Lunch near Phillip Island' },
-    { s: '14:00', e: '16:30', c: 'outdoor',   t: 'Summerland Beach · Nobbies Centre · koala reserve walk' },
-    { s: '16:30', e: '17:30', c: 'downtime',  t: 'Wait for dusk · penguins emerge after sunset' },
-    { s: '17:30', e: '19:30', c: 'outdoor',   t: 'Penguin Parade (dusk) · Little Penguins return from sea' },
-    { s: '19:30', e: '21:00', c: 'transit',   t: 'Drive back to Melbourne CBD (~1.25h)' },
-    { s: '21:00', e: '22:30', c: 'food',      t: 'Late dinner near hotel' },
-    { s: '22:30', e: '24:00', c: 'sleep',     t: 'Sleep · MEL N2' },
+  { tag: 2, date: 'Jul 4', wd: 'SAT', city: 'MEL', cityFull: 'Melbourne + Phillip Island', lbl: 'MEL N2 · Phillip Island corridor + Penguin Parade booked', blocks: [
+    { s: '09:00', e: '10:00', c: 'food',      t: 'Early breakfast · fuel before drive' },
+    { s: '10:00', e: '11:45', c: 'transit',   t: 'Drive Melbourne → Phillip Island (~1h45)' },
+    { s: '11:45', e: '13:00', c: 'food',      t: 'San Remo pelican feeding (~12pm) + lunch' },
+    { s: '13:00', e: '14:30', c: 'outdoor',   t: 'Koala Conservation Reserve' },
+    { s: '14:30', e: '16:00', c: 'outdoor',   t: 'Nobbies boardwalk · seal viewing' },
+    { s: '16:00', e: '16:30', c: 'transit',   t: 'Drive to Penguin Parade car park' },
+    { s: '16:30', e: '17:31', c: 'downtime',  t: 'Seated at Penguin Parade · wait for penguins to cross' },
+    { s: '17:31', e: '19:00', c: 'outdoor',   t: 'Penguin Parade · Little Penguins cross at sunset (5:31pm) · Booked' },
+    { s: '19:00', e: '20:45', c: 'transit',   t: 'Drive back to Melbourne CBD (~1h45)' },
+    { s: '20:45', e: '22:00', c: 'culture',   t: 'Optional: Firelight Festival, Docklands · free, till ~10:30pm' },
+    { s: '22:00', e: '24:00', c: 'sleep',     t: 'Sleep · MEL N2' },
   ]},
   { tag: 3, date: 'Jul 5', wd: 'SUN', city: 'MEL', cityFull: 'Melbourne (MEL N3)', lbl: 'MEL N3 · Social / Melbourne city', blocks: [
     { s: '09:00', e: '11:00', c: 'downtime',  t: 'Slow morning · hang with Melbourne friends (Selena etc.) or CBD wander' },
@@ -822,12 +823,13 @@ const MAP_DAYS = [
     { c: [-37.8180, 144.9688], l: 'Hosier Lane street art + Federation Square (optional)', t: '16:00' },
   ]},
   // Day 2 — Sat Jul 4 Phillip Island
-  { center: [-38.4000, 144.9000], zoom: 9, cityCode: 'MEL', pins: [
-    { c: [-37.8136, 144.9631], l: 'Melbourne CBD · early start', t: '08:30' },
-    { c: [-38.4460, 145.2930], l: 'Peninsula Hot Springs (optional AM session)', t: '10:00' },
-    { c: [-38.5140, 145.1250], l: 'Phillip Island · Summerland Beach', t: '14:00' },
-    { c: [-38.5069, 145.1531], l: 'Penguin Parade · Little Penguins at dusk', t: '17:30' },
-    { c: [-37.8136, 144.9631], l: 'Melbourne CBD · return late', t: '21:00' },
+  { center: [-38.4700, 145.2500], zoom: 10, cityCode: 'MEL', pins: [
+    { c: [-37.8136, 144.9631], l: 'Melbourne CBD · early start', t: '10:00' },
+    { c: [-38.5347, 145.3765], l: 'San Remo · pelican feeding + lunch', t: '12:00' },
+    { c: [-38.4886, 145.2211], l: 'Koala Conservation Reserve', t: '13:00' },
+    { c: [-38.5090, 145.1494], l: 'Nobbies boardwalk · seal viewing', t: '14:30' },
+    { c: [-38.5069, 145.1531], l: 'Penguin Parade · Little Penguins cross at sunset (5:31pm) · Booked', t: '16:30' },
+    { c: [-37.8136, 144.9631], l: 'Melbourne CBD · return late', t: '20:45' },
   ]},
   // Day 3 — Sun Jul 5 MEL Social
   { center: [-37.8136, 144.9631], zoom: 12, cityCode: 'MEL', pins: [

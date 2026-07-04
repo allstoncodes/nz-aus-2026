@@ -22,8 +22,11 @@ const TRIP_PLACES = [
   // ── Melbourne (Jul 3–6) ──────────────────────────────────
   { name: "Melbourne Airport (MEL)", leg: "Melbourne", category: "transit", city: "Tullamarine", booked: false, coords: [-37.6690, 144.8410], note: "Arrive Jul 3 · depart Jul 6 (JQ534 → Sydney)" },
   { name: "Southbank stay", leg: "Melbourne", category: "lodging", city: "Southbank, Melbourne", booked: true, coords: [-37.82409, 144.96814], note: "Lodging · Jul 3–6" },
-  { name: "Phillip Island Penguin Parade", leg: "Melbourne", category: "activity", city: "Phillip Island", booked: true, coords: [-38.5069, 145.1531], note: "Booked · Jul 4 dusk" },
-  { name: "Peninsula Hot Springs", leg: "Melbourne", category: "wellness", city: "Mornington Peninsula", booked: false, coords: [-38.4460, 145.2930], note: "Optional · Jul 4 morning" },
+  { name: "Phillip Island Penguin Parade", leg: "Melbourne", category: "activity", city: "Phillip Island", booked: true, coords: [-38.5069, 145.1531], note: "Booked · Jul 4 · sunset ~5:31pm" },
+  { name: "San Remo Pelican Feeding", leg: "Melbourne", category: "activity", city: "San Remo", booked: false, coords: [-38.5347, 145.3765], note: "Daily feeding ~12pm · Jul 4 lunch stop" },
+  { name: "Koala Conservation Reserve", leg: "Melbourne", category: "activity", city: "Phillip Island", booked: false, coords: [-38.4886, 145.2211], note: "Jul 4 afternoon" },
+  { name: "The Nobbies", leg: "Melbourne", category: "activity", city: "Phillip Island", booked: false, coords: [-38.5090, 145.1494], note: "Boardwalk · seal viewing · Jul 4 afternoon" },
+  { name: "Firelight Festival, Docklands", leg: "Melbourne", category: "culture", city: "Docklands, Melbourne", booked: false, coords: [-37.8142, 144.9460], note: "Optional · Jul 4 evening, free, till ~10:30pm" },
   { name: "Great Ocean Road — Kennett River", leg: "Melbourne", category: "activity", city: "Kennett River", booked: false, coords: [-38.66770, 143.85892], note: "Koalas · scenic drive option" },
   { name: "Hosier Lane", leg: "Melbourne", category: "culture", city: "Melbourne CBD", booked: false, coords: [-37.8166, 144.9690], note: "Street art laneway" },
   { name: "Federation Square", leg: "Melbourne", category: "culture", city: "Melbourne CBD", booked: false, coords: [-37.8180, 144.9691], note: "Civic plaza" },
