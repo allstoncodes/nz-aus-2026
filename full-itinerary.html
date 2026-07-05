@@ -653,14 +653,15 @@ const DAYS = [
     { s: '20:45', e: '22:00', c: 'culture',   t: 'Optional: Firelight Festival, Docklands · free, till ~10:30pm' },
     { s: '22:00', e: '24:00', c: 'sleep',     t: 'Sleep · MEL N2' },
   ]},
-  { tag: 3, date: 'Jul 5', wd: 'SUN', city: 'MEL', cityFull: 'Melbourne (MEL N3)', lbl: 'MEL N3 · Melbourne city + Firelight (final night)', blocks: [
-    { s: '09:30', e: '11:00', c: 'downtime',  t: 'Slow morning · Melbourne CBD wander' },
-    { s: '11:00', e: '13:30', c: 'outdoor',   t: 'Queen Victoria Market · browse + food stalls' },
-    { s: '13:30', e: '16:00', c: 'culture',   t: 'Laneways + Hosier Lane · NGV optional' },
-    { s: '16:00', e: '18:00', c: 'downtime',  t: 'Back to Southbank · rest + pack' },
-    { s: '18:30', e: '20:00', c: 'food',      t: 'Dinner with friends · Melbourne CBD' },
-    { s: '20:00', e: '22:00', c: 'outdoor',   t: 'Firelight Festival · Docklands (final night, free)' },
-    { s: '22:00', e: '24:00', c: 'sleep',     t: 'Pack for Mon JQ534 · Sleep MEL N3' },
+  { tag: 3, date: 'Jul 5', wd: 'SUN', city: 'MEL', cityFull: 'Melbourne (MEL N3)', lbl: 'MEL N3 · Market · Shrine + NGV · Firelight (final night)', blocks: [
+    { s: '10:00', e: '12:00', c: 'downtime',  t: 'Slow morning · Melbourne CBD' },
+    { s: '12:00', e: '14:15', c: 'outdoor',   t: 'Queen Victoria Market · belt + Aussie meat pie + coffee' },
+    { s: '14:45', e: '15:45', c: 'culture',   t: 'Shrine of Remembrance · galleries + city views' },
+    { s: '15:50', e: '16:40', c: 'culture',   t: 'NGV International · free permanent collection' },
+    { s: '17:00', e: '18:15', c: 'outdoor',   t: 'Firelight Festival · Docklands (final night, free)' },
+    { s: '18:30', e: '20:00', c: 'food',      t: 'Dinner with friends' },
+    { s: '20:00', e: '22:00', c: 'downtime',  t: 'Back to Southbank · pack for Mon JQ534' },
+    { s: '22:00', e: '24:00', c: 'sleep',     t: 'Sleep · MEL N3' },
   ]},
   { tag: 4, date: 'Jul 6', wd: 'MON', city: 'MEL', cityFull: 'MEL → SYD (JQ534)', lbl: 'SYD N1 · JQ534 11:05 AM → arrive SYD · check in · dinner', blocks: [
     { s: '08:00', e: '09:00', c: 'food',      t: 'Last Melbourne breakfast' },
@@ -831,11 +832,12 @@ const MAP_DAYS = [
     { c: [-38.5069, 145.1531], l: 'Penguin Parade · Little Penguins cross at sunset (5:31pm) · Booked', t: '16:30' },
     { c: [-37.8136, 144.9631], l: 'Melbourne CBD · return late', t: '20:45' },
   ]},
-  // Day 3 — Sun Jul 5 MEL city + Firelight
-  { center: [-37.8136, 144.9631], zoom: 12, cityCode: 'MEL', pins: [
-    { c: [-37.8007, 144.9570], l: 'Queen Victoria Market · browse + food stalls', t: '11:00' },
-    { c: [-37.8136, 144.9631], l: 'CBD laneways + NGV', t: '13:30' },
-    { c: [-37.8199, 144.9405], l: 'Firelight Festival · Docklands', t: '20:00' },
+  // Day 3 — Sun Jul 5 MEL market + Shrine/NGV + Firelight
+  { center: [-37.8200, 144.9650], zoom: 13, cityCode: 'MEL', pins: [
+    { c: [-37.8007, 144.9570], l: 'Queen Victoria Market · belt + meat pie', t: '12:00' },
+    { c: [-37.8305, 144.9734], l: 'Shrine of Remembrance', t: '14:45' },
+    { c: [-37.8226, 144.9689], l: 'NGV International', t: '15:50' },
+    { c: [-37.8199, 144.9405], l: 'Firelight Festival · Docklands', t: '17:00' },
   ]},
   // Day 4 — Mon Jul 6 MEL→SYD
   { center: [-36.0000, 148.0000], zoom: 6, cityCode: 'FLIGHT', arc: 'MEL-SYD', pins: [
