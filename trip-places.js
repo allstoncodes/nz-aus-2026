@@ -63,6 +63,10 @@ const TRIP_PLACES = [
   { name: "SEA LIFE Sydney Aquarium", leg: "Sydney", category: "activity", city: "Darling Harbour", booked: false, coords: [-33.8696, 151.2020], note: "Indoor wildlife fallback" },
   { name: "Cockatoo Island", leg: "Sydney", category: "culture", city: "Sydney Harbour", booked: false, coords: [-33.8490, 151.1720], note: "UNESCO convict history · ferry" },
   { name: "Spice Alley", leg: "Sydney", category: "food", city: "Chippendale, Sydney", booked: false, coords: [-33.8836, 151.1985], note: "Hawker-style · walk from Ultimo" },
+  { name: "Museum of Contemporary Art", leg: "Sydney", category: "culture", city: "Circular Quay, Sydney", booked: false, coords: [-33.8599, 151.2090], note: "Free indoor contemporary art · walking-tour pick" },
+  { name: "Sydney Observatory", leg: "Sydney", category: "culture", city: "Millers Point, Sydney", booked: false, coords: [-33.8593, 151.2044], note: "Free hilltop · Harbour + Bridge views · walking-tour pick" },
+  { name: "Chinese Garden of Friendship", leg: "Sydney", category: "culture", city: "Darling Harbour", booked: false, coords: [-33.8760, 151.2010], note: "Shaded quiet garden · walk from Ultimo · walking-tour pick" },
+  { name: "WILD LIFE Sydney Zoo", leg: "Sydney", category: "activity", city: "Darling Harbour", booked: false, coords: [-33.8695, 151.2015], note: "Indoor wildlife (koalas) · pairs with SEA LIFE · walking-tour pick" },
 
   // ── New Zealand (Jul 10–13) ──────────────────────────────
   { name: "Auckland Airport (AKL)", leg: "New Zealand", category: "transit", city: "Auckland", booked: false, coords: [-37.0082, 174.7850], note: "Arrive Jul 10 · depart Jul 13 (UA916 → SFO)" },
