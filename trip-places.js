@@ -55,6 +55,14 @@ const TRIP_PLACES = [
   { name: "Surry Hills", leg: "Sydney", category: "food", city: "Sydney", booked: false, coords: [-33.88451, 151.21003], note: "Brunch district" },
   { name: "Circular Quay dining (Bennelong / Quay)", leg: "Sydney", category: "food", city: "Sydney", booked: false, coords: [-33.86136, 151.21072], note: "Waterfront fine dining" },
   { name: "Carriageworks", leg: "Sydney", category: "culture", city: "Eveleigh", booked: false, coords: [-33.89416, 151.19160], note: "NAIDOC events" },
+  { name: "Whale-watching departure (Darling Harbour)", leg: "Sydney", category: "activity", city: "Darling Harbour", booked: false, coords: [-33.8683, 151.2010], note: "Peak-season cruise · King St Wharf" },
+  { name: "BridgeMuseum (Pylon Lookout)", leg: "Sydney", category: "culture", city: "Sydney", booked: false, coords: [-33.8523, 151.2108], note: "Harbour Bridge vantage · part-indoor" },
+  { name: "Wendy Whiteley's Secret Garden", leg: "Sydney", category: "culture", city: "Lavender Bay, Sydney", booked: false, coords: [-33.8430, 151.2100], note: "Hidden free garden · harbour views" },
+  { name: "Barangaroo Reserve", leg: "Sydney", category: "culture", city: "Barangaroo, Sydney", booked: false, coords: [-33.8556, 151.2010], note: "Free harbour headland walk" },
+  { name: "Art Gallery of NSW", leg: "Sydney", category: "culture", city: "The Domain, Sydney", booked: false, coords: [-33.8688, 151.2170], note: "Free entry · Archibald Prize" },
+  { name: "SEA LIFE Sydney Aquarium", leg: "Sydney", category: "activity", city: "Darling Harbour", booked: false, coords: [-33.8696, 151.2020], note: "Indoor wildlife fallback" },
+  { name: "Cockatoo Island", leg: "Sydney", category: "culture", city: "Sydney Harbour", booked: false, coords: [-33.8490, 151.1720], note: "UNESCO convict history · ferry" },
+  { name: "Spice Alley", leg: "Sydney", category: "food", city: "Chippendale, Sydney", booked: false, coords: [-33.8836, 151.1985], note: "Hawker-style · walk from Ultimo" },
 
   // ── New Zealand (Jul 10–13) ──────────────────────────────
   { name: "Auckland Airport (AKL)", leg: "New Zealand", category: "transit", city: "Auckland", booked: false, coords: [-37.0082, 174.7850], note: "Arrive Jul 10 · depart Jul 13 (UA916 → SFO)" },
