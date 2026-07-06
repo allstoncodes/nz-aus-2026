@@ -40,7 +40,7 @@ const TRIP_PLACES = [
 
   // ── Sydney (Jul 6–10) ────────────────────────────────────
   { name: "Sydney Airport (SYD)", leg: "Sydney", category: "transit", city: "Mascot", booked: false, coords: [-33.9399, 151.1753], note: "Arrive Jul 6 · depart Jul 10 (QF141 → Auckland)" },
-  { name: "Ultimo stay", leg: "Sydney", category: "lodging", city: "Ultimo, Sydney", booked: true, coords: [-33.87947, 151.19843], note: "Lodging · Jul 6–10" },
+  { name: "Metro Aspire Hotel", leg: "Sydney", category: "lodging", city: "Ultimo, Sydney", booked: true, coords: [-33.87947, 151.19843], note: "Lodging · Jul 6–10" },
   { name: "Sydney Opera House", leg: "Sydney", category: "culture", city: "Sydney", booked: true, coords: [-33.8568, 151.2153], note: "SSO concert booked · Jul 9 eve" },
   { name: "Sydney Harbour Bridge", leg: "Sydney", category: "culture", city: "Sydney", booked: false, coords: [-33.85212, 151.21078], note: "Landmark · BridgeClimb option" },
   { name: "Royal Botanic Garden — Mrs Macquarie's Chair", leg: "Sydney", category: "culture", city: "Sydney", booked: false, coords: [-33.8641, 151.2175], note: "Opera House + Bridge vantage" },
