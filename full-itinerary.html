@@ -464,7 +464,7 @@
       <tr><td><strong>Paddington / QVB</strong></td><td>Shopping / culture</td><td>Queen Victoria Building · Paddington terrace houses + boutiques</td></tr>
       <tr><td><strong>Bondi-to-Coogee cafés</strong></td><td>Food</td><td>Multiple café stops along the coastal walk · Bronte is a local favourite</td></tr>
       <tr><td><strong>Haigh's Chocolates</strong></td><td>Food</td><td>South Australian chocolate institution · Sydney CBD branch · gifts</td></tr>
-      <tr><td><strong>Pre-concert dinner · Circular Quay area</strong></td><td>Food</td><td>Thu Jul 9 pre-SSO dinner · Opera Bar (harbour view walk-up) or book ahead at Aria/Quay</td></tr>
+      <tr><td><strong>Pre-concert dinner · ARIA</strong></td><td>Food</td><td>Thu Jul 9 pre-SSO dinner · ARIA pre-theatre (booked) · fixed 5:00–6:30 seating, ~4-min walk to the Concert Hall</td></tr>
     </tbody>
   </table>
   </div>
@@ -699,27 +699,31 @@ const DAYS = [
     { s: '18:00', e: '20:00', c: 'food',      t: 'Dinner · Cafe Sydney (Customs House rooftop, Circular Quay) · harbour views · book ahead (smart dress)' },
     { s: '20:00', e: '24:00', c: 'sleep',     t: 'Back to the hotel · prep for tomorrow\'s SSO night · Sleep · SYD N3' },
   ]},
-  { tag: 7, date: 'Jul 9', wd: 'THU', city: 'SYD', cityFull: 'Sydney (SYD N4)', lbl: 'SYD N4 · Botanic Garden · ARIA pre-theatre · SSO Opera House 7 PM', blocks: [
-    { s: '09:30', e: '11:00', c: 'food',      t: 'Sleep-in · relaxed brunch (Surry Hills)' },
-    { s: '11:30', e: '15:00', c: 'downtime',  t: 'Back to hotel · PACK for the 4:15 AM Fri flight (do it now — no time after the concert)' },
-    { s: '15:15', e: '15:30', c: 'transit',   t: 'To the Royal Botanic Garden / Circular Quay (~15–26 min)' },
-    { s: '15:30', e: '16:40', c: 'outdoor',   t: 'Royal Botanic Garden → Mrs Macquarie\'s Chair (Opera House + Bridge viewpoint) · garden closes 5 PM winter' },
-    { s: '17:00', e: '18:30', c: 'food',      t: 'Dinner · ARIA pre-theatre (1 Macquarie St, Circular Quay) · ✅ BOOKED · fixed 5:00–6:30 seating — be prompt · ~4-min walk to the hall' },
+  { tag: 7, date: 'Jul 9', wd: 'THU', city: 'SYD', cityFull: 'Sydney (SYD N4)', lbl: 'SYD N4 · pack AM · Millers Point/Rocks/Botanic walk · ARIA pre-theatre · SSO Opera House 7 PM', blocks: [
+    { s: '08:30', e: '09:30', c: 'food',      t: 'Quick breakfast (Surry Hills) — light start, pack today' },
+    { s: '09:30', e: '12:15', c: 'downtime',  t: 'Back to hotel · PACK in the AM for the 4:15 AM Fri flight (do it now — no time after the concert)' },
+    { s: '12:30', e: '13:00', c: 'transit',   t: 'To Circular Quay / The Rocks (~15–26 min)' },
+    { s: '13:00', e: '15:00', c: 'outdoor',   t: 'Millers Point + The Rocks · Observatory Hill lookout (best Bridge view), Argyle Cut, Rocks Discovery Museum (free)' },
+    { s: '15:00', e: '16:45', c: 'outdoor',   t: 'Royal Botanic Garden → Mrs Macquarie\'s Chair (Opera House + Bridge viewpoint) · garden closes 5 PM winter' },
+    { s: '17:00', e: '18:30', c: 'food',      t: 'Dinner · ARIA pre-theatre (Circular Quay) · ✅ booked · fixed 5:00–6:30 seating — be prompt · ~4-min walk to the hall' },
     { s: '18:30', e: '19:00', c: 'culture',   t: 'Opera House · settle in, photos, explore the forecourt + Tarpeian lookout' },
     { s: '19:00', e: '21:00', c: 'culture',   t: 'Sydney Symphony Orchestra · Opera House Concert Hall · hard 7 PM curtain · arrive early (security screening, travel light)' },
     { s: '21:15', e: '22:00', c: 'downtime',  t: 'Straight back to the hotel · final pack check · sleep early (4:15 AM wake)' },
     { s: '22:00', e: '24:00', c: 'sleep',     t: 'Sleep · SYD N4 · pre-dawn airport run tomorrow' },
   ]},
-  { tag: 8, date: 'Jul 10', wd: 'FRI', city: 'NZ', cityFull: 'SYD → Auckland → Hamilton (NZ N1)', lbl: 'NZ N1 · QF141 07:10 → AKL 12:20 · drive to Hamilton · overnight Hamilton', blocks: [
+  { tag: 8, date: 'Jul 10', wd: 'FRI', city: 'NZ', cityFull: 'SYD → Auckland (Matariki) → Hamilton (NZ N1)', lbl: 'NZ N1 · 🌌 Matariki · QF141 07:10 → AKL 12:20 · Auckland afternoon (All Blacks + Weta) · drive to Hamilton', blocks: [
     { s: '04:30', e: '05:30', c: 'logistics', t: 'Early wake · hotel checkout · Uber to SYD airport' },
     { s: '05:30', e: '07:10', c: 'logistics', t: 'SYD airport check-in + security + gate' },
     { s: '07:10', e: '12:20', c: 'transit',   t: 'QF141 SYD → AKL · 3h10m nonstop (+2h timezone change AEST→NZST)' },
-    { s: '12:20', e: '13:30', c: 'logistics', t: 'AKL customs + bag claim + rental car pickup' },
-    { s: '13:30', e: '15:00', c: 'transit',   t: 'Drive AKL → Hamilton (~1.5h)' },
-    { s: '15:00', e: '16:00', c: 'logistics', t: 'Check in Hamilton hotel · settle' },
-    { s: '16:00', e: '18:00', c: 'downtime',  t: 'Relaxed Hamilton afternoon · explore town or rest' },
-    { s: '18:00', e: '20:00', c: 'food',      t: 'Dinner Hamilton · early evening' },
-    { s: '20:00', e: '22:00', c: 'downtime',  t: 'Wind down · early night — 7:30 AM departure tomorrow' },
+    { s: '12:20', e: '13:30', c: 'logistics', t: 'AKL customs + biosecurity + rental car pickup' },
+    { s: '13:30', e: '14:30', c: 'transit',   t: 'Drive AKL airport → city (SkyCity/Federal St) · ~30–60 min (Matariki holiday traffic)' },
+    { s: '14:30', e: '15:00', c: 'food',      t: 'Quick lunch · Federal St (The Hangi Shop — Māori hāngī) · 🌌 Matariki (NZ public holiday)' },
+    { s: '15:00', e: '16:30', c: 'culture',   t: 'All Blacks Experience · 3:00 PM · SkyCity (Federal St) · book ahead' },
+    { s: '16:30', e: '17:10', c: 'downtime',  t: 'Buffer · coffee/wander SkyCity before the Weta tour' },
+    { s: '17:10', e: '18:40', c: 'culture',   t: 'Weta Workshop Unleashed · 5:10 PM · 88 Federal St (film props / practical FX) · book ahead' },
+    { s: '18:40', e: '19:30', c: 'food',      t: 'SkyCity Matariki Night Markets · dinner from the stalls + kapa haka / craft demos (free, walk-up)' },
+    { s: '19:30', e: '21:15', c: 'transit',   t: 'Drive Auckland → Hamilton (~1h45) · arrive by ~9:15 PM (10 PM target)' },
+    { s: '21:15', e: '22:00', c: 'logistics', t: 'Check in Hamilton · settle (no separate dinner — ate at the market)' },
     { s: '22:00', e: '24:00', c: 'sleep',     t: 'Sleep · Hamilton N1 · early 7:30 AM departure tomorrow' },
   ]},
   { tag: 9, date: 'Jul 11', wd: 'SAT', city: 'NZ', cityFull: 'Hamilton → Waitomo → Matamata → Rotorua (NZ N2)', lbl: 'NZ N2 · Waitomo 9:30 AM + Hobbiton 2:30 PM + Rotorua overnight', blocks: [
@@ -734,7 +738,8 @@ const DAYS = [
     { s: '14:30', e: '16:30', c: 'culture',   t: 'Hobbiton Movie Set Tour · 2:30 PM · Shire\'s Rest → shuttle to set (~2h)' },
     { s: '16:30', e: '17:30', c: 'transit',   t: 'Drive Matamata → Rotorua (~1h)' },
     { s: '17:30', e: '18:30', c: 'logistics', t: 'Check in Rotorua hotel · freshen up' },
-    { s: '18:30', e: '20:30', c: 'food',      t: 'Dinner · Rotorua Eat Streat (Tutanekai St)' },
+    { s: '18:30', e: '19:45', c: 'food',      t: 'Dinner · Rotorua Lakefront Matariki night market (Village Green) — eat here so you\'re on the lakefront for the drone show' },
+    { s: '20:00', e: '20:30', c: 'culture',   t: '🌌 Aronui Matariki Drone Show · 8 PM · Rotorua Lakefront (550 synchronised drones, free, no booking) · weather-permitting' },
     { s: '20:30', e: '22:00', c: 'downtime',  t: 'Evening wander Rotorua · Lakefront reserve · geothermal steam vents' },
     { s: '22:00', e: '24:00', c: 'sleep',     t: 'Sleep · Rotorua N2' },
   ]},
@@ -877,14 +882,15 @@ const MAP_DAYS = [
   { center: [-28.0000, 165.0000], zoom: 4, cityCode: 'FLIGHT', arc: 'SYD-AKL', pins: [
     { c: [-33.9399, 151.1753], l: 'SYD Airport · QF141 dep 07:10', t: '07:10' },
     { c: [-37.0082, 174.7850], l: 'AKL Airport · QF141 arr 12:20 · rental car pickup', t: '12:20' },
-    { c: [-37.7870, 175.2793], l: 'Hamilton · drive from AKL (~1.5h) · NZ Night 1', t: '15:00' },
+    { c: [-36.8485, 174.7622], l: 'Auckland CBD (SkyCity) · 🌌 Matariki afternoon · All Blacks 3 PM + Weta 5:10 PM + Night Markets', t: '15:00' },
+    { c: [-37.7870, 175.2793], l: 'Hamilton · drive from Auckland (~1h45) · arrive ~9:15 PM · NZ Night 1', t: '21:15' },
   ]},
   // Day 9 — Sat Jul 11 Hamilton→Waitomo→Hobbiton→Rotorua
   { center: [-38.0000, 175.5000], zoom: 8, cityCode: 'NZ', pins: [
     { c: [-37.7870, 175.2793],         l: 'Hamilton · 7:30 AM departure', t: '07:30' },
     { c: [-38.2614, 175.1003],         l: 'Waitomo Glowworm Caves · 9:30 AM · 45-min underground boat tour', t: '09:30' },
     { c: [-37.8721, 175.6836],         l: 'Hobbiton (Matamata) · Shire\'s Rest · 2:30 PM tour', t: '14:30' },
-    { c: [-38.1368, 176.2497],         l: 'Rotorua · check in · Eat Streat dinner', t: '17:30' },
+    { c: [-38.1368, 176.2497],         l: 'Rotorua · check in · Lakefront Matariki market dinner + 8 PM Aronui drone show', t: '17:30' },
   ]},
   // Day 10 — Sun Jul 12 Rotorua overnight (NZ N3)
   { center: [-38.1368, 176.2497], zoom: 12, cityCode: 'NZ', pins: [
