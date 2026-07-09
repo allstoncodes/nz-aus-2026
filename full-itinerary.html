@@ -535,10 +535,11 @@
     <div class="info-card">
       <div class="info-card-title">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color:var(--cyan)"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-        eSIM — Airalo
+        eSIM — Nomad + Airalo
       </div>
-      <p><strong>Best: Oceania Regional Plan</strong> — covers both AU + NZ in one eSIM, no switching between countries.</p>
-      <p>Each person buys their own via the Airalo iOS app. Activate before Jul 1 departure.</p>
+      <p><strong>Best: Nomad (AU + NZ)</strong> — Donnie's pick; noticeably stronger in-country connection than the Airalo Oceania regional plan.</p>
+      <p><strong>On Airalo?</strong> A country-specific plan (e.g. Australia-only) has been outperforming the Oceania Regional plan on signal — prefer per-country eSIMs over the one-region plan.</p>
+      <p>Each person buys their own via the provider's iOS app; activate on arrival in each country.</p>
     </div>
 
     <div class="info-card">
@@ -713,15 +714,15 @@ const DAYS = [
   ]},
   { tag: 8, date: 'Jul 10', wd: 'FRI', city: 'NZ', cityFull: 'SYD → Auckland (Matariki) → Hamilton (NZ N1)', lbl: 'NZ N1 · 🌌 Matariki · QF141 07:10 → AKL 12:20 · Auckland afternoon (All Blacks + Weta) · drive to Hamilton', blocks: [
     { s: '04:30', e: '05:30', c: 'logistics', t: 'Early wake · hotel checkout · Uber to SYD airport' },
-    { s: '05:30', e: '07:10', c: 'logistics', t: 'SYD airport check-in + security + gate' },
+    { s: '05:30', e: '07:10', c: 'logistics', t: 'SYD T1 check-in + security · then The House lounge (Priority Pass, opens 5 AM, airside near Gate 50) — breakfast + barista coffee before boarding' },
     { s: '07:10', e: '12:20', c: 'transit',   t: 'QF141 SYD → AKL · 3h10m nonstop (+2h timezone change AEST→NZST)' },
     { s: '12:20', e: '13:30', c: 'logistics', t: 'AKL customs + biosecurity + rental car pickup' },
     { s: '13:30', e: '14:30', c: 'transit',   t: 'Drive AKL airport → city (SkyCity/Federal St) · ~30–60 min (Matariki holiday traffic)' },
-    { s: '14:30', e: '15:00', c: 'food',      t: 'Quick lunch · Federal St (The Hangi Shop — Māori hāngī) · 🌌 Matariki (NZ public holiday)' },
+    { s: '14:30', e: '15:00', c: 'food',      t: 'Quick lunch · Federal Delicatessen (86 Federal St, next to SkyCity) — Al Brown NYC-style deli; open 8am–9pm on Matariki. ~15% public-holiday surcharge. (The Hangi Shop is in Ōtāhuhu, not walkable — dropped.)' },
     { s: '15:00', e: '16:30', c: 'culture',   t: 'All Blacks Experience · 3:00 PM · SkyCity (Federal St) · book ahead' },
-    { s: '16:30', e: '17:10', c: 'downtime',  t: 'Buffer · coffee/wander SkyCity before the Weta tour' },
+    { s: '16:30', e: '17:10', c: 'downtime',  t: 'Buffer before Weta (~20 min) · quick coffee at Federal Deli or a sweet bite from the Night Markets — most CBD cafés shut by ~5 PM on Matariki (matcha: Slow Koi closes 5 PM, a risky ~16-min round trip)' },
     { s: '17:10', e: '18:40', c: 'culture',   t: 'Weta Workshop Unleashed · 5:10 PM · 88 Federal St (film props / practical FX) · book ahead' },
-    { s: '18:40', e: '19:30', c: 'food',      t: 'SkyCity Matariki Night Markets · dinner from the stalls + kapa haka / craft demos (free, walk-up)' },
+    { s: '18:40', e: '19:30', c: 'food',      t: 'SkyCity Matariki Night Markets · SkyCity Plaza · free, 4–10 PM · Māori & Pasifika food stalls (savoury→sweet) · kapa haka 7:00–7:15 PM (Hoani Waititi) · raranga weaving / whakairo carving / poi / moko craft demos' },
     { s: '19:30', e: '21:15', c: 'transit',   t: 'Drive Auckland → Hamilton (~1h45) · arrive by ~9:15 PM (10 PM target)' },
     { s: '21:15', e: '22:00', c: 'logistics', t: 'Check in Hamilton · settle (no separate dinner — ate at the market)' },
     { s: '22:00', e: '24:00', c: 'sleep',     t: 'Sleep · Hamilton N1 · early 7:30 AM departure tomorrow' },
@@ -735,9 +736,9 @@ const DAYS = [
     { s: '12:00', e: '13:30', c: 'food',      t: 'Lunch Matamata · relax before Hobbiton' },
     { s: '13:30', e: '14:10', c: 'logistics', t: 'Drive to Hobbiton · Shire\'s Rest check-in 2:10 PM' },
     { s: '14:10', e: '14:30', c: 'logistics', t: 'Buffer · Hobbiton check-in window (Shire\'s Rest)' },
-    { s: '14:30', e: '16:30', c: 'culture',   t: 'Hobbiton Movie Set Tour · 2:30 PM · Shire\'s Rest → shuttle to set (~2h)' },
-    { s: '16:30', e: '17:30', c: 'transit',   t: 'Drive Matamata → Rotorua (~1h)' },
-    { s: '17:30', e: '18:30', c: 'logistics', t: 'Check in Rotorua hotel · freshen up' },
+    { s: '14:30', e: '17:00', c: 'culture',   t: 'Hobbiton Movie Set Tour · 2:30 PM (2 adults) · check in ≥20 min prior at Shire\'s Rest, 501 Buckland Rd, Matamata · ~2.5 hr guided tour → shuttle to the Shire + a drink at the Green Dragon Inn (bring your passport — required to be served alcohol) · free Hobbiton Tour Companion App on iOS' },
+    { s: '17:00', e: '18:00', c: 'transit',   t: 'Drive Matamata → Rotorua (~1h)' },
+    { s: '18:00', e: '18:30', c: 'logistics', t: 'Check in Rotorua hotel · freshen up' },
     { s: '18:30', e: '19:45', c: 'food',      t: 'Dinner · Rotorua Lakefront Matariki night market (Village Green) — eat here so you\'re on the lakefront for the drone show' },
     { s: '20:00', e: '20:30', c: 'culture',   t: '🌌 Aronui Matariki Drone Show · 8 PM · Rotorua Lakefront (550 synchronised drones, free, no booking) · weather-permitting' },
     { s: '20:30', e: '22:00', c: 'downtime',  t: 'Evening wander Rotorua · Lakefront reserve · geothermal steam vents' },
