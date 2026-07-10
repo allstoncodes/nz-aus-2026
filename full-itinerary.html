@@ -174,6 +174,11 @@
     .det-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
     .det-time { font-family: 'DM Mono', monospace; font-size: .5625rem; color: var(--text-2); flex-shrink: 0; width: 86px; padding-top: 2px; }
     .det-lbl { font-size: .8125rem; color: var(--text); line-height: 1.3; }
+    .det-bring { display: flex; align-items: flex-start; gap: 6px; margin-top: 6px; padding: 6px 8px; background: rgba(245,158,11,0.06); border-left: 2px solid var(--accent); border-radius: 4px; font-size: .75rem; color: var(--text-2); line-height: 1.4; }
+    .det-bring svg { flex-shrink: 0; margin-top: 2px; color: var(--accent); }
+    .day-bring-note { display: flex; align-items: center; gap: 10px; background: rgba(245,158,11,0.06); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 16px; margin-bottom: 14px; font-size: .8125rem; color: var(--text); }
+    .day-bring-note svg { flex-shrink: 0; color: var(--accent); }
+    .day-bring-note[hidden] { display: none; }
 
     /* ── PAGE SECTIONS ── */
     .page-section { padding: 24px 40px; max-width: 1340px; margin: 0 auto; }
@@ -378,6 +383,10 @@
     <h2 class="detail-title" id="detail-title">Select a day above</h2>
     <span class="city-pill" id="detail-pill"></span>
     <button class="det-nav-btn" id="btn-next" aria-label="Next day">Next →</button>
+  </div>
+  <div class="day-bring-note" id="day-bring-note" hidden>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+    <span id="day-bring-note-text"></span>
   </div>
   <div class="detail-grid" id="detail-grid">
     <p style="color:var(--text-3);font-size:.875rem;">Click any day column or use the nav pills to see the full schedule.</p>
@@ -727,20 +736,26 @@ const DAYS = [
     { s: '21:15', e: '22:00', c: 'logistics', t: 'Check in Hamilton · settle (no separate dinner — ate at the market)' },
     { s: '22:00', e: '24:00', c: 'sleep',     t: 'Sleep · Hamilton N1 · early 7:30 AM departure tomorrow' },
   ]},
-  { tag: 9, date: 'Jul 11', wd: 'SAT', city: 'NZ', cityFull: 'Hamilton → Waitomo → Matamata → Rotorua (NZ N2)', lbl: 'NZ N2 · Waitomo 9:30 AM + Hobbiton 2:30 PM + Rotorua overnight', blocks: [
+  { tag: 9, date: 'Jul 11', wd: 'SAT', city: 'NZ', cityFull: 'Hamilton → Waitomo → Matamata → Rotorua (NZ N2)', lbl: 'NZ N2 · Waitomo 9:30 AM + Hobbiton 2:30 PM + Rotorua overnight',
+    bringNote: 'Swimwear + towel are for tomorrow (Zorb + Polynesian Spa) — leave them packed today. The Waitomo tour is a cave walk that ends with a short, dry boat ride — you stay dry.',
+    blocks: [
     { s: '06:30', e: '07:30', c: 'food',      t: 'Early breakfast at Hamilton hotel · pack day bag (camera, cash, snacks)' },
     { s: '07:30', e: '08:30', c: 'transit',   t: 'Drive Hamilton → Waitomo Glowworm Caves (~1h) · ❄️ frost/black-ice possible before sunrise — defrost + drive cautiously' },
     { s: '08:30', e: '09:30', c: 'logistics', t: 'Buffer · arrive Waitomo early · check in + wait for 9:30 AM tour' },
-    { s: '09:30', e: '10:15', c: 'outdoor',   t: 'Waitomo Glowworm Caves · 45-min underground boat tour (9:30 AM)' },
+    { s: '09:30', e: '10:15', c: 'outdoor',   t: 'Waitomo Glowworm Caves · 45-min guided tour: cave walk + short dry grotto boat ride (9:30 AM)',
+      bring: 'A cave WALK that ends with a short DRY boat ride under the grotto — no swimwear or wetsuit, you stay dry. Bring a warm layer/jacket (the cave is cool) + comfy closed-toe shoes with grip (paved paths, can be damp). Keep your phone away — no photography inside.' },
     { s: '10:15', e: '12:00', c: 'transit',   t: 'Drive Waitomo → Matamata (~1.5h)' },
     { s: '12:00', e: '13:30', c: 'food',      t: 'Lunch Matamata · relax before Hobbiton' },
     { s: '13:30', e: '14:10', c: 'logistics', t: 'Drive to Hobbiton · Shire\'s Rest check-in 2:10 PM' },
     { s: '14:10', e: '14:30', c: 'logistics', t: 'Buffer · Hobbiton check-in window (Shire\'s Rest)' },
-    { s: '14:30', e: '17:00', c: 'culture',   t: 'Hobbiton Movie Set Tour · 2:30 PM (2 adults) · check in ≥20 min prior at Shire\'s Rest, 501 Buckland Rd, Matamata · ~2.5 hr guided tour → shuttle to the Shire + a drink at the Green Dragon Inn (bring your passport — required to be served alcohol) · free Hobbiton Tour Companion App on iOS' },
+    { s: '14:30', e: '17:00', c: 'culture',   t: 'Hobbiton Movie Set Tour · 2:30 PM (2 adults) · check in ≥20 min prior at Shire\'s Rest, 501 Buckland Rd, Matamata · ~2.5 hr guided tour → shuttle to the Shire + a drink at the Green Dragon Inn (bring your passport — required to be served alcohol) · free Hobbiton Tour Companion App on iOS',
+      bring: 'Bring your passport (required to be served at the Green Dragon Inn). Warm jacket + comfy walking shoes — ~2.5 hr on exposed farmland. Download the free Hobbiton Tour Companion App (iOS) beforehand.' },
     { s: '17:00', e: '18:00', c: 'transit',   t: 'Drive Matamata → Rotorua (~1h)' },
     { s: '18:00', e: '18:30', c: 'logistics', t: 'Check in Rotorua hotel · freshen up' },
-    { s: '18:30', e: '19:45', c: 'food',      t: 'Dinner · Rotorua Lakefront Matariki night market (Village Green) — eat here so you\'re on the lakefront for the drone show' },
-    { s: '20:00', e: '20:30', c: 'culture',   t: '🌌 Aronui Matariki Drone Show · 8 PM · Rotorua Lakefront (550 synchronised drones, free, no booking) · weather-permitting' },
+    { s: '18:30', e: '19:45', c: 'food',      t: 'Dinner · Rotorua Lakefront Matariki night market (Village Green) — eat here so you\'re on the lakefront for the drone show',
+      bring: 'Card or cash for the night-market food stalls.' },
+    { s: '20:00', e: '20:30', c: 'culture',   t: '🌌 Aronui Matariki Drone Show · 8 PM · Rotorua Lakefront (550 synchronised drones, free, no booking) · weather-permitting',
+      bring: 'Warm layers for the outdoor 8 PM show. Self-check-in Airbnb tonight — pack a portable CO detector.' },
     { s: '20:30', e: '22:00', c: 'downtime',  t: 'Evening wander Rotorua · Lakefront reserve · geothermal steam vents' },
     { s: '22:00', e: '24:00', c: 'sleep',     t: 'Sleep · Rotorua N2' },
   ]},
@@ -889,7 +904,7 @@ const MAP_DAYS = [
   // Day 9 — Sat Jul 11 Hamilton→Waitomo→Hobbiton→Rotorua
   { center: [-38.0000, 175.5000], zoom: 8, cityCode: 'NZ', pins: [
     { c: [-37.7870, 175.2793],         l: 'Hamilton · 7:30 AM departure', t: '07:30' },
-    { c: [-38.2614, 175.1003],         l: 'Waitomo Glowworm Caves · 9:30 AM · 45-min underground boat tour', t: '09:30' },
+    { c: [-38.2614, 175.1003],         l: 'Waitomo Glowworm Caves · 9:30 AM · 45-min cave walk + dry grotto boat ride', t: '09:30' },
     { c: [-37.8721, 175.6836],         l: 'Hobbiton (Matamata) · Shire\'s Rest · 2:30 PM tour', t: '14:30' },
     { c: [-38.1368, 176.2497],         l: 'Rotorua · check in · Lakefront Matariki market dinner + 8 PM Aronui drone show', t: '17:30' },
   ]},
@@ -1059,12 +1074,20 @@ function showDetail(idx, scroll = true) {
   document.getElementById('detail-title').textContent = `${tagDisp} · ${day.date} · ${day.cityFull}`;
   const pill = document.getElementById('detail-pill');
   pill.textContent = day.lbl; pill.className = `city-pill ${pillClass(day.city)}`;
+  const bringNoteEl = document.getElementById('day-bring-note');
+  if (day.bringNote) {
+    document.getElementById('day-bring-note-text').textContent = day.bringNote;
+    bringNoteEl.hidden = false;
+  } else {
+    bringNoteEl.hidden = true;
+  }
+  const bringIcon = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>';
   document.getElementById('detail-grid').innerHTML = day.blocks.map(b => {
     const col = CAT[b.c]?.color || '#475569';
     return `<div class="det-item" style="border-left-color:${col}">
       <div class="det-dot" style="background:${col}" aria-hidden="true"></div>
       <div class="det-time">${fmtT(b.s)} – ${fmtT(b.e)}</div>
-      <div class="det-lbl">${b.t}</div>
+      <div class="det-lbl">${b.t}${b.bring ? `<div class="det-bring">${bringIcon}<span>${b.bring}</span></div>` : ''}</div>
     </div>`;
   }).join('');
   document.getElementById('btn-prev').disabled = (idx <= 0);
