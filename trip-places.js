@@ -80,7 +80,7 @@ const TRIP_PLACES = [
   { name: "Eat Streat (Rotorua)", leg: "New Zealand", category: "food", city: "Rotorua", booked: false, coords: [-38.1385, 176.2478], note: "Jul 11 dinner option · covered/heated food strip" },
   { name: "Zorb Rotorua", leg: "New Zealand", category: "activity", city: "Rotorua", booked: true, coords: [-38.08120, 176.21258], note: "Booked · Jul 12" },
   { name: "Woolworths Fairy Springs", leg: "New Zealand", category: "food", city: "Rotorua", booked: false, coords: [-38.1170, 176.2312], note: "Snack stop · on the Jul 12 Zorb route" },
-  { name: "Pak'nSave Rotorua", leg: "New Zealand", category: "food", city: "Rotorua", booked: false, coords: [-38.1470, 176.2493], note: "Snack stop alt · open late" },
+  { name: "Pak'nSave Rotorua", leg: "New Zealand", category: "food", city: "Rotorua", booked: false, coords: [-38.1470, 176.2493], note: "Tim Tams · cheapest · to 9 PM" },
   { name: "Polynesian Spa", leg: "New Zealand", category: "wellness", city: "Rotorua", booked: false, coords: [-38.1490, 176.2540], note: "Geothermal · walk-in Jul 12" },
   { name: "Ōhinemutu Village", leg: "New Zealand", category: "culture", city: "Rotorua", booked: false, coords: [-38.1330, 176.2440], note: "Living Māori village · lakefront" },
   { name: "Government Gardens", leg: "New Zealand", category: "culture", city: "Rotorua", booked: false, coords: [-38.1370, 176.2560], note: "Historic gardens · lakefront" },
