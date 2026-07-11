@@ -119,6 +119,35 @@
     .blk { position: absolute; left: 2px; right: 2px; border-radius: 3px; padding: 1px 4px; font-size: .5rem; font-weight: 600; letter-spacing: .02em; color: #fff; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; transition: opacity .12s, transform .12s; z-index: 2; }
     .blk:hover { opacity: .85; transform: scaleX(1.02); z-index: 10; }
     .blk.cat-sleep { border: 1px solid var(--border); color: var(--text-3); background: var(--surface)!important; }
+    /* Vertical split halves (e.g. Jul 12 spa / United check-in) */
+    .blk.blk-half-l, .blk.blk-half-r { transform: none; }
+    .blk.blk-half-l:hover, .blk.blk-half-r:hover { transform: none; }
+    /* High-contrast action alert — carved into a half-slot, must be impossible to miss */
+    .blk.blk-alert {
+      background: linear-gradient(150deg, #FCD34D 0%, var(--accent) 100%) !important;
+      border: 1.5px solid #FDE68A;
+      box-shadow: 0 0 0 1px rgba(2,6,23,.5), 0 0 9px rgba(245,158,11,.55);
+      color: #451A03;
+      font-weight: 800;
+      white-space: normal;
+      line-height: 1.05;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 1px 3px;
+      z-index: 3;
+      animation: blkAlertPulse 2.4s ease-in-out infinite;
+    }
+    .blk.blk-alert:hover { opacity: 1; box-shadow: 0 0 0 1px rgba(2,6,23,.6), 0 0 14px rgba(245,158,11,.85); }
+    .blk-alert-label { display: block; }
+    @keyframes blkAlertPulse {
+      0%, 100% { box-shadow: 0 0 0 1px rgba(2,6,23,.5), 0 0 6px rgba(245,158,11,.45); }
+      50%      { box-shadow: 0 0 0 1px rgba(2,6,23,.6), 0 0 14px rgba(245,158,11,.9); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .blk.blk-alert { animation: none; }
+    }
 
     /* ── DAY NAV STRIP ── */
     .day-nav-strip { padding: 10px 40px 16px; max-width: 1380px; margin: 0 auto; display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
@@ -176,6 +205,8 @@
     .det-lbl { font-size: .8125rem; color: var(--text); line-height: 1.3; }
     .det-bring { display: flex; align-items: flex-start; gap: 6px; margin-top: 6px; padding: 6px 8px; background: rgba(245,158,11,0.06); border-left: 2px solid var(--accent); border-radius: 4px; font-size: .75rem; color: var(--text-2); line-height: 1.4; }
     .det-bring svg { flex-shrink: 0; margin-top: 2px; color: var(--accent); }
+    .det-item.det-alert { background: rgba(245,158,11,.08); border-left-color: var(--accent) !important; }
+    .det-item.det-alert .det-lbl { font-weight: 700; color: var(--accent); }
     .day-bring-note { display: flex; align-items: center; gap: 10px; background: rgba(245,158,11,0.06); border-left: 3px solid var(--accent); border-radius: 8px; padding: 12px 16px; margin-bottom: 14px; font-size: .8125rem; color: var(--text); }
     .day-bring-note svg { flex-shrink: 0; color: var(--accent); }
     .day-bring-note[hidden] { display: none; }
@@ -784,7 +815,8 @@ const DAYS = [
     { s: '11:00', e: '12:00', c: 'outdoor',   t: 'Zorb VIP Maxi · 11:00 AM · wet ride — bring own togs + towel · hot tubs to warm up (no showers) · max 125 kg · GoPro or hire one · free parking + WiFi' },
     { s: '12:00', e: '12:15', c: 'logistics', t: 'Buffer · Zorb → Eat Streat / lakefront · change / dry off' },
     { s: '12:15', e: '13:15', c: 'food',      t: 'Lunch near the spa (walk-in) · El Mexicano Zapata Cantina (1148 Tutanekai St, Eat Streat · 4.9★) · closest: Zippy Central (1153 Pukuatua St) · pub: Pig & Whistle' },
-    { s: '13:30', e: '16:00', c: 'wellness',  t: 'Polynesian Spa · Deluxe Lake Spa ($85pp · walk-in · UNLIMITED time · open 9am–11pm) · lakefront pools + cold plunge · arrive before ~4pm to dodge the 4–8pm busy window' },
+    { s: '13:30', e: '16:00', c: 'wellness',  half: 'L', t: 'Polynesian Spa · Deluxe Lake Spa ($85pp · walk-in · UNLIMITED time · open 9am–11pm) · lakefront pools + cold plunge · arrive before ~4pm to dodge the 4–8pm busy window' },
+    { s: '13:50', e: '14:40', c: 'logistics', half: 'R', alert: true, shortLabel: 'CHECK-IN<br>1:50 PM', t: 'DO THIS FIRST — United online check-in opens 1:50 PM (24h before UA916). Check in + enter passports/APIS + check the Polaris upgrade, before you get in the pools.' },
     { s: '16:00', e: '17:00', c: 'outdoor',   t: 'Golden-hour stroll by the spa · Government Gardens + Sulphur Point lakefront walk (free, adjacent) · Rotorua Museum / Bath House if open (verify — long quake closure) · sunset 5:11' },
     { s: '17:15', e: '18:15', c: 'outdoor',   t: 'Redwoods Nightlights Treewalk · lanterns on ~5:30, dark ~6:15 · GA $45pp walk-up (Fast Pass $55pp if the school-holiday queue is long) · ~30–40 min over 28 suspension bridges · open to 9:30pm' },
     { s: '19:15', e: '20:30', c: 'food',      t: 'Last NZ dinner · Atticus Finch (Eat Streat · 4.6★) — BOOK the table in the AM (07 460 0400), closes 8:30pm · backup Pig & Whistle (open to 10pm) if Redwoods runs late' },
@@ -985,11 +1017,20 @@ function renderDays() {
       const { top, height } = blockGeom(b.s, b.e);
       const col = CAT[b.c]?.color || '#475569';
       const isSleep = b.c === 'sleep';
-      return `<div class="blk cat-${b.c}" style="top:${top}px;height:${height}px;${isSleep ? '' : 'background:' + col + 'DC;'}"
+      // Optional vertical split: b.half 'L'/'R' carves the block into a half-width column slot
+      // (e.g. a time-critical alert sharing a slot with the activity it interrupts).
+      const halfStyle = b.half === 'L' ? 'left:1px;right:auto;width:calc(50% - 2px);'
+        : b.half === 'R' ? 'left:calc(50% + 1px);right:auto;width:calc(50% - 2px);'
+        : '';
+      const halfClass = b.half === 'L' ? ' blk-half-l' : b.half === 'R' ? ' blk-half-r' : '';
+      const alertClass = b.alert ? ' blk-alert' : '';
+      const bgStyle = (isSleep || b.alert) ? '' : 'background:' + col + 'DC;';
+      const inner = b.alert ? '<span class="blk-alert-label">' + b.shortLabel + '</span>' : b.t;
+      return `<div class="blk cat-${b.c}${halfClass}${alertClass}" style="top:${top}px;height:${height}px;${halfStyle}${bgStyle}"
         data-s="${b.s}" data-e="${b.e}" data-c="${b.c}"
         data-t="${b.t.replace(/"/g, '&quot;').replace(/'/g, '&#39;')}"
         tabindex="0" role="button" aria-label="${b.t}"
-      >${height >= 13 ? b.t : ''}</div>`;
+      >${height >= 13 || b.alert ? inner : ''}</div>`;
     }).join('');
     const tagDisp = typeof day.tag === 'number' ? `Day ${day.tag}` : day.tag;
     return `<div class="day-col ${cityClass(day.city)}" data-idx="${i}">
@@ -1104,7 +1145,7 @@ function showDetail(idx, scroll = true) {
   const bringIcon = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>';
   document.getElementById('detail-grid').innerHTML = day.blocks.map(b => {
     const col = CAT[b.c]?.color || '#475569';
-    return `<div class="det-item" style="border-left-color:${col}">
+    return `<div class="det-item${b.alert ? ' det-alert' : ''}" style="border-left-color:${col}">
       <div class="det-dot" style="background:${col}" aria-hidden="true"></div>
       <div class="det-time">${fmtT(b.s)} – ${fmtT(b.e)}</div>
       <div class="det-lbl">${b.t}${b.bring ? `<div class="det-bring">${bringIcon}<span>${b.bring}</span></div>` : ''}</div>
