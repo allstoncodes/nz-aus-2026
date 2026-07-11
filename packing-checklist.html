@@ -33,6 +33,7 @@
       --blue:     #3B82F6;
       --cyan:     #06B6D4;
       --slate:    #64748B;
+      --today:    #FDE68A;
       /* Z-index scale */
       --z-nav:    50;
       --z-drawer: 40;
@@ -378,12 +379,25 @@
     .section-accent--high { background: var(--accent); }
     .section-accent--bag { background: var(--teal); }
     .section-accent--nice { background: var(--slate); }
+    .section-accent--today { background: linear-gradient(180deg, var(--today) 0%, var(--accent) 100%); }
     .section-title {
       font-family: 'Syne', sans-serif;
       font-size: 1.125rem;
       font-weight: 700;
       color: var(--text);
     }
+    .section-title--today { color: var(--today); }
+
+    /* "Today" section — the actionable-now group gets a subtle tinted
+       wrapper so it visually leads the page without a resting glow
+       (DESIGN.md glow-accent is hover-only, so this uses a flat tint) */
+    .section-group--today {
+      background: rgba(253, 230, 138, 0.05);
+      border: 1px solid rgba(253, 230, 138, 0.20);
+      border-radius: 12px;
+      padding: 16px 16px 4px;
+    }
+    .section-group--today .section-header { border-bottom-color: rgba(253, 230, 138, 0.25); }
     .section-count {
       font-family: 'DM Mono', monospace;
       font-size: 0.75rem;
@@ -740,6 +754,22 @@
 <script>
 /* PACK_ITEMS_START */
 const PACK_ITEMS = [
+  {"id": "jul12-phone-cable", "section": "Today — Sun Jul 12", "label": "Phone + charging cable", "note": "eSIM active"},
+  {"id": "jul12-battery-pack", "section": "Today — Sun Jul 12", "label": "Battery pack (charged)", "note": ""},
+  {"id": "jul12-wallet", "section": "Today — Sun Jul 12", "label": "Wallet — Venture X + a little cash", "note": ""},
+  {"id": "jul12-water-bottle", "section": "Today — Sun Jul 12", "label": "Reusable water bottle", "note": ""},
+  {"id": "jul12-sunscreen-lipbalm", "section": "Today — Sun Jul 12", "label": "Sunscreen SPF 30+ + lip balm", "note": "winter UV still burns"},
+  {"id": "jul12-sunglasses", "section": "Today — Sun Jul 12", "label": "Sunglasses", "note": ""},
+  {"id": "jul12-swimwear-worn", "section": "Today — Sun Jul 12", "label": "Swimwear (wear it UNDER your clothes)", "note": "no showers at Zorb — easier changes"},
+  {"id": "jul12-own-towel", "section": "Today — Sun Jul 12", "label": "Your OWN towel (quick-dry microfiber ideal)", "note": "Zorb requires your own; spa too"},
+  {"id": "jul12-dry-bag", "section": "Today — Sun Jul 12", "label": "Dry bag for wet swimwear/gear", "note": "Zorb → spa"},
+  {"id": "jul12-dry-change", "section": "Today — Sun Jul 12", "label": "Dry change of clothes", "note": ""},
+  {"id": "jul12-sandals", "section": "Today — Sun Jul 12", "label": "Sandals / flip-flops", "note": ""},
+  {"id": "jul12-warm-layer-beanie-gloves", "section": "Today — Sun Jul 12", "label": "Warm layer + beanie + gloves", "note": "near-freezing at dusk + after-dark Redwoods (low ~-1°C)"},
+  {"id": "jul12-rain-shell", "section": "Today — Sun Jul 12", "label": "Packable rain shell", "note": "0mm forecast — precaution"},
+  {"id": "jul12-waterproof-camera", "section": "Today — Sun Jul 12", "label": "Waterproof camera / GoPro (optional)", "note": "your phone can't ride Zorb — only way to capture it"},
+  {"id": "jul12-zorb-booking", "section": "Today — Sun Jul 12", "label": "Zorb booking pulled up on phone", "note": ""},
+  {"id": "jul12-tim-tams-bag", "section": "Today — Sun Jul 12", "label": "Reusable bag for the Tim Tams haul", "note": ""},
   {"id": "passport", "section": "Critical", "label": "Passport", "note": "expiration after Jan 2027 (NZ + AU require 6-month forward validity)"},
   {"id": "nzeta-nz-electronic-travel-authority", "section": "Critical", "label": "NZeTA (NZ Electronic Travel Authority)", "note": "both travelers · apply via app, allow up to 72h"},
   {"id": "australian-eta-subclass-601", "section": "Critical", "label": "Australian ETA (subclass 601)", "note": "free via \"AustralianETA\" app · usually instant · do before boarding"},
@@ -798,9 +828,10 @@ const PACK_ITEMS = [
 /* PACK_ITEMS_END */
 
 // Section render order
-const SECTION_ORDER = ["Critical", "High priority", "Bag inventory", "Nice to have"];
+const SECTION_ORDER = ["Today — Sun Jul 12", "Critical", "High priority", "Bag inventory", "Nice to have"];
 
 const SECTION_META = {
+  "Today — Sun Jul 12": { accent: "section-accent--today",  label: "Today · Sun Jul 12 Day Bag", highlight: true },
   "Critical":       { accent: "section-accent--critical", label: "Critical" },
   "High priority":  { accent: "section-accent--high",     label: "High Priority" },
   "Bag inventory":  { accent: "section-accent--bag",       label: "Bag Inventory" },
@@ -912,14 +943,14 @@ function renderChecklist() {
     const meta = SECTION_META[sectionName];
 
     const group = document.createElement('div');
-    group.className = 'section-group';
+    group.className = 'section-group' + (meta.highlight ? ' section-group--today' : '');
     group.setAttribute('aria-label', meta.label + ' section');
 
     // Section header
     group.innerHTML = `
       <div class="section-header">
         <div class="section-accent ${meta.accent}" aria-hidden="true"></div>
-        <h2 class="section-title">${meta.label}</h2>
+        <h2 class="section-title${meta.highlight ? ' section-title--today' : ''}">${meta.label}</h2>
         <span class="section-count" aria-label="${items.length} items">${items.length} items</span>
       </div>
     `;
