@@ -92,6 +92,8 @@ const TRIP_PLACES = [
   { name: "Te Puia", leg: "New Zealand", category: "culture", city: "Rotorua", booked: false, coords: [-38.16435, 176.25017], note: "Geothermal + Māori culture" },
   { name: "Wai-O-Tapu Thermal Wonderland", leg: "New Zealand", category: "activity", city: "Rotorua", booked: false, coords: [-38.35585, 176.36755], note: "Geothermal park" },
   { name: "Hamilton Gardens", leg: "New Zealand", category: "culture", city: "Hamilton", booked: false, coords: [-37.80507, 175.30110], note: "Free entry · themed gardens" },
+  { name: "Z Energy — Auckland Airport", leg: "New Zealand", category: "transit", city: "Auckland Airport", booked: false, coords: [-36.999302, 174.797256], note: "Fuel stop before the Jul 13 rental return · open 24/7 · only station inside the airport · a backtrack from the domestic rental precinct, not a drive-by" },
+  { name: "Hertz rental return (Domestic precinct)", leg: "New Zealand", category: "transit", city: "Auckland Airport", booked: false, coords: [-37.00350, 174.78420], note: "Jul 13 car return · DOMESTIC terminal side — transfer to International after (walk or free shuttle)" },
 ];
 
 if (typeof module !== "undefined" && module.exports) { module.exports = { TRIP_PLACES }; }
