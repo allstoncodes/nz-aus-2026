@@ -222,6 +222,29 @@
       letter-spacing: 0.05em;
     }
 
+    /* === KEEP IN MIND (condensed) === */
+    .kimc-section { max-width: 1280px; margin: 28px auto 0; padding: 0 24px; }
+    .kimc-panel { background: var(--surface); border: 1px solid var(--border); border-top: 3px solid var(--accent); border-radius: 12px; padding: 18px 22px 20px; }
+    .kimc-title { font-family: 'Syne', sans-serif; font-size: 1.0625rem; font-weight: 800; display: flex; align-items: center; gap: 9px; color: var(--text); margin-bottom: 12px; }
+    .kimc-title svg { color: var(--accent); flex-shrink: 0; }
+    .kimc-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+    .kimc-item { display: flex; gap: 9px; align-items: flex-start; font-size: 0.8125rem; line-height: 1.5; color: var(--text-2); }
+    .kimc-emoji { flex-shrink: 0; font-size: 0.9375rem; line-height: 1.4; }
+    .kimc-item strong { color: var(--text); font-weight: 600; }
+    .kimc-tag { display: inline-block; font-family: 'DM Mono', monospace; font-size: 0.5rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-2); background: rgba(148,163,184,0.12); border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; margin-right: 4px; vertical-align: 1px; }
+    .kimc-tel { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(245,158,11,0.4); font-family: 'DM Mono', monospace; white-space: nowrap; }
+    .kimc-tel:hover { border-color: var(--accent); }
+    .kimc-item--urgent { background: rgba(239,68,68,0.09); border: 1px solid rgba(239,68,68,0.4); border-radius: 8px; padding: 9px 11px; margin: -1px 0; }
+    .kimc-item--urgent strong { color: #FCA5A5; }
+    .kimc-item--urgent .kimc-tag { color: #FCA5A5; background: rgba(239,68,68,0.18); border-color: rgba(239,68,68,0.45); }
+    .kimc-more { display: inline-flex; align-items: center; gap: 6px; font-size: 0.8125rem; font-weight: 600; color: var(--accent); text-decoration: none; }
+    .kimc-more svg { transition: transform 0.15s; }
+    .kimc-more:hover svg { transform: translateX(3px); }
+    @media (max-width: 767px) {
+      .kimc-section { padding: 0 16px; }
+      .kimc-panel { padding: 16px 16px 18px; }
+    }
+
     /* === TIMELINE === */
     .timeline-wrap {
       max-width: 1280px;
@@ -451,6 +474,42 @@
         </div>
       </div>
       <p class="trip-subline">13 days &middot; 3 legs &middot; Southern-hemisphere winter</p>
+    </div>
+  </section>
+
+  <!-- KEEP IN MIND (condensed) -->
+  <section class="kimc-section" aria-labelledby="kimc-heading">
+    <div class="kimc-panel">
+      <h2 class="kimc-title" id="kimc-heading">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></svg>
+        Keep in Mind
+      </h2>
+      <ul class="kimc-list">
+        <li class="kimc-item">
+          <span class="kimc-emoji" aria-hidden="true">📞</span>
+          <span><span class="kimc-tag">Today</span><strong>BOOK Terrace Kitchen, ~6:30 PM</strong> &mdash; <a class="kimc-tel" href="tel:+6474601229">07 460 1229</a> &mdash; NZ school holidays: reserve, don't walk in.</span>
+        </li>
+        <li class="kimc-item kimc-item--urgent">
+          <span class="kimc-emoji" aria-hidden="true">🚨</span>
+          <span><span class="kimc-tag">Tomorrow</span><strong>DEPART ROTORUA 7:15 AM &mdash; not 7:45.</strong> Hertz return is at the DOMESTIC precinct &mdash; transfer to International adds 25&ndash;40 min.</span>
+        </li>
+        <li class="kimc-item kimc-item--urgent">
+          <span class="kimc-emoji" aria-hidden="true">🚨</span>
+          <span><span class="kimc-tag">Tomorrow</span><strong>LOOK UP UA916's &ldquo;Zone T&rdquo; check-in zone</strong> at <a class="kimc-tel" href="https://www.aucklandairport.co.nz" target="_blank" rel="noopener">aucklandairport.co.nz</a> (published within 24 h) &mdash; AKL check-in is now two steps.</span>
+        </li>
+        <li class="kimc-item">
+          <span class="kimc-emoji" aria-hidden="true">🧳</span>
+          <span><span class="kimc-tag">Tomorrow</span><strong>Bag drop is STILL required</strong> even though you're checked in online (~60 min cutoff).</span>
+        </li>
+        <li class="kimc-item kimc-item--urgent">
+          <span class="kimc-emoji" aria-hidden="true">🚨</span>
+          <span><span class="kimc-tag">Tomorrow</span><strong>DECLARE the 2 boxes of Tim Tams</strong> to US CBP at SFO &mdash; not declaring risks your Global Entry membership.</span>
+        </li>
+      </ul>
+      <a class="kimc-more" href="full-itinerary.html#keep-in-mind">
+        See the full Keep in Mind list on the Full Itinerary page
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
     </div>
   </section>
 

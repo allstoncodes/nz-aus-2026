@@ -215,6 +215,39 @@
     .page-section { padding: 24px 40px; max-width: 1340px; margin: 0 auto; }
     .section-head { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 700; display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
 
+    /* ── KEEP IN MIND ── */
+    .kim-section { padding: 22px 40px 4px; max-width: 1340px; margin: 0 auto; }
+    .kim-panel { background: var(--surface); border: 1px solid var(--border); border-top: 3px solid var(--accent); border-radius: 12px; padding: 22px 26px 24px; }
+    .kim-title { font-family: 'Syne', sans-serif; font-size: 1.15rem; font-weight: 800; display: flex; align-items: center; gap: 9px; color: var(--text); margin-bottom: 4px; }
+    .kim-title svg { color: var(--accent); flex-shrink: 0; }
+    .kim-sub { font-size: .75rem; color: var(--text-2); margin: 0 0 18px; padding-left: 27px; }
+    .kim-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 24px 28px; }
+    .kim-group { border-left: 3px solid var(--border); padding-left: 16px; }
+    .kim-group--today { border-left-color: var(--teal); }
+    .kim-group--tomorrow { border-left-color: var(--accent); }
+    .kim-group-title { font-family: 'Syne', sans-serif; font-size: .8125rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; display: flex; align-items: center; gap: 8px; margin-bottom: 13px; }
+    .kim-group--today .kim-group-title { color: var(--teal); }
+    .kim-group--tomorrow .kim-group-title { color: var(--accent); }
+    .kim-group-title svg { flex-shrink: 0; }
+    .kim-list { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+    .kim-item { display: flex; gap: 9px; align-items: flex-start; font-size: .8125rem; line-height: 1.55; color: var(--text-2); }
+    .kim-emoji { flex-shrink: 0; font-size: .9375rem; line-height: 1.45; }
+    .kim-item strong { color: var(--text); font-weight: 600; }
+    .kim-tel, .kim-link { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(245,158,11,.4); transition: border-color .15s; }
+    .kim-tel { font-family: 'DM Mono', monospace; white-space: nowrap; }
+    .kim-tel:hover, .kim-link:hover { border-color: var(--accent); }
+    .kim-item--urgent { background: rgba(239,68,68,.09); border: 1px solid rgba(239,68,68,.4); border-radius: 8px; padding: 10px 12px; margin: -1px 0; }
+    .kim-item--urgent strong { color: #FCA5A5; }
+    .kim-urgent-badge { display: inline-block; font-family: 'DM Mono', monospace; font-size: .5625rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #FCA5A5; background: rgba(239,68,68,.18); border: 1px solid rgba(239,68,68,.45); border-radius: 4px; padding: 1px 6px; margin-right: 2px; }
+    @media (max-width: 860px) {
+      .kim-groups { grid-template-columns: 1fr; gap: 22px; }
+    }
+    @media (max-width: 767px) {
+      .kim-section { padding: 18px 16px 4px; }
+      .kim-panel { padding: 18px 16px 20px; }
+      .kim-sub { padding-left: 0; }
+    }
+
     /* ── BOOKING QUICK LINKS ── */
     .booking-quicklinks { background: var(--surface); border-top: 2px solid var(--accent); border-bottom: 1px solid var(--border); }
     .ql-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(320px,1fr)); gap: 12px; margin-top: 10px; }
@@ -359,6 +392,106 @@
     </div>
   </div>
 </header>
+
+<!-- ── KEEP IN MIND ── -->
+<section class="kim-section" id="keep-in-mind" aria-labelledby="kim-heading">
+  <div class="kim-panel">
+    <h2 class="kim-title" id="kim-heading">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></svg>
+      Keep in Mind
+    </h2>
+    <p class="kim-sub">Top-of-mind actions for the rest of the trip &mdash; all three flagged 🚨 items below are time-critical.</p>
+    <div class="kim-groups">
+
+      <div class="kim-group kim-group--today">
+        <h3 class="kim-group-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+          Rest of Today &middot; Sun Jul 12
+        </h3>
+        <ul class="kim-list">
+          <li class="kim-item">
+            <span class="kim-emoji" aria-hidden="true">📞</span>
+            <span><strong>BOOK Terrace Kitchen, ~6:30 PM</strong> &mdash; <a class="kim-tel" href="tel:+6474601229">07 460 1229</a> &mdash; NZ school holidays (4&ndash;19 Jul): reserve, don't walk in.</span>
+          </li>
+          <li class="kim-item">
+            <span class="kim-emoji" aria-hidden="true">📞</span>
+            <span><strong>Confirm Polynesian Spa walk-in</strong> &mdash; <a class="kim-tel" href="tel:+6473481328">07 348 1328</a> (open to 11 PM).</span>
+          </li>
+          <li class="kim-item">
+            <span class="kim-emoji" aria-hidden="true">🏠</span>
+            <span><strong>Airbnb stop 4:45&ndash;5:15 PM</strong> &mdash; PACK for tomorrow + grab DRY swimwear (the Zorb togs are damp).</span>
+          </li>
+          <li class="kim-item">
+            <span class="kim-emoji" aria-hidden="true">🌌</span>
+            <span><strong>Redwoods Nightlights 5:30&ndash;6:15</strong> &mdash; must come BEFORE dinner (needs darkness; closes 9:30 PM).</span>
+          </li>
+          <li class="kim-item">
+            <span class="kim-emoji" aria-hidden="true">💆</span>
+            <span><strong>Polynesian Spa 8:10&ndash;11 PM</strong> (closes 11 PM &mdash; the late slot dodges the 4&ndash;8 PM rush).</span>
+          </li>
+          <li class="kim-item">
+            <span class="kim-emoji" aria-hidden="true">🍫</span>
+            <span><strong>Tim Tams before 9 PM</strong> &mdash; all Rotorua supermarkets close at 9.</span>
+          </li>
+          <li class="kim-item">
+            <span class="kim-emoji" aria-hidden="true">🏛️</span>
+            <span><strong>Rotorua Museum is CLOSED</strong> (to ~2028) &mdash; exterior/facade only.</span>
+          </li>
+          <li class="kim-item">
+            <span class="kim-emoji" aria-hidden="true">⚠️</span>
+            <span><strong>Repack the CO detector.</strong></span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="kim-group kim-group--tomorrow">
+        <h3 class="kim-group-title">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1.5 3.5 1.5L8 21.5 9 21v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.3c.4-.2.6-.6.5-1.1z"/></svg>
+          Tomorrow &middot; Mon Jul 13 &mdash; Departure Day
+        </h3>
+        <ul class="kim-list">
+          <li class="kim-item kim-item--urgent">
+            <span class="kim-emoji" aria-hidden="true">🚨</span>
+            <span><span class="kim-urgent-badge">Urgent</span> <strong>LOOK UP UA916's &ldquo;Zone T&rdquo; check-in zone</strong> &rarr; <a class="kim-link" href="https://www.aucklandairport.co.nz" target="_blank" rel="noopener">aucklandairport.co.nz</a> (published only within 24 h). AKL check-in is now TWO steps: pavilion check-in/bag-weigh &rarr; walk to <strong>Zone B</strong> to induct the bag.</span>
+          </li>
+          <li class="kim-item kim-item--urgent">
+            <span class="kim-emoji" aria-hidden="true">🚨</span>
+            <span><span class="kim-urgent-badge">Urgent</span> <strong>DEPART ROTORUA 7:15 AM &mdash; not 7:45.</strong> The Hertz return is at the DOMESTIC terminal precinct, so you must then transfer to International (950 m walk, or free shuttle every 15 min) &mdash; that's <strong>25&ndash;40 min</strong> the old plan didn't account for.</span>
+          </li>
+          <li class="kim-item">
+            <span class="kim-emoji" aria-hidden="true">☕</span>
+            <span><strong>Breakfast: Capers Cafe</strong>, opens 7 AM (zero detour). Tirau's The Baker is <strong>CLOSED Mondays</strong> &mdash; don't bank on Tirau.</span>
+          </li>
+          <li class="kim-item">
+            <span class="kim-emoji" aria-hidden="true">⛽</span>
+            <span><strong>Fuel up before the Hertz return</strong> (Z Station, cnr Tom Pearce Dr &amp; George Bolt Memorial Dr) &mdash; avoids the refuel surcharge.</span>
+          </li>
+          <li class="kim-item">
+            <span class="kim-emoji" aria-hidden="true">🧳</span>
+            <span><strong>Bag drop is STILL required</strong> even though you're checked in online (~60 min cutoff &mdash; confirm in the United app).</span>
+          </li>
+          <li class="kim-item">
+            <span class="kim-emoji" aria-hidden="true">🛋️</span>
+            <span><strong>Strata Lounge</strong> = the ONLY Priority Pass lounge at AKL international (airside, Level 2, after security). The Air NZ lounge does <strong>NOT</strong> accept Priority Pass. May be space-restricted &mdash; consider pre-booking in the PP app.</span>
+          </li>
+          <li class="kim-item">
+            <span class="kim-emoji" aria-hidden="true">💺</span>
+            <span><strong>Decide the Polaris upgrade</strong> before boarding.</span>
+          </li>
+          <li class="kim-item kim-item--urgent">
+            <span class="kim-emoji" aria-hidden="true">🚨</span>
+            <span><span class="kim-urgent-badge">Urgent</span> <strong>DECLARE the 2 boxes of Tim Tams to US CBP at SFO</strong> &mdash; not declaring risks your Global Entry membership even for admissible items.</span>
+          </li>
+          <li class="kim-item">
+            <span class="kim-emoji" aria-hidden="true">🛂</span>
+            <span>NZ departure eGates accept US ePassports (fast emigration).</span>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
 
 <!-- ── BOOKING QUICK LINKS ── -->
 <section class="page-section booking-quicklinks" aria-label="Booking status overview">
@@ -823,13 +956,15 @@ const DAYS = [
     { s: '20:10', e: '23:00', c: 'wellness',  t: 'Polynesian Spa · Deluxe Lake Spa ($85pp · UNLIMITED · closes 11pm) — the LATE slot is the better one: the spa\'s busy window is 4–8pm, so an 8pm arrival lands in the calm, and a hot mineral soak before bed on a −1°C night is the perfect close to NZ · ☎ 07 348 1328 to confirm walk-in' },
     { s: '23:10', e: '24:00', c: 'sleep',     t: 'Home → sleep · Rotorua N3 · already packed, so the 7:45 AM start is painless' },
   ]},
-  { tag: 'RET', date: 'Jul 13', wd: 'MON', city: 'NZ', cityFull: 'Rotorua → Auckland → SFO (UA916)', lbl: 'Depart · drive Rotorua → AKL 7:45 AM · UA916 1:50 PM → SFO Mon 6:50 AM', blocks: [
-    { s: '06:45', e: '07:15', c: 'logistics', t: 'Early start + check out of the Springfield Retreat Airbnb · load the car · repack the CO detector' },
-    { s: '07:00', e: '07:40', c: 'food',      t: 'Breakfast (grab-and-go) · Capers Cafe + Store (1181 Eruera St) — confirmed open Mon 7:00 AM, zero detour · DO NOT bank on Tirau: The Baker is CLOSED Mondays and most Tirau cafés open ~8:30 (only a Subway opens 7am). Eat before you drive.' },
-    { s: '07:45', e: '10:50', c: 'transit',   t: 'Drive Rotorua → AKL airport · ~229 km / ~3 h (SH5 → SH1) · depart 7:45 AM (not 8:00) to hold a ~10:50 arrival · skip the Matamata detour on a flight day · watch for early frost/fog (Rotorua low ~−1°C)' },
-    { s: '10:50', e: '11:15', c: 'logistics', t: 'Fuel up + return the rental car · confirm whether your counter is on-site (~3 min) or off-site (~15 min + shuttle) — it changes the buffer' },
-    { s: '11:15', e: '11:45', c: 'logistics', alert: true, shortLabel: 'ZONE T<br>CHECK-IN', t: 'CHECK-IN → BAG DROP → SECURITY → EMIGRATION. AKL recommends 3h for international, so 10:50 is the line — do not drift later. ZONE T: check-in is now TWO steps (pavilion check-in/bag-weigh → walk to Zone B to induct the bag). Look up UA916\'s zone on aucklandairport.co.nz within 24h. Bag drop is still required even though you are checked in (~60 min cutoff — confirm in the United app). NZ departure eGates accept US ePassports.' },
-    { s: '11:45', e: '13:15', c: 'downtime',  t: 'Strata Lounge (Priority Pass ✅) — the ONLY Priority Pass lounge at AKL international · airside, International Departures Level 2 (after security/emigration) · follow "Premium Lounges", entrance left at the top of the escalator · open ~5am–midnight, max stay 3h · ⚠ may be space-restricted at peak → consider pre-booking in the Priority Pass app · NOTE: the Air New Zealand lounge does NOT accept Priority Pass' },
+  { tag: 'RET', date: 'Jul 13', wd: 'MON', city: 'NZ', cityFull: 'Rotorua → Auckland → SFO (UA916)', lbl: 'Depart · drive Rotorua → AKL 7:15 AM (Hertz returns at the DOMESTIC terminal — allow for the transfer) · UA916 1:50 PM → SFO Mon 6:50 AM', blocks: [
+    { s: '06:30', e: '07:00', c: 'logistics', t: 'Early start + check out of the Springfield Retreat Airbnb · load the car · repack the CO detector' },
+    { s: '07:00', e: '07:15', c: 'food',      t: 'Breakfast (grab-and-go) · Capers Cafe + Store (1181 Eruera St) — confirmed open Mon 7:00 AM, zero detour · DO NOT bank on Tirau: The Baker is CLOSED Mondays and most Tirau cafés open ~8:30 (only a Subway opens 7am). Eat before you drive.' },
+    { s: '07:15', e: '10:15', c: 'transit',   alert: true, shortLabel: 'DEPART<br>7:15 AM', t: 'Drive Rotorua → AKL · ~229 km / ~3 h (SH5 → SH1) · DEPART 7:15 AM — NOT 7:45. Why 30 min earlier: the Hertz return is at the DOMESTIC terminal precinct, so you still have to cross to International afterward, which eats 25–40 min the old plan did not account for. Skip the Matamata detour · watch for early frost/fog (Rotorua low ~−1°C).' },
+    { s: '10:15', e: '10:30', c: 'logistics', t: 'Fuel up before the return (avoids Hertz\'s refuel surcharge) · nearest: Z Station, cnr Tom Pearce Dr & George Bolt Memorial Dr — check live routing from the return lot' },
+    { s: '10:30', e: '10:45', c: 'logistics', t: 'Return the Hertz car · Andrew McKee Ave (open 5am–2am · ☎ 09 256 8692) · ⚠ THIS IS THE DOMESTIC-TERMINAL RENTAL PRECINCT, NOT INTERNATIONAL · return/inspection ≈ 10–15 min' },
+    { s: '10:45', e: '11:10', c: 'transit',   alert: true, shortLabel: 'DOM → INTL<br>TRANSFER', t: 'Transfer DOMESTIC → INTERNATIONAL terminal — 950 m walk (~10–15 min) OR the free inter-terminal shuttle (every 15 min, 5am–11pm, ~10 min ride; int\'l side = Bus Stop B at the Transport Hub). Budget 10–25 min — the shuttle wait is the variable. Zone-T construction adds congestion right at the Transport Hub.' },
+    { s: '11:10', e: '12:00', c: 'logistics', alert: true, shortLabel: 'ZONE T<br>CHECK-IN', t: 'CHECK-IN → BAG DROP → SECURITY → EMIGRATION. ZONE T: check-in is now TWO steps (pavilion check-in/bag-weigh → walk to Zone B to induct the bag). Look up UA916\'s zone on aucklandairport.co.nz within 24h. Bag drop is still required even though you are checked in (~60 min cutoff — confirm in the United app). NZ departure eGates accept US ePassports.' },
+    { s: '12:00', e: '13:15', c: 'downtime',  t: 'Strata Lounge (Priority Pass ✅) — the ONLY Priority Pass lounge at AKL international · airside, International Departures Level 2 (after security/emigration) · follow "Premium Lounges", entrance left at the top of the escalator · open ~5am–midnight, max stay 3h · ⚠ may be space-restricted at peak → consider pre-booking in the Priority Pass app · NOTE: the Air New Zealand lounge does NOT accept Priority Pass' },
     { s: '13:15', e: '13:50', c: 'logistics', t: 'To the gate (gate not yet assigned — watch the boards)' },
     { s: '13:50', e: '24:00', c: 'transit',   t: 'UA916 AKL → SFO · departs 1:50 PM · gains a day eastbound · arrives Mon 6:50 AM SFO → Global Entry at SFO · DECLARE the 2 boxes of Tim Tams to US CBP (no honey — none bought) · declaring is free; not declaring risks your Global Entry membership even for admissible items · keep them in original packaging, accessible' },
   ]},
